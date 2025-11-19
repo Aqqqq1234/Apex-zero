@@ -362,12 +362,12 @@
     .plan-opt { 
         padding: 18px; 
         background: var(--card); 
+        border: 1px solid var(--card-border); 
         border-radius: 12px; 
         margin-bottom: 10px; 
         cursor: pointer; 
         display: flex; justify-content: space-between; align-items: center; 
         transition: background 0.2s ease-out;
-        border: 1px solid var(--card-border);
     }
     .plan-opt:active { background: #2C2C2E; } /* Darker active state */
     .plan-opt-title { font-weight: 600; font-size: 17px; }
@@ -523,4 +523,358 @@
             <ul>
                 <li><strong>Kreatin Monohidrat:</strong> Günde 5g. (ATP depolarını artırır, güç ve performans sağlar. Saç dökmesi efsanedir).</li>
                 <li><strong>Magnezyum Bisglisinat:</strong> Gece yatmadan 400mg. (Kas gevşemesi, uyku kalitesi ve sinir sistemi desteği).</li>
-                <li><strong>D3 Vitamini (K2 ile):</strong> Günde 5000 IU. (Kemik sağlığı, bağışıklık, hormonal den
+                <li><strong>D3 Vitamini (K2 ile):</strong> Günde 5000 IU. (Kemik sağlığı, bağışıklık, hormonal denge).</li>
+            </ul>
+        `},
+    ];
+
+    // --- JAVASCRIPT: TEMEL FONKSİYONLAR ---
+
+    // GLOBAL DURUM (STATE)
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+    let selectedDate = new Date();
+    let workouts = {}; // 'YYYY-MM-DD': templateKey
+    let timerInterval;
+    let startTime;
+    let currentSession = null; // Aktif antrenman oturumu
+    let sessionTime = 0;
+
+    // GÜNÜN PLANINI ALMA
+    function getPlanForDate(date) {
+        const dateKey = formatDate(date);
+        const templateKey = workouts[dateKey] || 'rest'; 
+        return templates[templateKey];
+    }
+
+    // TARİH FORMATLAMA (YYYY-MM-DD)
+    function formatDate(date) {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    }
+
+    // NAVİGASYON FONKSİYONU
+    function nav(viewId) {
+        const screens = document.querySelectorAll('.screen');
+        screens.forEach(screen => screen.classList.remove('active'));
+        document.getElementById('view-' + viewId).classList.add('active');
+
+        const tabs = document.querySelectorAll('.tab-btn');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        document.querySelector(`.tab-btn[onclick="nav('${viewId}')"]`).classList.add('active');
+
+        if (viewId === 'dash') {
+            renderCalendar(); // Takvimi her dönüşte yeniden çiz
+        }
+        if (viewId === 'vault') {
+            renderVault(''); // Vault'u ilk açılışta yükle
+        }
+    }
+
+    // --- DASHBOARD: TAKVİM VE PLAN YÖNETİMİ ---
+
+    function renderCalendar() {
+        const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+        const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
+        const dayCount = lastDayOfMonth.getDate();
+        const firstDayIndex = firstDayOfMonth.getDay(); // Pazar 0, Pazartesi 1...
+
+        document.getElementById('monthDisplay').textContent = 
+            firstDayOfMonth.toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' }).toUpperCase();
+        
+        const calendarGrid = document.getElementById('calendarGrid');
+        calendarGrid.innerHTML = ''; // Temizle
+
+        // Gün başlıklarını ekle (Pzt, Sal, Ça...)
+        const dayNames = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
+        dayNames.forEach(day => {
+            calendarGrid.innerHTML += `<div class="cal-day-head">${day}</div>`;
+        });
+
+        // Boş günleri ekle (Haftanın ilk günü Pzt olsun)
+        let startDay = (firstDayIndex === 0 ? 6 : firstDayIndex - 1);
+        for (let i = 0; i < startDay; i++) {
+            calendarGrid.innerHTML += `<div class="cal-day empty"></div>`;
+        }
+
+        // Günleri ekle
+        for (let i = 1; i <= dayCount; i++) {
+            const date = new Date(currentYear, currentMonth, i);
+            const dateKey = formatDate(date);
+            const isToday = date.toDateString() === new Date().toDateString();
+            const isSelected = dateKey === formatDate(selectedDate);
+            const hasWorkout = workouts[dateKey] && workouts[dateKey] !== 'rest';
+            
+            let classes = 'cal-day';
+            if (isToday) classes += ' today';
+            if (isSelected) classes += ' selected';
+            if (hasWorkout) classes += ' has-workout';
+
+            calendarGrid.innerHTML += `
+                <div class="${classes}" onclick="selectDate(new Date(${currentYear}, ${currentMonth}, ${i}))">
+                    <div class="cd-num">${i}</div>
+                </div>
+            `;
+        }
+
+        updateDayDetails();
+    }
+
+    function changeMonth(delta) {
+        currentMonth += delta;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        } else if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        selectedDate = new Date(currentYear, currentMonth, 1); // Yeni ayın 1. gününü seç
+        renderCalendar();
+    }
+
+    function selectDate(date) {
+        selectedDate = date;
+        renderCalendar(); // Takvimi yeniden çizmek, seçili günü vurgulayacaktır.
+    }
+
+    function updateDayDetails() {
+        const plan = getPlanForDate(selectedDate);
+        const dateKey = formatDate(selectedDate);
+        const dateDisplay = selectedDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' });
+
+        document.getElementById('selectedDateText').textContent = dateDisplay;
+        document.getElementById('planTag').textContent = plan.tag;
+        document.getElementById('planTitle').textContent = plan.name;
+        document.getElementById('planDesc').textContent = plan.moves.join(' / ');
+        
+        const smartTipEl = document.getElementById('smartTip');
+        smartTipEl.classList.add('hidden'); // Her zaman gizle
+        if (plan.tip) {
+            smartTipEl.classList.remove('hidden');
+            document.querySelector('#smartTip .tip-text').textContent = plan.tip;
+        }
+        
+        updateHeatmap(plan.energy);
+        
+        // Antrenmana Başla butonu durumunu ayarla
+        const startBtn = document.querySelector('.btn-primary');
+        if (currentSession) {
+            startBtn.textContent = 'OTURUMU DEVAM ETTİR';
+            startBtn.onclick = () => nav('session');
+        } else if (plan.tag === 'OFF') {
+            startBtn.textContent = 'DİNLENMEYİ KAYDET';
+            startBtn.onclick = () => alert('Dinlenme gününü kaydettin.');
+        } else {
+            startBtn.textContent = 'ANTRENMANA BAŞLA';
+            startBtn.onclick = startSession;
+        }
+    }
+
+    function updateHeatmap(energyLevels) { // [upper, core, legs]
+        const parts = ['upper', 'core', 'legs'];
+        parts.forEach((part, index) => {
+            const level = energyLevels[index];
+            const hmPart = document.getElementById(`hm-${part}`);
+            const bar = document.getElementById(`bar-${part}`);
+            
+            // Bar yüksekliği (0% - 100%)
+            bar.style.height = `${level}%`;
+            
+            // Renk sınıfı (Yüksek/Orta/Düşük enerji)
+            hmPart.className = 'hm-part';
+            if (level >= 80) {
+                hmPart.classList.add('high-energy');
+            } else if (level >= 50) {
+                hmPart.classList.add('medium-energy');
+            } else {
+                hmPart.classList.add('low-energy');
+            }
+        });
+    }
+
+    // --- PLANLAMA VE MODAL ---
+    function openEditor() {
+        renderTemplates();
+        document.getElementById('editModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('editModal').style.display = 'none';
+    }
+
+    function renderTemplates() {
+        const templateList = document.getElementById('templateList');
+        templateList.innerHTML = '';
+        
+        for (const key in templates) {
+            const t = templates[key];
+            templateList.innerHTML += `
+                <div class="plan-opt" onclick="applyTemplate('${key}')">
+                    <div class="plan-opt-title">${t.name}</div>
+                    <div class="plan-opt-tag">${t.tag}</div>
+                </div>
+            `;
+        }
+    }
+
+    function applyTemplate(templateKey) {
+        const dateKey = formatDate(selectedDate);
+        workouts[dateKey] = templateKey;
+        closeModal();
+        renderCalendar(); // Takvimi ve detayları güncelle
+    }
+
+
+    // --- ANTRENMAN OTURUMU (SESSION) ---
+    function startSession() {
+        const plan = getPlanForDate(selectedDate);
+        if (plan.tag === 'OFF') return; // Dinlenme günü ise başlatma
+
+        currentSession = {
+            date: formatDate(selectedDate),
+            template: plan.name,
+            exercises: plan.moves.map(move => ({ name: move, sets: [] })),
+            isRunning: true,
+            setsDone: 0
+        };
+        
+        // Oturumu başlat ve sayacı ayarla
+        startTime = Date.now();
+        sessionTime = 0;
+        timerInterval = setInterval(updateTimer, 1000);
+        
+        renderSession();
+        nav('session'); // Antrenman ekranına geç
+    }
+
+    function updateTimer() {
+        sessionTime = Math.floor((Date.now() - startTime) / 1000);
+        const minutes = String(Math.floor(sessionTime / 60)).padStart(2, '0');
+        const seconds = String(sessionTime % 60).padStart(2, '0');
+        document.getElementById('sessionTimer').textContent = `${minutes}:${seconds}`;
+    }
+
+    function renderSession() {
+        if (!currentSession) return;
+        
+        document.querySelector('#view-session h1').textContent = currentSession.template;
+        
+        const sessionList = document.getElementById('sessionList');
+        sessionList.innerHTML = '';
+        
+        currentSession.exercises.forEach((ex, exIndex) => {
+            let setsHtml = `<div style="display:grid; grid-template-columns: 30px 1fr 1fr 45px; gap: 10px; margin-bottom: 10px; font-weight:600; color:var(--dim-text);">
+                                <div style="text-align:center;">SET</div><div>KG/LBS</div><div>TEKRAR</div><div></div>
+                            </div>`;
+                            
+            ex.sets.forEach((set, setIndex) => {
+                setsHtml += `
+                    <div class="ex-row">
+                        <div class="set-num">${setIndex + 1}</div>
+                        <input type="number" class="inp" placeholder="Ağırlık" value="${set.weight || ''}" oninput="updateSet(${exIndex}, ${setIndex}, 'weight', this.value)">
+                        <input type="number" class="inp" placeholder="Tekrar" value="${set.reps || ''}" oninput="updateSet(${exIndex}, ${setIndex}, 'reps', this.value)">
+                        <div class="chk ${set.done ? 'done' : ''}" onclick="toggleSetDone(${exIndex}, ${setIndex})">${set.done ? '✅' : ' '}</div>
+                    </div>
+                `;
+            });
+            
+            setsHtml += `<button class="btn-flat" onclick="addSet(${exIndex})" style="margin-top:0; color:var(--accent); font-size:14px;">+ SET EKLE</button>`;
+
+            sessionList.innerHTML += `
+                <div class="ex-card">
+                    <div class="ex-card-header">
+                        <div class="ex-name">${ex.name}</div>
+                    </div>
+                    ${setsHtml}
+                </div>
+            `;
+        });
+    }
+
+    function addSet(exIndex) {
+        if (!currentSession) return;
+        currentSession.exercises[exIndex].sets.push({ weight: '', reps: '', done: false });
+        renderSession();
+    }
+
+    function updateSet(exIndex, setIndex, field, value) {
+        if (!currentSession) return;
+        currentSession.exercises[exIndex].sets[setIndex][field] = value;
+        // Otomatik render yapmıyoruz, sadece veriyi güncelliyoruz.
+    }
+
+    function toggleSetDone(exIndex, setIndex) {
+        if (!currentSession) return;
+        const set = currentSession.exercises[exIndex].sets[setIndex];
+        set.done = !set.done;
+        
+        // Tamamlanan set sayısını güncelle (Basit bir örnek)
+        currentSession.setsDone = currentSession.exercises.reduce((count, ex) => 
+            count + ex.sets.filter(s => s.done).length, 0);
+
+        renderSession();
+    }
+
+    function finishSession() {
+        clearInterval(timerInterval);
+        alert(`Antrenman Tamamlandı! Süre: ${document.getElementById('sessionTimer').textContent}. Toplam Set: ${currentSession.setsDone}`);
+        
+        // Oturum verisini kaydetme (Şimdilik sadece konsola basıyoruz)
+        console.log("Kaydedilen Oturum:", currentSession);
+
+        currentSession = null;
+        document.getElementById('sessionTimer').textContent = '00:00';
+        
+        // Ana ekrana dön ve durumu güncelle
+        nav('dash'); 
+        updateDayDetails(); 
+    }
+
+    // --- VAULT (BİLGİ KAYNAĞI) ---
+    function renderVault(searchText) {
+        const vaultGrid = document.getElementById('vaultGrid');
+        vaultGrid.innerHTML = '';
+        const filteredContent = vaultContent.filter(item => 
+            item.title.toLowerCase().includes(searchText.toLowerCase()) || 
+            item.body.toLowerCase().includes(searchText.toLowerCase()) || 
+            item.tag.toLowerCase().includes(searchText.toLowerCase())
+        );
+
+        filteredContent.forEach((item, index) => {
+            vaultGrid.innerHTML += `
+                <div class="vault-item">
+                    <div class="vi-head" onclick="toggleVaultItem(${index})">
+                        <div class="vi-title">${item.title}</div>
+                        <div class="vi-tag">${item.tag}</div>
+                    </div>
+                    <div class="vi-body" id="vault-body-${index}">${item.body}</div>
+                </div>
+            `;
+        });
+    }
+
+    function toggleVaultItem(index) {
+        const body = document.getElementById(`vault-body-${index}`);
+        body.classList.toggle('open');
+    }
+
+
+    // UYGULAMA BAŞLANGICI: DOM yüklendiğinde çalışacak ana fonksiyon
+    document.addEventListener('DOMContentLoaded', () => {
+        // Geçerli tarihi ayarla ve takvimi çiz
+        const today = new Date();
+        currentMonth = today.getMonth();
+        currentYear = today.getFullYear();
+        selectedDate = today;
+        
+        // Başlangıç ekranını ayarla
+        nav('dash'); 
+    });
+
+</script>
+</body>
+</html>
+ 
