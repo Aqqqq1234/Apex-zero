@@ -3,506 +3,382 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="LegalMech Fit">
     <meta name="theme-color" content="#000000">
-
-    <title>LegalMech Fit</title>
+    <title>PRIME</title>
 
     <style>
-        /* --- MODERN iOS DEĞİŞKENLERİ --- */
+        /* --- TEMEL TASARIM (PRIME AESTHETIC) --- */
         :root {
-            --bg: #000000;
-            --card-bg: #1c1c1e;
-            --text-main: #ffffff;
-            --text-muted: #8e8e93;
-            --accent: #0a84ff; /* iOS Blue */
-            --accent-glow: rgba(10, 132, 255, 0.3);
-            --danger: #ff453a;
-            --success: #30d158;
-            --border: #38383a;
-            --glass: rgba(28, 28, 30, 0.85);
-            --radius: 16px;
+            --bg: #000000; --card: #1c1c1e; --text: #ffffff; --muted: #8e8e93;
+            --accent: #32d74b; /* Prime Green */
+            --blue: #0a84ff; --danger: #ff453a; --warn: #ff9f0a; --purple: #bf5af2; --gold: #ffd60a;
+            --glass: rgba(28, 28, 30, 0.95); --radius: 18px;
         }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; }
+        body { margin: 0; background: var(--bg); color: var(--text); padding-top: env(safe-area-inset-top); padding-bottom: 120px; -webkit-user-select: none; user-select: none; transition: 0.3s; }
 
-        /* --- TEMEL YAPILANDIRMA --- */
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        /* ZEN MODE */
+        body.zen-mode header, body.zen-mode .date-strip, body.zen-mode .bottom-bar, body.zen-mode .tracker-section, body.zen-mode .prehab-box, body.zen-mode .jump-box { display: none !important; }
+        body.zen-mode .container { padding-top: 40px; }
+        body.zen-mode .card { border: 1px solid var(--accent); box-shadow: 0 0 30px rgba(50, 215, 75, 0.15); }
+
+        /* HEADER */
+        header { position: sticky; top: 0; z-index: 100; background: var(--glass); backdrop-filter: blur(20px); border-bottom: 0.5px solid #333; padding: 12px 20px; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .app-brand { display: flex; flex-direction: column; }
+        .app-title { font-size: 1.3rem; font-weight: 900; letter-spacing: 1px; font-style: italic; }
+        .app-subtitle { font-size: 0.65rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
         
-        body {
-            margin: 0; padding: 0;
-            background-color: var(--bg); color: var(--text-main);
-            /* iPhone Çentik ve Alt Çubuk Ayarları */
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: calc(100px + env(safe-area-inset-bottom));
-            min-height: 100vh;
-            -webkit-user-select: none; user-select: none; /* Uygulama hissi için seçimi kapat */
-        }
+        /* XP BAR */
+        .xp-container { width: 100%; height: 6px; background: #333; border-radius: 3px; overflow: hidden; }
+        .xp-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--blue)); width: 0%; transition: width 0.5s ease; }
+        .level-badge { font-size: 0.7rem; color: var(--blue); font-weight: bold; display: flex; justify-content: space-between; margin-top: 4px; }
+        .header-icons { display: flex; gap: 15px; }
+        .icon-btn { background: none; border: none; color: var(--text); font-size: 1.2rem; cursor: pointer; opacity: 0.8; }
 
-        /* --- HEADER (Glassmorphism) --- */
-        header {
-            position: sticky; top: 0; z-index: 100;
-            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-bottom: 0.5px solid var(--border);
-            padding: 10px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .app-title { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.5px; }
-        .app-title span { color: var(--accent); }
-        .streak-pill { 
-            background: rgba(255, 159, 10, 0.15); color: #ff9f0a; 
-            padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; 
-            display: flex; align-items: center; gap: 4px;
-        }
-
-        /* --- IKONLAR (SVG) --- */
-        .icon-btn { background: none; border: none; cursor: pointer; padding: 8px; border-radius: 50%; transition: background 0.2s; }
-        .icon-btn:active { background: rgba(255,255,255,0.1); }
-        svg { width: 24px; height: 24px; fill: var(--text-main); }
-        .icon-danger svg { fill: var(--danger); }
-        .icon-accent svg { fill: var(--accent); }
-
-        /* --- DATE NAV --- */
-        .date-strip {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 20px; background: var(--bg);
-        }
-        .date-main { font-size: 1.1rem; font-weight: 600; text-align: center; }
-        .nav-arrow { font-size: 1.5rem; color: var(--accent); padding: 0 15px; cursor: pointer; }
-
-        /* --- CARDS & LIST --- */
+        /* NAV */
+        .date-strip { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
+        .nav-arrow { font-size: 1.4rem; color: var(--accent); padding: 5px 15px; cursor: pointer; }
+        
+        /* CARDS */
         .container { padding: 0 16px; max-width: 600px; margin: 0 auto; }
-        .card {
-            background: var(--card-bg); border-radius: var(--radius);
-            padding: 20px; margin-bottom: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-            position: relative; overflow: hidden;
-        }
+        .card { background: var(--card); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; position: relative; border: 1px solid #2c2c2e; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
 
-        /* Progress Ring (CSS Draw) */
-        .header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
-        .prog-ring {
-            width: 40px; height: 40px; border-radius: 50%;
-            background: conic-gradient(var(--accent) var(--deg, 0deg), #333 0deg);
-            display: flex; align-items: center; justify-content: center;
-            position: relative;
-        }
-        .prog-ring::after {
-            content: ''; position: absolute; width: 34px; height: 34px;
-            background: var(--card-bg); border-radius: 50%;
-        }
-        .prog-text { position: absolute; z-index: 2; font-size: 0.65rem; font-weight: bold; color: var(--text-muted); }
+        /* SPECIAL BOXES */
+        .box-header { font-weight: bold; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 8px; display:flex; align-items:center; gap:8px; }
+        .prehab-box { background: rgba(10, 132, 255, 0.1); border: 1px solid rgba(10, 132, 255, 0.3); padding: 15px; margin-bottom: 15px; border-radius: 12px; }
+        .jump-box { background: rgba(191, 90, 242, 0.15); border: 1px solid var(--purple); padding: 15px; margin-bottom: 15px; border-radius: 12px; display:none; }
+        .jump-box.active { display:block; animation: fadeIn 0.5s; }
+        .sub-item { font-size: 0.9rem; color: #ddd; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; padding: 5px 0; }
+        .sub-dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid #777; margin-right: 10px; transition: 0.2s; }
+        .checked-sub { opacity: 0.5; text-decoration: line-through; }
+        .checked-sub .sub-dot { background: currentColor; box-shadow: 0 0 8px currentColor; border-color: transparent; }
 
-        /* List Items */
-        .task-item {
-            display: flex; flex-direction: column; gap: 8px;
-            padding: 16px 0; border-bottom: 0.5px solid var(--border);
-        }
-        .task-top { display: flex; align-items: center; justify-content: space-between; }
-        
-        /* Modern Checkbox */
+        /* TASKS */
+        .task-item { padding: 16px 0; border-bottom: 1px solid #2a2a2a; }
+        .task-top { display: flex; align-items: center; gap: 12px; }
+        .task-icon { width: 42px; height: 42px; background: #2c2c2e; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.3rem; }
         .check-group { display: flex; align-items: center; gap: 12px; flex: 1; cursor: pointer; }
-        .circle-check {
-            width: 24px; height: 24px; border: 2px solid var(--border); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .checked .circle-check { border-color: var(--success); background: var(--success); }
-        .circle-check svg { width: 14px; height: 14px; fill: #000; opacity: 0; transform: scale(0.5); transition: 0.2s; }
-        .checked .circle-check svg { opacity: 1; transform: scale(1); }
+        .circle-check { width: 24px; height: 24px; border: 2px solid #444; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: 0.2s; }
+        .checked .circle-check { background: var(--accent); border-color: var(--accent); }
+        .task-name { font-size: 1rem; font-weight: 600; transition: 0.2s; line-height: 1.3; }
+        .checked .task-name { color: var(--muted); text-decoration: line-through; }
+        .task-time { font-size: 0.7rem; color: var(--warn); font-weight: bold; display: block; margin-bottom: 2px; }
+
+        /* INPUTS */
+        .input-row { display: flex; gap: 8px; margin-top: 12px; padding-left: 66px; align-items: center; }
+        .mini-input { background: #000; border: 1px solid #333; color: #fff; width: 65px; padding: 10px; border-radius: 8px; text-align: center; font-size: 0.9rem; font-weight: 600; transition: 0.3s; }
+        .tool-btn { background: #222; border: 1px solid #333; color: var(--muted); width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; }
+        .pr-active { border-color: var(--gold) !important; color: var(--gold) !important; box-shadow: 0 0 10px rgba(255, 214, 10, 0.3); }
+
+        /* TRACKERS */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+        .track-box { background: #111; padding: 15px; border-radius: 14px; text-align: center; cursor: pointer; border: 1px solid #333; transition: 0.1s; }
+        .track-box:active { transform: scale(0.98); }
+        .track-val { font-size: 1.4rem; font-weight: 800; color: #fff; }
+        .pain-map { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .pain-pill { padding: 8px 16px; border-radius: 20px; background: #222; border: 1px solid #333; font-size: 0.8rem; color: #888; transition: 0.2s; cursor: pointer; }
+        .pain-pill.active { background: rgba(255, 69, 58, 0.2); color: var(--danger); border-color: var(--danger); }
+
+        /* TIMER FLOATING */
+        .timer-float { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(150px); background: #1c1c1e; border: 1px solid var(--accent); padding: 12px 24px; border-radius: 40px; display: flex; align-items: center; gap: 15px; z-index: 250; box-shadow: 0 10px 40px rgba(0,0,0,0.8); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .timer-float.active { transform: translateX(-50%) translateY(0); }
+        .timer-val { font-variant-numeric: tabular-nums; font-size: 1.4rem; font-weight: 800; color: var(--text); }
+
+        /* MODALS */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 300; align-items: flex-end; backdrop-filter: blur(5px); }
+        .modal.open { display: flex; }
+        .sheet { background: #1c1c1e; width: 100%; border-radius: 24px 24px 0 0; padding: 30px 25px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s; border-top: 1px solid #333; }
+        .bottom-bar { position: fixed; bottom: 0; width: 100%; background: var(--glass); backdrop-filter: blur(20px); border-top: 0.5px solid #333; display: flex; justify-content: space-around; padding: 12px; padding-bottom: calc(15px + env(safe-area-inset-bottom)); z-index: 200; }
+        .tab-btn { font-size: 1.7rem; opacity: 0.5; transition: 0.2s; } .tab-btn.active { opacity: 1; transform: scale(1.1); color: var(--accent); filter: drop-shadow(0 0 5px rgba(50,215,75,0.4)); }
         
-        .task-name { font-size: 1rem; font-weight: 500; transition: 0.3s; }
-        .checked .task-name { color: var(--text-muted); text-decoration: line-through; }
+        /* UTILS */
+        .plate-visual { display: flex; gap: 3px; align-items: center; margin-top: 15px; overflow-x: auto; padding-bottom: 5px; }
+        .plate { height: 45px; border-radius: 6px; background: var(--accent); color: #000; font-size: 0.8rem; font-weight: bold; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; box-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
+        .history-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #333; font-size: 0.95rem; color: #ccc; }
 
-        /* YouTube Button */
-        .yt-btn {
-            background: rgba(255, 59, 48, 0.15); border-radius: 8px;
-            padding: 6px 10px; display: flex; align-items: center; justify-content: center;
-            text-decoration: none; transition: 0.2s;
-        }
-        .yt-btn svg { width: 18px; height: 18px; fill: var(--danger); }
-        .yt-btn:active { background: rgba(255, 59, 48, 0.3); transform: scale(0.95); }
-
-        /* Inputs */
-        .task-inputs { display: flex; gap: 10px; padding-left: 36px; margin-top: 4px; }
-        .data-pill {
-            background: #000; border: 1px solid var(--border); border-radius: 8px;
-            display: flex; flex-direction: column; padding: 4px 8px; min-width: 60px;
-        }
-        .data-label { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; }
-        .data-input {
-            background: none; border: none; color: #fff; font-size: 1rem; width: 100%;
-            outline: none; padding: 2px 0; font-weight: 600;
-        }
-        .prev-data { font-size: 0.75rem; color: var(--accent); margin-top: 8px; padding-left: 36px; opacity: 0.8; }
-
-        /* --- BOTTOM BAR --- */
-        .bottom-bar {
-            position: fixed; bottom: 0; left: 0; right: 0;
-            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-top: 0.5px solid var(--border);
-            padding: 10px 30px; padding-bottom: calc(10px + env(safe-area-inset-bottom));
-            display: flex; justify-content: space-between; align-items: center; z-index: 200;
-        }
-        .tab-item { display: flex; flex-direction: column; align-items: center; gap: 4px; opacity: 0.6; font-size: 0.7rem; cursor: pointer; }
-        .tab-item.active { opacity: 1; color: var(--accent); }
-        .tab-item.active svg { fill: var(--accent); }
-        .tab-center {
-            background: var(--accent); width: 50px; height: 50px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            margin-top: -30px; box-shadow: 0 4px 15px var(--accent-glow);
-        }
-        .tab-center svg { fill: #fff; width: 28px; height: 28px; }
-
-        /* --- TIMER OVERLAY --- */
-        .timer-overlay {
-            position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
-            background: #2c2c2e; padding: 10px 20px; border-radius: 30px;
-            border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            display: none; align-items: center; gap: 15px; z-index: 150;
-        }
-        .timer-overlay.active { display: flex; animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes slideUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
-
-        /* --- MODALS --- */
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 300;
-            align-items: flex-end; /* Sheet style */
-        }
-        .modal.active { display: flex; }
-        .modal-sheet {
-            background: var(--card-bg); width: 100%; border-radius: 20px 20px 0 0;
-            padding: 25px; max-height: 85vh; overflow-y: auto;
-            animation: slideUpSheet 0.3s ease-out;
-        }
-        @keyframes slideUpSheet { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
+        #confetti { position: fixed; top:0; left:0; pointer-events:none; z-index:999; }
         
-        .btn-block { width: 100%; padding: 15px; background: #333; color: #fff; border: none; border-radius: 12px; font-size: 1rem; margin-top: 10px; font-weight: 600; }
-        .btn-primary { background: var(--accent); color: #fff; }
-        .btn-danger { background: rgba(255, 69, 58, 0.15); color: var(--danger); }
-
-        /* Canvas Chart */
-        #weightCanvas { width: 100%; height: 200px; margin-top: 20px; }
-        #confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
+        /* BUILDER & FOOD STYLES */
+        .custom-select { width: 100%; padding: 14px; background: #000; color: #fff; border: 1px solid #333; border-radius: 12px; font-size: 1rem; margin-bottom: 15px; appearance: none; }
+        .nutri-tabs { display: flex; background: #000; padding: 4px; border-radius: 12px; margin: 20px 0; }
+        .n-tab { flex: 1; text-align: center; padding: 10px; border-radius: 10px; font-size: 0.9rem; color: #777; transition: 0.2s; font-weight: bold; }
+        .n-tab.active { background: #222; color: #fff; }
+        .food-list { display: none; } .food-list.active { display: block; }
     </style>
 </head>
 <body>
-
     <canvas id="confetti"></canvas>
 
     <header>
-        <div class="app-title">LegalMech<span>Fit</span></div>
-        <div class="streak-pill" id="streakBadge">
-            <svg style="width:14px; height:14px; fill:#ff9f0a" viewBox="0 0 24 24"><path d="M17.66 11.2C17.43 10.9 17.15 10.64 16.89 10.38C16.22 9.78 15.46 9.35 14.82 8.72C13.33 7.26 13 4.85 13.95 3C13.08 3.23 12.17 3.75 11.46 4.32C8.96 6.35 7.97 9.8 9.18 12.87C9.33 13.24 9.55 13.63 9.79 13.97C10 14.33 10.28 14.7 10.45 15C10.63 15.35 10.74 15.82 10.65 16.23C10.56 16.63 10.3 16.97 10 17.22C9.28 17.81 8.27 17.83 7.42 17.44C7.03 17.25 6.67 16.92 6.4 16.5C6.11 16.03 5.92 15.5 5.86 14.95C5.84 14.75 5.56 14.72 5.5 14.91C4.46 18.23 5.83 21.84 8.79 23.36C10.45 24.21 12.42 24.21 14.08 23.36C18.67 21.03 19.9 15.19 17.66 11.2Z"/></svg>
-            <span id="streakCount">0</span>
+        <div class="header-top">
+            <div class="app-brand">
+                <div class="app-title">PRIME</div>
+                <div class="app-subtitle">Hybrid Performance</div>
+            </div>
+            <div class="header-icons">
+                <button class="icon-btn" onclick="toggleZen()">👁️</button>
+                <button class="icon-btn" onclick="toggleSound()">🔊</button>
+            </div>
         </div>
+        <div class="xp-container"><div class="xp-fill" id="xpBar"></div></div>
+        <div class="level-badge"><span id="currentLvl">Lvl 1</span><span id="userRank">Rookie</span><span id="xpText">0 XP</span></div>
     </header>
 
     <div class="date-strip">
         <div class="nav-arrow" onclick="changeDate(-1)">❮</div>
-        <div class="date-main" id="dateDisplay">Bugün</div>
+        <div style="font-weight:700; font-size:1.1rem;" id="dateDisplay">Bugün</div>
         <div class="nav-arrow" onclick="changeDate(1)">❯</div>
     </div>
 
     <div class="container">
-        
-        <div id="warningArea"></div>
-
-        <div class="card">
-            <div class="header-row">
-                <div>
-                    <h2 style="margin:0; font-size:1.3rem;" id="programName">Program</h2>
-                    <p style="margin:5px 0 0 0; color:var(--text-muted); font-size:0.85rem;" id="programSub">...</p>
-                </div>
-                <div class="prog-ring" id="progressRing">
-                    <span class="prog-text" id="progressText">0%</span>
-                </div>
-            </div>
-
-            <div id="workoutList">
-                </div>
+        <div class="prehab-box" id="prehabSection">
+            <div class="box-header" style="color:var(--blue)">🛡️ Sakatlık Önleme</div>
+            <div id="prehabList"></div>
         </div>
-
-        <div class="card">
-            <h3 style="margin:0 0 15px 0;">Günlük</h3>
-            <div style="display:flex; gap:10px; margin-bottom:10px;">
-                 <div class="data-pill" style="width:100px;">
-                    <span class="data-label">Kilo (Kg)</span>
-                    <input type="number" id="weightInput" class="data-input" onchange="saveWeight()">
-                 </div>
-            </div>
-            <textarea id="journalInput" style="width:100%; background:#111; color:#fff; border:1px solid var(--border); border-radius:12px; padding:12px; min-height:80px; resize:none;" placeholder="Antrenman notları..." oninput="saveJournal()"></textarea>
+        <div class="jump-box" id="jumpSection">
+            <div class="box-header" style="color:var(--purple)">🏀 Dikey Sıçrama</div>
+            <div id="jumpList"></div>
         </div>
         
-        <div style="height:20px;"></div>
+        <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:10px;">
+                <div><h2 style="margin:0; font-size:1.3rem" id="progTitle">...</h2><small style="color:var(--muted)" id="progSub">...</small></div>
+                <div style="text-align:right">
+                    <div style="font-size:1.5rem; font-weight:900; color:var(--accent); text-shadow: 0 0 10px rgba(50,215,75,0.3);" id="progPercent">%0</div>
+                    <div style="font-size:0.7rem; color:#777; margin-top:4px">YÜK: <span id="totalVolume" style="color:#fff; font-weight:bold">0 kg</span></div>
+                </div>
+            </div>
+            <div id="workoutList"></div>
+            <button onclick="openModal('builderModal')" style="width:100%; margin-top:15px; padding:14px; background:#222; border:1px solid #333; color:var(--blue); border-radius:12px; font-weight:600; font-size:0.9rem; cursor:pointer;">🛠️ Programı Değiştir</button>
+        </div>
+
+        <div class="card tracker-section">
+            <h3 style="margin:0 0 15px 0">🔋 Recovery</h3>
+            <div class="grid-2">
+                <div class="track-box" onclick="addWater()"><div class="track-val" id="waterCount">0 lt</div><div style="font-size:0.7rem; color:#777; letter-spacing:1px; margin-top:5px">SU</div></div>
+                <div class="track-box" onclick="toggleProtein()"><div class="track-val" id="proteinStatus">❌</div><div style="font-size:0.7rem; color:#777; letter-spacing:1px; margin-top:5px">PROTEİN</div></div>
+            </div>
+            <div style="border-top:1px solid #333; padding-top:15px;">
+                <small style="color:var(--muted); font-weight:bold; text-transform:uppercase">⚠️ Ağrı Sinyali</small>
+                <div class="pain-map">
+                    <div class="pain-pill" onclick="togglePain('Ayak Bileği')">Ayak Bileği</div>
+                    <div class="pain-pill" onclick="togglePain('Diz')">Diz</div>
+                    <div class="pain-pill" onclick="togglePain('Bel')">Bel</div>
+                    <div class="pain-pill" onclick="togglePain('Omuz')">Omuz</div>
+                </div>
+            </div>
+            <textarea id="journal" style="width:100%; background:#111; color:#fff; border:1px solid #333; border-radius:12px; padding:15px; margin-top:15px; min-height:80px; font-family:inherit" placeholder="Antrenman notları..." oninput="saveData()"></textarea>
+        </div>
     </div>
 
-    <div class="timer-overlay" id="timerOverlay">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z" fill="var(--accent)"/></svg>
-        <span style="font-family:monospace; font-size:1.4rem; font-weight:bold; width:60px;" id="timerDisplay">00:00</span>
-        <div style="display:flex; gap:10px;">
-            <button class="icon-btn" onclick="addTime(10)">+10</button>
-            <button class="icon-btn icon-danger" onclick="stopTimer()">
-                <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
-            </button>
-        </div>
+    <div class="timer-float" id="timerFloat">
+        <div style="font-size:0.7rem; color:var(--accent); font-weight:bold; letter-spacing:1px">REST</div>
+        <div class="timer-val" id="timerDisplay">01:30</div>
+        <button class="icon-btn" onclick="addTimer(10)" style="color:#fff; font-size:1.1rem">+10</button>
+        <button class="icon-btn" onclick="stopTimer()" style="color:var(--danger); font-size:1.1rem">✕</button>
     </div>
 
     <div class="bottom-bar">
-        <div class="tab-item" onclick="togglePanic()">
-            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-            <span>Ev Modu</span>
-        </div>
-        <div class="tab-center" onclick="startTimer()">
-            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
-        </div>
-        <div class="tab-item" onclick="openModal('statsModal')">
-            <svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
-            <span>Veriler</span>
+        <div class="tab-btn" onclick="togglePanic()">🏠</div>
+        <div class="tab-btn" onclick="openModal('toolsModal')">🍎</div>
+        <div class="tab-btn active" onclick="window.scrollTo(0,0)">💪</div>
+        <div class="tab-btn" onclick="openModal('statsModal')">📊</div>
+    </div>
+
+    <div class="modal" id="plateModal">
+        <div class="sheet">
+            <div style="display:flex; justify-content:space-between;"><h2>Plaka Hesabı</h2><span onclick="closeModal('plateModal')" style="font-size:1.5rem">✕</span></div>
+            <input type="number" id="plateTarget" class="mini-input" style="width:100%; font-size:1.5rem; padding:15px; margin-bottom:10px;" placeholder="Hedef (Bar Dahil)" oninput="calcPlates()">
+            <div id="plateResult" style="color:var(--accent); font-weight:bold; margin-bottom:10px; font-size:1.1rem"></div>
+            <div id="plateVisual" class="plate-visual"></div>
+            <p style="color:#666; font-size:0.8rem; margin-top:20px">* 20kg Olimpik Bar</p>
         </div>
     </div>
 
-    <div class="modal" id="statsModal">
-        <div class="modal-sheet">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h2>İstatistikler</h2>
-                <button class="icon-btn" onclick="closeModal('statsModal')">✕</button>
-            </div>
-            <p style="font-size:0.9rem; color:var(--text-muted)">Son 14 gün Kilo Takibi</p>
-            <canvas id="weightCanvas"></canvas>
-            
-            <h3 style="margin-top:20px;">Araçlar</h3>
-            <button class="btn-block" onclick="exportData()">📤 Verileri Yedekle</button>
-            <button class="btn-block btn-danger" onclick="resetApp()">🗑 Verileri Sıfırla</button>
-            <input type="file" id="importFile" style="display:none" onchange="importData(this)">
-            <button class="btn-block" onclick="document.getElementById('importFile').click()">📥 Yedek Yükle</button>
+    <div class="modal" id="historyModal">
+        <div class="sheet">
+            <div style="display:flex; justify-content:space-between;"><h2 id="histTitle">Geçmiş</h2><span onclick="closeModal('historyModal')" style="font-size:1.5rem">✕</span></div>
+            <div id="histList" style="margin-top:15px;"></div>
         </div>
     </div>
+
+    <div class="modal" id="builderModal">
+        <div class="sheet">
+            <div style="display:flex; justify-content:space-between;"><h2>Program Yap</h2><span onclick="closeModal('builderModal')" style="font-size:1.5rem">✕</span></div>
+            <p style="color:#777; margin-bottom:15px">Akıllı sistem uyumsuz bölgeleri kapatır.</p>
+            <select id="mainMuscle" class="custom-select" onchange="updateSec()"><option value="">1. Ana Bölge</option><option value="chest">Göğüs (İtme)</option><option value="back">Sırt (Çekme)</option><option value="legs">Bacak (Kuvvet)</option><option value="shoulders">Omuz (Press)</option><option value="arms">Kollar (Pump)</option></select>
+            <select id="subMuscle" class="custom-select" disabled><option value="">2. Yan Bölge</option></select>
+            <div style="background:#000; padding:15px; border-radius:12px; border:1px solid #333; display:flex; justify-content:space-between; align-items:center; margin-bottom:20px"><span style="color:var(--purple); font-weight:bold">🏀 Zıplama Antrenmanı?</span><input type="checkbox" id="addJump" style="width:20px; height:20px; accent-color:var(--purple);"></div>
+            <button onclick="buildProg()" style="width:100%; padding:16px; background:var(--blue); border:none; color:#fff; border-radius:12px; font-weight:bold; font-size:1rem">Programı Uygula</button>
+        </div>
+    </div>
+    
+    <div class="modal" id="toolsModal"><div class="sheet"><div style="display:flex;justify-content:space-between"><h2>Besin</h2><span onclick="closeModal('toolsModal')" style="font-size:1.5rem">✕</span></div><div id="foodContent"></div></div></div>
+    <div class="modal" id="statsModal"><div class="sheet"><h2>İstatistik</h2><canvas id="chartCanvas" style="width:100%;height:200px; margin-top:10px"></canvas><input type="number" id="dailyWeight" class="mini-input" style="width:100%; margin-top:20px; padding:15px" placeholder="Kilo (kg)" onchange="saveData()"></div></div>
 
     <script>
-        /* --- JS LOGIC --- */
-        const templates = {
-            0: { title: "Dinlenme", sub: "Pazar: Aktif Toparlanma", items: ["45 Dk Yürüyüş", "Foam Rolling", "Meal Prep"] },
-            1: { title: "Chest & Back", sub: "Pazartesi: Hipertrofi", items: ["Bench Press (4x8)", "Bent Over Row (4x10)", "Incline DB Press (3x10)", "Lat Pulldown (3x12)", "Face Pull (3x15)"] },
-            2: { title: "Legs & Core", sub: "Salı: Kuvvet", items: ["Squat (4x6)", "RDL (3x10)", "Leg Extension (3x15)", "Calf Raise (4x20)", "Plank (3x1 dk)"] },
-            3: { title: "Maç Günü", sub: "Çarşamba: Basketbol", items: ["Maç (21:45)", "Karbonhidrat Yüklemesi", "Magnezyum"], warning: "Maç için enerjini koru." },
-            4: { title: "Shoulders & Arms", sub: "Perşembe: Pump", items: ["Overhead Press (4x8)", "Lateral Raise (4x15)", "Barbell Curl (3x10)", "Tricep Pushdown (3x12)"] },
-            5: { title: "Mobility", sub: "Cuma: Pilates", items: ["Pilates (19:00)", "Kalça Mobilite", "Omurga Esnetme"] },
-            6: { title: "Upper Body", sub: "Cumartesi: Hacim", items: ["Pull Up (3xMax)", "Dips (3x10)", "DB Shoulder Press (3x12)", "Cable Fly (3x15)"] },
-            panic: { title: "Ev Modu", sub: "Ekipmansız Antrenman", items: ["50x Şınav", "50x Squat", "50x Mekik", "Burpees (3x10)", "Esneme"], warning: "Bahane yok!" }
+        // --- DATABASE ---
+        const muscleDB = { chest:{t:"Göğüs",i:[{n:"Bench Press (4x8)",c:"gym"},{n:"Inc. Press (3x10)",c:"gym"},{n:"Fly (3x15)",c:"gym"}]}, back:{t:"Sırt",i:[{n:"Pull Up",c:"gym"},{n:"Row",c:"gym"},{n:"Lat Pull",c:"gym"}]}, legs:{t:"Bacak",i:[{n:"Squat",c:"gym"},{n:"RDL",c:"gym"},{n:"Leg Ext",c:"gym"}]}, shoulders:{t:"Omuz",i:[{n:"OH Press",c:"gym"},{n:"Lat Raise",c:"gym"}]}, arms:{t:"Kol",i:[{n:"Curl",c:"gym"},{n:"Pushdown",c:"gym"}]}, core:{t:"Karın",i:[{n:"Plank",c:"gym"}]} };
+        const compat = { chest:['arms','shoulders'], back:['arms','shoulders'], legs:['core'], shoulders:['arms'], arms:['core'] };
+        const jumpR = [{n:"Pogo Hops (3x20)"},{n:"Box Jump (3x8)"},{n:"Depth Jump (3x5)"}];
+        const foodDB = { prot: [{n:"Tavuk G.",v:"31g/100g"},{n:"Kıyma",v:"26g"},{n:"Yumurta",v:"6g/adet"}], carb: [{n:"Pirinç",v:"28g"},{n:"Yulaf",v:"60g"},{n:"Muz",v:"23g"}], fat: [{n:"Zeytinyağı",v:"13g"},{n:"Badem",v:"15g"}] };
+        const icons = { gym:'🏋️', pilates:'🧘', bball:'🏀', rest:'🛌' };
+
+        const schedule = {
+            0: {t:"Dinlenme", s:"Recovery", j:false, pre:["Yürüyüş"], i:[{n:"Meal Prep",c:"rest"}, {n:"Magnezyum",c:"rest"}]},
+            1: {t:"Chest & Triceps", s:"İtme", j:false, pre:["Rotator Cuff"], i:[...muscleDB.chest.i, {n:"Pushdown",c:"gym"}]},
+            2: {t:"Pilates & Basket", s:"Yoğun", j:false, pre:["Tibialis"], i:[{n:"Pilates (19:00)",c:"pilates"},{n:"Basketbol (20:45)",c:"bball"}]},
+            3: {t:"Maç Günü", s:"Game Night", j:true, pre:["Patellar Tendon"], i:[{n:"Maç (21:45)",c:"bball"}]},
+            4: {t:"Pilates", s:"Recov", j:false, pre:["Kalça Flexor"], i:[{n:"Pilates (19:00)",c:"pilates"}]},
+            5: {t:"Back & Biceps", s:"Çekme", j:true, pre:["Omuz Mob."], i:[...muscleDB.back.i, {n:"Curl",c:"gym"}]},
+            6: {t:"Legs & Shoulders", s:"Kuvvet", j:false, pre:["Kalça Akt."], i:[...muscleDB.legs.i, {n:"OH Press",c:"gym"}]},
+            panic: {t:"Ev Modu", s:"Home", j:false, pre:["Jacks"], i:[{n:"50 Şınav",c:"gym"},{n:"50 Squat",c:"gym"}]}
         };
 
-        let currentDate = new Date();
-        let appData = JSON.parse(localStorage.getItem('legalMechApp')) || {};
-        let timerInt = null;
-        let timerSec = 0;
+        // --- STATE ---
+        let today = new Date();
+        let data = JSON.parse(localStorage.getItem('primeData')) || {};
+        let stats = JSON.parse(localStorage.getItem('primeStats')) || {xp:0, max:{}};
+        let settings = JSON.parse(localStorage.getItem('primeSettings')) || {sound:false};
+        const getK = d => d.toISOString().split('T')[0];
+        let timerInt = null, timerSec = 0;
 
-        const formatDate = d => d.toISOString().split('T')[0];
-        
-        function init() {
-            // Touch delay fix for iOS
-            document.addEventListener('touchstart', function() {}, false);
-            render();
-            drawChart();
-            calcStreak();
-        }
+        function init() { render(); renderXP(); renderFoodContent(); drawChart(); }
 
         function render() {
-            // Date UI
-            const dStr = currentDate.toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'short' });
-            document.getElementById('dateDisplay').innerText = dStr;
-
-            const key = formatDate(currentDate);
-            const dayIdx = currentDate.getDay();
+            document.getElementById('dateDisplay').innerText = today.toLocaleDateString('tr-TR', {weekday:'long', day:'numeric'});
+            const k = getK(today); const idx = today.getDay();
+            if(!data[k]) data[k] = {custom:null,c:[],s:{},w:{},n:"",wt:0,p:false,pn:[],panic:false};
+            const dd = data[k];
+            const p = dd.panic ? schedule.panic : (dd.custom || schedule[idx]);
             
-            if (!appData[key]) appData[key] = { checked: [], sets: {}, weights: {}, notes: "", weight: "", isPanic: false };
-            const data = appData[key];
-            const tpl = data.isPanic ? templates['panic'] : templates[dayIdx];
-
-            document.getElementById('programName').innerText = tpl.title;
-            document.getElementById('programSub').innerText = tpl.sub;
-            document.getElementById('warningArea').innerHTML = tpl.warning ? `<div style="background:rgba(255,165,0,0.15); color:#ffa500; padding:10px; border-radius:8px; margin-bottom:15px; font-size:0.9rem;">⚠️ ${tpl.warning}</div>` : '';
-            document.getElementById('journalInput').value = data.notes || "";
-            document.getElementById('weightInput').value = data.weight || "";
-
-            const list = document.getElementById('workoutList');
-            list.innerHTML = '';
+            document.getElementById('progTitle').innerText = p.t; document.getElementById('progSub').innerText = p.s;
             
-            tpl.items.forEach((item, idx) => {
-                const isChecked = data.checked.includes(idx);
-                const prev = getPrev(dayIdx, idx, data.isPanic);
+            renderBox('prehabSection','prehabList',p.pre,'sc','var(--blue)',dd);
+            renderBox('jumpSection','jumpList',p.j?jumpR.map(x=>x.n):[],'jc','var(--purple)',dd);
+
+            const list = document.getElementById('workoutList'); list.innerHTML=''; let vol=0;
+            p.i.forEach((it,i) => {
+                const chk=dd.c.includes(i); const kg=parseInt(dd.w[i]||0); const s=parseInt(dd.s[i]||3);
+                if(chk) vol += kg*s;
+                const name = it.n.split('(')[0].trim();
+                const isPR = kg > (stats.max[name]||0) && kg>0;
                 
-                const div = document.createElement('div');
-                div.className = `task-item ${isChecked ? 'checked' : ''}`;
-                
-                // YouTube link logic
-                const ytUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(item + " exercise form")}`;
-                
-                div.innerHTML = `
+                list.innerHTML += `
+                <div class="task-item ${chk?'checked':''}">
                     <div class="task-top">
-                        <div class="check-group" onclick="toggle(${idx})">
-                            <div class="circle-check">
-                                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                            </div>
-                            <span class="task-name">${item}</span>
-                        </div>
-                        <a href="${ytUrl}" target="_blank" class="yt-btn">
-                            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                        </a>
+                        <div class="task-icon">${icons[it.c]||icons.gym}</div>
+                        <div class="check-group" onclick="toggle(${i})"><div style="flex:1"><span class="task-time">${it.n.includes('(')?it.n.split('(')[1].replace(')',''):''}</span><span class="task-name">${name}</span></div><div class="circle-check"></div></div>
                     </div>
-                    <div class="task-inputs">
-                        <div class="data-pill">
-                            <span class="data-label">Set</span>
-                            <input type="text" class="data-input" value="${data.sets[idx]||''}" onchange="saveSub('sets', ${idx}, this.value)">
-                        </div>
-                        <div class="data-pill">
-                            <span class="data-label">Kg</span>
-                            <input type="number" class="data-input" value="${data.weights[idx]||''}" onchange="saveSub('weights', ${idx}, this.value)">
-                        </div>
-                    </div>
-                    ${prev ? `<div class="prev-data">Önceki: ${prev}kg</div>` : ''}
-                `;
-                list.appendChild(div);
+                    ${it.c==='gym' ? `
+                    <div class="input-row">
+                        <input class="mini-input" placeholder="Set" value="${dd.s[i]||''}" onchange="saveS(${i},this.value)">
+                        <input class="mini-input ${isPR?'pr-active':''}" placeholder="Kg" type="number" value="${dd.w[i]||''}" onchange="saveW('${name}',${i},this.value)">
+                        <button class="tool-btn" onclick="openCalc(${kg||0})">🧮</button>
+                        <button class="tool-btn" onclick="openHist('${name}')">📜</button>
+                        ${isPR?'<span style="color:gold;font-size:0.7rem;font-weight:bold">PR!</span>':''}
+                    </div>`:''}
+                </div>`;
             });
+            document.getElementById('totalVolume').innerText = vol + " kg";
+            document.getElementById('progPercent').innerText = "%" + Math.round((dd.c.length/p.i.length)*100)||0;
 
-            // Progress Ring Logic
-            const total = tpl.items.length;
-            const done = data.checked.length;
-            const pct = total ? Math.round((done/total)*100) : 0;
-            document.getElementById('progressText').innerText = `${pct}%`;
-            document.getElementById('progressRing').style.setProperty('--deg', `${pct * 3.6}deg`);
-        }
-
-        function toggle(idx) {
-            const key = formatDate(currentDate);
-            const arr = appData[key].checked;
-            const pos = arr.indexOf(idx);
-            if(pos > -1) arr.splice(pos, 1); else arr.push(idx);
-            
-            // Konfeti (Sadece %100 olduğunda)
-            const dayIdx = currentDate.getDay();
-            const tpl = appData[key].isPanic ? templates['panic'] : templates[dayIdx];
-            if(arr.length === tpl.items.length) doConfetti();
-
-            save(); render(); calcStreak();
+            document.getElementById('waterCount').innerText = dd.wt+" lt";
+            document.getElementById('proteinStatus').innerText = dd.p?"✅":"❌";
+            document.getElementById('journal').value = dd.n||"";
+            document.getElementById('dailyWeight').value = dd.bw||"";
+            document.querySelectorAll('.pain-pill').forEach(e=>e.classList.toggle('active', dd.pn.includes(e.innerText)));
         }
 
-        function saveSub(type, idx, val) {
-            appData[formatDate(currentDate)][type][idx] = val; save();
+        function renderBox(bid, lid, items, type, col, dd) {
+            const b=document.getElementById(bid); const l=document.getElementById(lid);
+            if(!items||!items.length){b.style.display='none';return;}
+            b.style.display='block'; l.innerHTML='';
+            items.forEach((x,i)=>{
+                const chk = (data[getK(today)][type]||[]).includes(i);
+                l.innerHTML += `<div class="sub-item ${chk?'checked-sub':''}" onclick="toggleSub('${type}',${i})"><div style="display:flex;align-items:center"><div class="sub-dot" style="color:${col}"></div>${x}</div></div>`;
+            });
         }
-        function saveWeight() {
-            appData[formatDate(currentDate)].weight = document.getElementById('weightInput').value; save(); drawChart();
-        }
-        function saveJournal() {
-            appData[formatDate(currentDate)].notes = document.getElementById('journalInput').value; save();
-        }
-        function changeDate(d) { currentDate.setDate(currentDate.getDate()+d); render(); }
+
+        // --- LOGIC ---
+        function toggle(i){ const k=getK(today); const a=data[k].c; if(a.includes(i))a.splice(a.indexOf(i),1); else {a.push(i); startTimer(); addXP(10);} save(); render(); }
+        function toggleSub(t,i){ const k=getK(today); if(!data[k][t])data[k][t]=[]; const a=data[k][t]; if(a.includes(i))a.splice(a.indexOf(i),1); else {a.push(i); addXP(5);} save(); render(); }
+        function saveW(n,i,v){ const k=getK(today); data[k].w[i]=v; if(v>(stats.max[n]||0)){stats.max[n]=v; fireConfetti(); alert("YENİ PR! 🏆");} save(); render(); }
+        function saveS(i,v){ data[getK(today)].s[i]=v; save(); }
+        function addWater(){ data[getK(today)].wt = Math.round((data[getK(today)].wt+0.5)*10)/10; save(); render(); }
+        function toggleProtein(){ data[getK(today)].p = !data[getK(today)].p; save(); render(); }
+        function togglePain(p){ const k=getK(today); const a=data[k].pn; if(a.includes(p))a.splice(a.indexOf(p),1); else a.push(p); save(); render(); }
+        function saveData(){ data[getK(today)].n=document.getElementById('journal').value; data[getK(today)].bw=document.getElementById('dailyWeight').value; save(); }
+        function togglePanic(){ data[getK(today)].panic=!data[getK(today)].panic; save(); render(); }
+        function changeDate(d){ today.setDate(today.getDate()+d); render(); }
+        function save(){ localStorage.setItem('primeData', JSON.stringify(data)); localStorage.setItem('primeStats', JSON.stringify(stats)); }
+        function addXP(x){ stats.xp+=x; save(); renderXP(); }
+        function renderXP(){ const lvl=Math.floor(stats.xp/100)+1; document.getElementById('xpBar').style.width=(stats.xp%100)+'%'; document.getElementById('currentLvl').innerText='Lvl '+lvl; 
+        let r="Rookie"; if(lvl>5)r="Pro"; if(lvl>15)r="Elite"; if(lvl>30)r="Legend"; document.getElementById('userRank').innerText=r; document.getElementById('xpText').innerText=(stats.xp%100)+" XP";}
+
+        function toggleZen(){ document.body.classList.toggle('zen-mode'); }
+        function toggleSound(){ settings.sound=!settings.sound; localStorage.setItem('primeSettings',JSON.stringify(settings)); alert(settings.sound?"Ses Açık 🔊":"Ses Kapalı 🔇"); }
         
-        function getPrev(dIdx, iIdx, panic) {
-            let d = new Date(currentDate);
-            for(let i=1;i<45;i++){
-                d.setDate(d.getDate()-1);
-                const k = formatDate(d);
-                if(appData[k] && d.getDay()===dIdx && appData[k].isPanic===panic && appData[k].weights[iIdx]) return appData[k].weights[iIdx];
-            }
-            return null;
+        function startTimer(){ const el=document.getElementById('timerFloat'); el.classList.add('active'); if(timerInt) clearInterval(timerInt); timerSec=90; updT(); timerInt=setInterval(()=>{ timerSec--; updT(); if(timerSec<=0){stopTimer(); notify();} },1000); }
+        function stopTimer(){ clearInterval(timerInt); document.getElementById('timerFloat').classList.remove('active'); }
+        function addTimer(s){ timerSec+=s; updT(); }
+        function updT(){ const m=Math.floor(timerSec/60), s=timerSec%60; document.getElementById('timerDisplay').innerText=`0${m}:${s<10?'0'+s:s}`; }
+        function notify(){ if(settings.sound && 'speechSynthesis' in window){ const u=new SpeechSynthesisUtterance("Süre doldu, sete gir!"); u.lang='tr-TR'; window.speechSynthesis.speak(u); } else { navigator.vibrate([200,100,200]); alert("SÜRE BİTTİ!"); } }
+
+        function openCalc(w){ document.getElementById('plateTarget').value=w||""; calcPlates(); openModal('plateModal'); }
+        function calcPlates(){
+            const t = parseFloat(document.getElementById('plateTarget').value);
+            const res = document.getElementById('plateResult'); const vis = document.getElementById('plateVisual');
+            vis.innerHTML=''; if(!t || t<=20){ res.innerText="Sadece Bar"; return; }
+            let w = (t-20)/2; let txt=[]; 
+            [25,20,15,10,5,2.5,1.25].forEach(p => { while(w >= p){ w-=p; txt.push(p); vis.innerHTML+=`<div class="plate" style="width:${28+p}px; background:${getPlateColor(p)}">${p}</div>`; } });
+            res.innerText = txt.join(" + ") + " (Taraf Başı)";
+        }
+        function getPlateColor(p){ if(p>=25)return'#ff3b30'; if(p>=20)return'#0a84ff'; if(p>=10)return'#32d74b'; return'#ffd60a'; }
+
+        function openHist(n){
+            document.getElementById('histTitle').innerText = n; const l = document.getElementById('histList'); l.innerHTML='';
+            let d = new Date(); let count=0;
+            for(let i=0; i<90; i++){
+                if(count>=5) break; const k = getK(d);
+                if(data[k]){
+                    const p = data[k].panic ? schedule.panic : (data[k].custom || schedule[d.getDay()]);
+                    const idx = p.i.findIndex(x => x.n.includes(n));
+                    if(idx > -1 && data[k].w[idx]){
+                        l.innerHTML += `<div class="history-row"><span>${d.toLocaleDateString('tr-TR')}</span><span style="color:var(--accent)">${data[k].w[idx]}kg x ${data[k].s[idx]||3}</span></div>`; count++;
+                    }
+                } d.setDate(d.getDate()-1);
+            } if(count===0) l.innerHTML="<div style='color:#555'>Kayıt yok.</div>"; openModal('historyModal');
         }
 
-        function togglePanic() {
-            const k = formatDate(currentDate);
-            appData[k].isPanic = !appData[k].isPanic;
-            appData[k].checked = [];
-            save(); render();
+        function openModal(id){document.getElementById(id).classList.add('open');} function closeModal(id){document.getElementById(id).classList.remove('open');}
+        function updateSec(){ const m=document.getElementById('mainMuscle').value; const s=document.getElementById('subMuscle'); s.innerHTML='<option value="">Yan Bölge</option>'; s.disabled=true; if(m&&compat[m]){ s.disabled=false; compat[m].forEach(x=>{s.innerHTML+=`<option value="${x}">${muscleDB[x].t}</option>`}); } }
+        function buildProg(){ const m=document.getElementById('mainMuscle').value; const s=document.getElementById('subMuscle').value; const j=document.getElementById('addJump').checked; if(!m)return; let i=[...muscleDB[m].i]; let t=muscleDB[m].t; if(s){i=[...i, ...muscleDB[s].i]; t+=" & "+muscleDB[s].t;} let ph=["Genel Isınma"]; if(m==='legs')ph=["Kalça Akt."]; if(m==='shoulders')ph=["Rotator Cuff"]; const k=getK(today); data[k].custom={t:"Özel: "+t,s:"Kişisel",j:j,pre:ph,i:i}; data[k].c=[]; save(); closeModal('builderModal'); render(); }
+        function renderFoodContent() { 
+            const d = document.getElementById('foodContent'); d.innerHTML='';
+            d.innerHTML += `
+            <div style="background:#111; padding:15px; border-radius:12px; margin-bottom:20px;">
+                <div style="display:flex; gap:10px;">
+                    <input type="number" id="calcW" class="mini-input" style="width:100%" placeholder="Kilo">
+                    <button style="background:var(--accent); border:none; border-radius:8px; padding:0 20px; font-weight:bold" onclick="calcMacros()">Hesapla</button>
+                </div>
+                <div id="macroRes" style="margin-top:10px; font-weight:bold; color:var(--accent)"></div>
+            </div>
+            <div class="nutri-tabs"><div class="n-tab active" onclick="switchTab('prot')">Protein</div><div class="n-tab" onclick="switchTab('carb')">Karb</div><div class="n-tab" onclick="switchTab('fat')">Yağ</div></div>
+            <div id="tab-prot" class="food-list active"></div><div id="tab-carb" class="food-list"></div><div id="tab-fat" class="food-list"></div>`;
+            Object.keys(foodDB).forEach(key => { document.getElementById('tab-'+key).innerHTML = foodDB[key].map(f=>`<div class="food-row"><span>${f.n}</span><span style="color:var(--accent)">${f.v}</span></div>`).join(''); });
         }
-
-        function calcStreak() {
-            let s=0, d=new Date();
-            for(let i=0;i<365;i++){
-                const k=formatDate(d);
-                if(appData[k] && (appData[k].checked.length>0 || appData[k].notes)) s++;
-                else if(k !== formatDate(new Date())) break;
-                d.setDate(d.getDate()-1);
-            }
-            document.getElementById('streakCount').innerText = s;
-        }
-
-        /* --- TIMER --- */
-        function startTimer() {
-            document.getElementById('timerOverlay').classList.add('active');
-            if(timerInt) clearInterval(timerInt);
-            timerSec = 90; updateTimer();
-            timerInt = setInterval(()=>{
-                timerSec--; updateTimer();
-                if(timerSec<=0) { stopTimer(); alert("Süre bitti!"); }
-            },1000);
-        }
-        function addTime(s) { timerSec+=s; updateTimer(); }
-        function stopTimer() { clearInterval(timerInt); document.getElementById('timerOverlay').classList.remove('active'); }
-        function updateTimer() {
-            const m=Math.floor(timerSec/60), s=timerSec%60;
-            document.getElementById('timerDisplay').innerText = `${m}:${s<10?'0'+s:s}`;
-        }
-
-        /* --- CHART (Canvas) --- */
-        function drawChart() {
-            const ctx = document.getElementById('weightCanvas').getContext('2d');
-            const w=ctx.canvas.width=ctx.canvas.clientWidth, h=ctx.canvas.height=ctx.canvas.clientHeight;
-            
-            let pts=[]; let d=new Date();
-            for(let i=13;i>=0;i--){
-                let temp=new Date(); temp.setDate(d.getDate()-i);
-                let val = appData[formatDate(temp)]?.weight;
-                if(val) pts.push({x:i, y:parseFloat(val)});
-            }
-
-            ctx.clearRect(0,0,w,h);
-            if(pts.length<2) { ctx.fillStyle="#555"; ctx.fillText("Veri girildikçe grafik oluşur.", 20, h/2); return; }
-
-            const min = Math.min(...pts.map(p=>p.y))-1, max = Math.max(...pts.map(p=>p.y))+1;
-            
-            // Draw Gradient Line
-            const grad = ctx.createLinearGradient(0,0,0,h);
-            grad.addColorStop(0, "rgba(10,132,255,0.5)"); grad.addColorStop(1, "transparent");
-
-            ctx.beginPath();
-            pts.forEach((p,i)=>{
-                const x=(i/(pts.length-1))*(w-20)+10;
-                const y=h - ((p.y-min)/(max-min))*(h-40)-20;
-                if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-            });
-            ctx.strokeStyle="#0a84ff"; ctx.lineWidth=3; ctx.stroke();
-            
-            // Fill
-            ctx.lineTo(w-10, h); ctx.lineTo(10,h); ctx.fill();
-        }
-
-        /* --- UTILS --- */
-        function save(){ localStorage.setItem('legalMechApp', JSON.stringify(appData)); }
-        function openModal(id){ document.getElementById(id).classList.add('active'); if(id==='statsModal') drawChart(); }
-        function closeModal(id){ document.getElementById(id).classList.remove('active'); }
-        function resetApp(){ if(confirm('Silinsin mi?')) { localStorage.clear(); location.reload(); } }
-        function exportData(){
-            const a=document.createElement('a');
-            a.href="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(appData));
-            a.download="backup.json"; a.click();
-        }
-        function importData(inp){
-            const r=new FileReader(); r.onload=e=>{ appData=JSON.parse(e.target.result); save(); location.reload(); };
-            if(inp.files[0]) r.readAsText(inp.files[0]);
-        }
-        function doConfetti() {
-            const c=document.getElementById('confetti'); const x=c.getContext('2d');
-            c.width=window.innerWidth; c.height=window.innerHeight;
-            let p=[]; for(let i=0;i<60;i++)p.push({x:Math.random()*c.width,y:-10,v:Math.random()*5+2,c:`hsl(${Math.random()*360},100%,50%)`});
-            function anim(){ x.clearRect(0,0,c.width,c.height); let act=false;
-            p.forEach(o=>{o.y+=o.v; if(o.y<c.height){act=true;x.fillStyle=o.c;x.fillRect(o.x,o.y,6,6)}});
-            if(act)requestAnimationFrame(anim); else x.clearRect(0,0,c.width,c.height); }
-            anim();
-        }
+        function switchTab(t) { document.querySelectorAll('.food-list').forEach(e=>e.classList.remove('active')); document.getElementById('tab-'+t).classList.add('active'); document.querySelectorAll('.n-tab').forEach(e=>e.classList.remove('active')); event.target.classList.add('active'); }
+        function calcMacros() { const w = document.getElementById('calcW').value; if(w) document.getElementById('macroRes').innerText = `Hedef: ${Math.round(w*33)} Kal. / ${Math.round(w*2)}g Pro.`; }
+        function drawChart() { const ctx=document.getElementById('chartCanvas').getContext('2d'); const w=ctx.canvas.width=ctx.canvas.clientWidth, h=ctx.canvas.height=ctx.canvas.clientHeight; ctx.clearRect(0,0,w,h); let pts=[]; let d=new Date(); for(let i=13;i>=0;i--){ let t=new Date(); t.setDate(d.getDate()-i); let v = data[getK(t)]?.bw; if(v) pts.push({x:i, y:parseFloat(v)}); } if(pts.length<2) return; const min=Math.min(...pts.map(p=>p.y))-1, max=Math.max(...pts.map(p=>p.y))+1; ctx.beginPath(); ctx.strokeStyle="#32d74b"; ctx.lineWidth=3; pts.forEach((p,i)=>{ const x=(i/13)*(w-20)+10, y=h-((p.y-min)/(max-min))*(h-40)-20; if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); ctx.fillStyle="#fff"; ctx.fillRect(x-2,y-2,4,4); }); ctx.stroke(); }
+        function fireConfetti(){const c=document.getElementById('confetti');const x=c.getContext('2d');c.width=window.innerWidth;c.height=window.innerHeight;let p=[];for(let i=0;i<60;i++)p.push({x:Math.random()*c.width,y:-10,v:Math.random()*5+2,c:'hsl('+Math.random()*360+',100%,50%)'});function l(){x.clearRect(0,0,c.width,c.height);let a=false;p.forEach(o=>{o.y+=o.v;if(o.y<c.height){a=true;x.fillStyle=o.c;x.fillRect(o.x,o.y,5,5)}});if(a)requestAnimationFrame(l);}l();}
 
         init();
     </script>
 </body>
 </html>
-
