@@ -1,880 +1,508 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>APEX ZERO</title>
-<link rel="apple-touch-icon" href="https://img.icons8.com/ios-filled/192/000000/triangle.png">
-<style>
-    /* --- APEX ZERO DESIGN SYSTEM (2024) --- */
-    :root { 
-        --bg: #000000; 
-        --card: #1C1C1E; /* Darker, modern iOS card background */
-        --card-border: #2C2C2E;
-        --primary: #0A84FF; /* iOS Blue */
-        --accent: #FF9F0A; /* Orange for energy/warning */
-        --success: #30D158; /* iOS Green */
-        --danger: #FF453A; /* iOS Red */
-        --text: #FFFFFF;
-        --dim-text: #8E8E93; /* Lighter grey for secondary text */
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="LegalMech Fit">
+    <meta name="theme-color" content="#000000">
+
+    <title>LegalMech Fit</title>
+
+    <style>
+        /* --- MODERN iOS DEĞİŞKENLERİ --- */
+        :root {
+            --bg: #000000;
+            --card-bg: #1c1c1e;
+            --text-main: #ffffff;
+            --text-muted: #8e8e93;
+            --accent: #0a84ff; /* iOS Blue */
+            --accent-glow: rgba(10, 132, 255, 0.3);
+            --danger: #ff453a;
+            --success: #30d158;
+            --border: #38383a;
+            --glass: rgba(28, 28, 30, 0.85);
+            --radius: 16px;
+        }
+
+        /* --- TEMEL YAPILANDIRMA --- */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         
-        --safe-top: env(safe-area-inset-top); 
-        --safe-bottom: env(safe-area-inset-bottom);
-    }
-    body { 
-        background: var(--bg); 
-        color: var(--text); 
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-        margin: 0; padding: 0; 
-        height: 100vh; 
-        display: flex; flex-direction: column; 
-        overflow: hidden;
-        -webkit-tap-highlight-color: transparent; 
-        user-select: none;
-        font-size: 16px;
-        line-height: 1.4;
-    }
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--bg); color: var(--text-main);
+            /* iPhone Çentik ve Alt Çubuk Ayarları */
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: calc(100px + env(safe-area-inset-bottom));
+            min-height: 100vh;
+            -webkit-user-select: none; user-select: none; /* Uygulama hissi için seçimi kapat */
+        }
 
-    /* --- GLOBAL TYPOGRAPHY & HEADERS --- */
-    h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin: 0 0 5px 0; }
-    h2 { font-size: 20px; font-weight: 600; margin: 0 0 10px 0; }
-    h3 { font-size: 17px; font-weight: 600; margin: 0 0 8px 0; }
-    p { margin: 0 0 10px 0; }
+        /* --- HEADER (Glassmorphism) --- */
+        header {
+            position: sticky; top: 0; z-index: 100;
+            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 0.5px solid var(--border);
+            padding: 10px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .app-title { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.5px; }
+        .app-title span { color: var(--accent); }
+        .streak-pill { 
+            background: rgba(255, 159, 10, 0.15); color: #ff9f0a; 
+            padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; 
+            display: flex; align-items: center; gap: 4px;
+        }
 
-    /* --- NAVIGATION (TAB BAR) --- */
-    .tab-bar {
-        position: fixed; bottom: 0; width: 100%; height: 85px;
-        background: rgba(28,28,30,0.9); /* Slightly transparent background */
-        border-top: 0.5px solid rgba(72,72,74,0.7); /* Subtle border */
-        display: flex; justify-content: space-around; padding-top: 10px; 
-        z-index: 1000;
-        backdrop-filter: blur(20px); /* iOS blur effect */
-        -webkit-backdrop-filter: blur(20px);
-        padding-bottom: var(--safe-bottom);
-    }
-    .tab-btn { 
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        gap: 4px; 
-        color: var(--dim-text); 
-        font-size: 10px; font-weight: 500; 
-        cursor: pointer; 
-        transition: color 0.2s ease-out; 
-    }
-    .tab-btn.active { color: var(--primary); }
-    .tab-icon { font-size: 24px; transition: transform 0.2s ease-out; }
-    .tab-btn.active .tab-icon { transform: translateY(-2px); } /* Slight lift on active */
+        /* --- IKONLAR (SVG) --- */
+        .icon-btn { background: none; border: none; cursor: pointer; padding: 8px; border-radius: 50%; transition: background 0.2s; }
+        .icon-btn:active { background: rgba(255,255,255,0.1); }
+        svg { width: 24px; height: 24px; fill: var(--text-main); }
+        .icon-danger svg { fill: var(--danger); }
+        .icon-accent svg { fill: var(--accent); }
 
-    /* --- SCREENS --- */
-    .screen { 
-        flex: 1; 
-        overflow-y: auto; 
-        padding: 20px; 
-        padding-top: calc(var(--safe-top) + 15px); 
-        /* GÜNCELLENMİŞ ALAN: Navigasyon çubuğunun üstünde, butonun rahatça görünmesi için 120px boşluk */
-        padding-bottom: calc(120px + var(--safe-bottom)); 
-        display: none; 
-        animation: fadeIn 0.2s ease-out; 
-    }
-    .screen.active { display: block; }
-    @keyframes fadeIn { from {opacity:0; transform: translateY(5px);} to {opacity:1; transform: translateY(0);} }
+        /* --- DATE NAV --- */
+        .date-strip {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 20px; background: var(--bg);
+        }
+        .date-main { font-size: 1.1rem; font-weight: 600; text-align: center; }
+        .nav-arrow { font-size: 1.5rem; color: var(--accent); padding: 0 15px; cursor: pointer; }
 
-    /* --- CALENDAR (GRID) --- */
-    .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .month-title { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
-    .cal-nav-btn { 
-        background: var(--card-border); 
-        border: none; 
-        color: var(--text); 
-        width: 38px; height: 38px; 
-        border-radius: 10px; 
-        cursor: pointer; 
-        display: flex; align-items: center; justify-content: center; 
-        font-size: 20px; 
-        transition: background 0.2s ease-out;
-    }
-    .cal-nav-btn:active { background: #48484A; }
+        /* --- CARDS & LIST --- */
+        .container { padding: 0 16px; max-width: 600px; margin: 0 auto; }
+        .card {
+            background: var(--card-bg); border-radius: var(--radius);
+            padding: 20px; margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            position: relative; overflow: hidden;
+        }
 
-    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 25px; }
-    .cal-day-head { text-align: center; font-size: 11px; color: var(--dim-text); font-weight: 600; text-transform: uppercase; margin-bottom: 5px; }
-    .cal-day { 
-        aspect-ratio: 1/1; 
-        background: var(--card); 
-        border-radius: 12px; 
-        border: 1px solid var(--card-border);
-        display: flex; flex-direction: column; align-items: center; justify-content: center; 
-        cursor: pointer; 
-        position: relative;
-        transition: all 0.2s ease-out;
-    }
-    .cal-day.empty { background: transparent; border: none; cursor: default; }
-    .cal-day.today { border-color: var(--primary); background: rgba(10,132,255,0.15); }
-    .cal-day.selected { 
-        background: var(--primary); 
-        border-color: var(--primary); 
-        color: white; 
-        box-shadow: 0 5px 15px rgba(10,132,255,0.3); 
-        transform: translateY(-2px); /* Pop effect */
-    }
-    .cal-day.has-workout::after { 
-        content: ''; 
-        width: 6px; height: 6px; 
-        background: var(--success); 
-        border-radius: 50%; 
-        position: absolute; 
-        bottom: 8px; right: 8px; /* More modern dot position */
-    }
-    .cd-num { font-size: 16px; font-weight: 600; }
-    .cal-day.selected .cd-num, .cal-day.selected .cd-day-name { color: white !important; }
+        /* Progress Ring (CSS Draw) */
+        .header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .prog-ring {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: conic-gradient(var(--accent) var(--deg, 0deg), #333 0deg);
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+        .prog-ring::after {
+            content: ''; position: absolute; width: 34px; height: 34px;
+            background: var(--card-bg); border-radius: 50%;
+        }
+        .prog-text { position: absolute; z-index: 2; font-size: 0.65rem; font-weight: bold; color: var(--text-muted); }
 
-    /* --- DASHBOARD CARDS --- */
-    .day-detail-card { 
-        background: var(--card); 
-        border: 1px solid var(--card-border); 
-        border-radius: 18px; 
-        padding: 20px; 
-        margin-top: 15px; 
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2); /* Soft shadow */
-    }
-    .dd-tag { 
-        font-size: 11px; font-weight: 700; 
-        background: rgba(72,72,74,0.5); /* Subtle background for tags */
-        color: var(--dim-text); 
-        padding: 6px 10px; 
-        border-radius: 6px; 
-        text-transform: uppercase; 
-        display: inline-block; 
-        margin-bottom: 10px; 
-    }
-    .dd-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
-    .dd-desc { font-size: 15px; color: var(--dim-text); margin-bottom: 15px; }
-    
-    .smart-tip { 
-        margin-top: 20px; 
-        padding: 12px; 
-        background: rgba(255,159,10,0.15); /* Accent color background */
-        border-left: 4px solid var(--accent); 
-        border-radius: 10px; 
-        font-size: 14px; 
-        color: var(--accent); 
-        display: flex; align-items: flex-start; gap: 10px;
-    }
-    .tip-icon { font-size: 18px; line-height: 1; }
-    .tip-text { flex: 1; }
+        /* List Items */
+        .task-item {
+            display: flex; flex-direction: column; gap: 8px;
+            padding: 16px 0; border-bottom: 0.5px solid var(--border);
+        }
+        .task-top { display: flex; align-items: center; justify-content: space-between; }
+        
+        /* Modern Checkbox */
+        .check-group { display: flex; align-items: center; gap: 12px; flex: 1; cursor: pointer; }
+        .circle-check {
+            width: 24px; height: 24px; border: 2px solid var(--border); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .checked .circle-check { border-color: var(--success); background: var(--success); }
+        .circle-check svg { width: 14px; height: 14px; fill: #000; opacity: 0; transform: scale(0.5); transition: 0.2s; }
+        .checked .circle-check svg { opacity: 1; transform: scale(1); }
+        
+        .task-name { font-size: 1rem; font-weight: 500; transition: 0.3s; }
+        .checked .task-name { color: var(--text-muted); text-decoration: line-through; }
 
-    .action-row { display: flex; gap: 12px; margin-top: 25px; }
-    .btn-primary { 
-        flex: 2; 
-        background: var(--primary); 
-        color: white; 
-        border: none; 
-        padding: 16px; 
-        border-radius: 12px; 
-        font-weight: 600; 
-        font-size: 17px; 
-        cursor: pointer; 
-        transition: background 0.2s ease-out, transform 0.1s ease-out;
-    }
-    .btn-primary:active { transform: scale(0.98); }
-    .btn-outline { 
-        flex: 1; 
-        background: transparent; 
-        border: 1px solid var(--card-border); 
-        color: var(--dim-text); 
-        padding: 16px; 
-        border-radius: 12px; 
-        font-weight: 500; 
-        font-size: 15px; 
-        cursor: pointer; 
-        transition: background 0.2s ease-out, color 0.2s ease-out, transform 0.1s ease-out;
-    }
-    .btn-outline:active { background: #2C2C2E; transform: scale(0.98); }
+        /* YouTube Button */
+        .yt-btn {
+            background: rgba(255, 59, 48, 0.15); border-radius: 8px;
+            padding: 6px 10px; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; transition: 0.2s;
+        }
+        .yt-btn svg { width: 18px; height: 18px; fill: var(--danger); }
+        .yt-btn:active { background: rgba(255, 59, 48, 0.3); transform: scale(0.95); }
 
-    /* --- HEATMAP --- */
-    .heatmap-container { display: flex; justify-content: center; margin-top: 30px; gap: 10px; }
-    .hm-part { 
-        width: 80px; height: 100px; 
-        background: var(--card-border); 
-        border-radius: 12px; 
-        display: flex; flex-direction: column; align-items: center; justify-content: center; 
-        font-size: 11px; font-weight: 600; 
-        color: var(--dim-text); 
-        transition: all 0.4s ease-out; 
-        border: 1px solid transparent; /* Default transparent border */
-        overflow: hidden;
-        position: relative;
-    }
-    .hm-part::before { /* Gradient overlay for better look */
-        content: '';
-        position: absolute; inset: 0;
-        background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
-        z-index: 1;
-    }
-    .hm-level-bar {
-        position: absolute; bottom: 0; width: 100%; 
-        background: linear-gradient(to top, var(--danger), var(--warning), var(--success));
-        height: 0; /* Controlled by JS */
-        transition: height 0.4s ease-out;
-        z-index: 0;
-    }
-    .hm-part span { z-index: 2; position: relative; } /* Ensure text is above gradient */
-    .hm-part.low-energy { color: white; background: var(--danger); }
-    .hm-part.medium-energy { color: white; background: var(--warning); }
-    .hm-part.high-energy { color: black; background: var(--success); }
+        /* Inputs */
+        .task-inputs { display: flex; gap: 10px; padding-left: 36px; margin-top: 4px; }
+        .data-pill {
+            background: #000; border: 1px solid var(--border); border-radius: 8px;
+            display: flex; flex-direction: column; padding: 4px 8px; min-width: 60px;
+        }
+        .data-label { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; }
+        .data-input {
+            background: none; border: none; color: #fff; font-size: 1rem; width: 100%;
+            outline: none; padding: 2px 0; font-weight: 600;
+        }
+        .prev-data { font-size: 0.75rem; color: var(--accent); margin-top: 8px; padding-left: 36px; opacity: 0.8; }
 
-    /* --- VAULT (KNOWLEDGE) --- */
-    .vault-search { 
-        width: 100%; 
-        background: var(--card); 
-        border: 1px solid var(--card-border); 
-        padding: 12px 15px; 
-        border-radius: 12px; 
-        color: var(--text); 
-        font-size: 16px; 
-        margin-bottom: 25px; 
-        box-sizing: border-box;
-    }
-    .vault-search::placeholder { color: var(--dim-text); opacity: 0.7; }
-    .vault-search:focus { border-color: var(--primary); outline: none; }
-    
-    .vault-item { 
-        background: var(--card); 
-        border: 1px solid var(--card-border); 
-        border-radius: 16px; 
-        margin-bottom: 12px; 
-        overflow: hidden; 
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    .vi-head { 
-        padding: 18px; 
-        display: flex; justify-content: space-between; align-items: center; 
-        cursor: pointer; 
-        transition: background 0.2s ease-out;
-    }
-    .vi-head:active { background: #2C2C2E; }
-    .vi-title { font-weight: 600; font-size: 17px; }
-    .vi-tag { 
-        font-size: 11px; font-weight: 700; 
-        padding: 4px 8px; 
-        border-radius: 5px; 
-        background: rgba(72,72,74,0.5); 
-        color: var(--dim-text); 
-        text-transform: uppercase;
-    }
-    .vi-body { 
-        display: none; 
-        padding: 10px 18px 18px 18px; 
-        border-top: 1px solid var(--card-border); 
-        font-size: 15px; 
-        color: #ccc; 
-        line-height: 1.6; 
-    }
-    .vi-body.open { 
-        display: block; 
-        animation: slideDown 0.3s ease-out; 
-    }
-    .vi-body p { margin-bottom: 10px; }
-    .vi-body p:last-child { margin-bottom: 0; }
-    .vi-body strong { color: var(--text); }
-    .vi-body ul { padding-left: 20px; margin-top: 5px; margin-bottom: 10px; }
-    .vi-body li { margin-bottom: 5px; }
+        /* --- BOTTOM BAR --- */
+        .bottom-bar {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-top: 0.5px solid var(--border);
+            padding: 10px 30px; padding-bottom: calc(10px + env(safe-area-inset-bottom));
+            display: flex; justify-content: space-between; align-items: center; z-index: 200;
+        }
+        .tab-item { display: flex; flex-direction: column; align-items: center; gap: 4px; opacity: 0.6; font-size: 0.7rem; cursor: pointer; }
+        .tab-item.active { opacity: 1; color: var(--accent); }
+        .tab-item.active svg { fill: var(--accent); }
+        .tab-center {
+            background: var(--accent); width: 50px; height: 50px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin-top: -30px; box-shadow: 0 4px 15px var(--accent-glow);
+        }
+        .tab-center svg { fill: #fff; width: 28px; height: 28px; }
 
-    /* --- SESSION TRACKER --- */
-    .session-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-    .timer-badge { 
-        font-family: monospace; 
-        font-size: 17px; 
-        background: var(--card-border); 
-        padding: 8px 12px; 
-        border-radius: 8px; 
-        color: var(--success); 
-        font-weight: 600;
-    }
-    
-    .ex-card { 
-        background: var(--card); 
-        border-radius: 16px; 
-        padding: 18px; 
-        margin-bottom: 15px; 
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    .ex-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-    .ex-name { font-size: 18px; font-weight: 600; }
-    .btn-add-set { 
-        background: transparent; border: none; 
-        color: var(--primary); 
-        font-size: 24px; font-weight: 300; /* Thin plus sign */
-        padding: 0 5px; 
-        cursor: pointer;
-    }
+        /* --- TIMER OVERLAY --- */
+        .timer-overlay {
+            position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+            background: #2c2c2e; padding: 10px 20px; border-radius: 30px;
+            border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: none; align-items: center; gap: 15px; z-index: 150;
+        }
+        .timer-overlay.active { display: flex; animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes slideUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
 
-    .ex-row { display: grid; grid-template-columns: 30px 1fr 1fr 45px; gap: 10px; align-items: center; margin-bottom: 10px; }
-    .set-num { font-size: 13px; color: var(--dim-text); text-align: center; }
-    .inp { 
-        background: rgba(0,0,0,0.5); 
-        border: 1px solid var(--card-border); 
-        color: var(--text); 
-        border-radius: 8px; 
-        padding: 10px; 
-        text-align: center; 
-        width: 100%; 
-        box-sizing: border-box; 
-        font-size: 16px;
-        -webkit-appearance: none; /* Remove default iOS styles */
-    }
-    .inp:focus { outline: none; border-color: var(--primary); }
-    .chk { 
-        width: 40px; height: 40px; 
-        display: flex; align-items: center; justify-content: center; 
-        background: var(--card-border); 
-        border-radius: 10px; 
-        cursor: pointer; 
-        font-size: 20px; 
-        color: var(--dim-text); 
-        transition: background 0.2s ease-out, color 0.2s ease-out;
-    }
-    .chk.done { background: var(--success); color: var(--bg); }
+        /* --- MODALS --- */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 300;
+            align-items: flex-end; /* Sheet style */
+        }
+        .modal.active { display: flex; }
+        .modal-sheet {
+            background: var(--card-bg); width: 100%; border-radius: 20px 20px 0 0;
+            padding: 25px; max-height: 85vh; overflow-y: auto;
+            animation: slideUpSheet 0.3s ease-out;
+        }
+        @keyframes slideUpSheet { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        
+        .btn-block { width: 100%; padding: 15px; background: #333; color: #fff; border: none; border-radius: 12px; font-size: 1rem; margin-top: 10px; font-weight: 600; }
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-danger { background: rgba(255, 69, 58, 0.15); color: var(--danger); }
 
-    /* --- MODALS --- */
-    .modal-overlay { 
-        position: fixed; inset: 0; 
-        background: rgba(0,0,0,0.6); 
-        z-index: 2000; 
-        display: none; 
-        align-items: flex-end; 
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
-        animation: modalFadeIn 0.2s ease-out;
-    }
-    @keyframes modalFadeIn { from{opacity:0;} to{opacity:1;} }
-
-    .modal-box { 
-        background: #1a1a1a; 
-        width: 100%; 
-        border-radius: 25px 25px 0 0; 
-        padding: 25px; 
-        max-height: 80vh; 
-        overflow-y: auto; 
-        animation: slideUp 0.3s ease-out;
-    }
-    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-    .plan-opt { 
-        padding: 18px; 
-        background: var(--card); 
-        border: 1px solid var(--card-border); 
-        border-radius: 12px; 
-        margin-bottom: 10px; 
-        cursor: pointer; 
-        display: flex; justify-content: space-between; align-items: center; 
-        transition: background 0.2s ease-out;
-    }
-    .plan-opt:active { background: #2C2C2E; } /* Darker active state */
-    .plan-opt-title { font-weight: 600; font-size: 17px; }
-    .plan-opt-tag { font-size: 11px; background: rgba(72,72,74,0.5); padding: 5px 9px; border-radius: 5px; color: var(--dim-text); text-transform: uppercase; }
-
-    .btn-flat {
-        width: 100%; background: transparent; border: none;
-        color: var(--primary); padding: 15px; border-radius: 12px;
-        font-weight: 600; font-size: 16px; margin-top: 15px; cursor: pointer;
-        transition: background 0.2s ease-out;
-    }
-    .btn-flat:active { background: rgba(10,132,255,0.15); }
-
-    .hidden { display: none !important; }
-</style>
+        /* Canvas Chart */
+        #weightCanvas { width: 100%; height: 200px; margin-top: 20px; }
+        #confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
+    </style>
 </head>
 <body>
 
-    <div id="view-dash" class="screen active">
-        <h1 style="margin-bottom: 25px; text-align: center;">APEX <span style="font-size:18px; color:var(--dim-text)">ZERO</span></h1>
+    <canvas id="confetti"></canvas>
 
-        <div class="calendar-header">
-            <button class="cal-nav-btn" onclick="changeMonth(-1)">&#x276E;</button>
-            <div class="month-title" id="monthDisplay">ARALIK 2024</div>
-            <button class="cal-nav-btn" onclick="changeMonth(1)">&#x276F;</button>
+    <header>
+        <div class="app-title">LegalMech<span>Fit</span></div>
+        <div class="streak-pill" id="streakBadge">
+            <svg style="width:14px; height:14px; fill:#ff9f0a" viewBox="0 0 24 24"><path d="M17.66 11.2C17.43 10.9 17.15 10.64 16.89 10.38C16.22 9.78 15.46 9.35 14.82 8.72C13.33 7.26 13 4.85 13.95 3C13.08 3.23 12.17 3.75 11.46 4.32C8.96 6.35 7.97 9.8 9.18 12.87C9.33 13.24 9.55 13.63 9.79 13.97C10 14.33 10.28 14.7 10.45 15C10.63 15.35 10.74 15.82 10.65 16.23C10.56 16.63 10.3 16.97 10 17.22C9.28 17.81 8.27 17.83 7.42 17.44C7.03 17.25 6.67 16.92 6.4 16.5C6.11 16.03 5.92 15.5 5.86 14.95C5.84 14.75 5.56 14.72 5.5 14.91C4.46 18.23 5.83 21.84 8.79 23.36C10.45 24.21 12.42 24.21 14.08 23.36C18.67 21.03 19.9 15.19 17.66 11.2Z"/></svg>
+            <span id="streakCount">0</span>
         </div>
+    </header>
 
-        <div class="calendar-grid" id="calendarGrid">
+    <div class="date-strip">
+        <div class="nav-arrow" onclick="changeDate(-1)">❮</div>
+        <div class="date-main" id="dateDisplay">Bugün</div>
+        <div class="nav-arrow" onclick="changeDate(1)">❯</div>
+    </div>
+
+    <div class="container">
+        
+        <div id="warningArea"></div>
+
+        <div class="card">
+            <div class="header-row">
+                <div>
+                    <h2 style="margin:0; font-size:1.3rem;" id="programName">Program</h2>
+                    <p style="margin:5px 0 0 0; color:var(--text-muted); font-size:0.85rem;" id="programSub">...</p>
+                </div>
+                <div class="prog-ring" id="progressRing">
+                    <span class="prog-text" id="progressText">0%</span>
+                </div>
             </div>
 
-        <div class="day-detail-card">
+            <div id="workoutList">
+                </div>
+        </div>
+
+        <div class="card">
+            <h3 style="margin:0 0 15px 0;">Günlük</h3>
+            <div style="display:flex; gap:10px; margin-bottom:10px;">
+                 <div class="data-pill" style="width:100px;">
+                    <span class="data-label">Kilo (Kg)</span>
+                    <input type="number" id="weightInput" class="data-input" onchange="saveWeight()">
+                 </div>
+            </div>
+            <textarea id="journalInput" style="width:100%; background:#111; color:#fff; border:1px solid var(--border); border-radius:12px; padding:12px; min-height:80px; resize:none;" placeholder="Antrenman notları..." oninput="saveJournal()"></textarea>
+        </div>
+        
+        <div style="height:20px;"></div>
+    </div>
+
+    <div class="timer-overlay" id="timerOverlay">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z" fill="var(--accent)"/></svg>
+        <span style="font-family:monospace; font-size:1.4rem; font-weight:bold; width:60px;" id="timerDisplay">00:00</span>
+        <div style="display:flex; gap:10px;">
+            <button class="icon-btn" onclick="addTime(10)">+10</button>
+            <button class="icon-btn icon-danger" onclick="stopTimer()">
+                <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="bottom-bar">
+        <div class="tab-item" onclick="togglePanic()">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span>Ev Modu</span>
+        </div>
+        <div class="tab-center" onclick="startTimer()">
+            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+        </div>
+        <div class="tab-item" onclick="openModal('statsModal')">
+            <svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
+            <span>Veriler</span>
+        </div>
+    </div>
+
+    <div class="modal" id="statsModal">
+        <div class="modal-sheet">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div class="dd-tag" id="planTag"></div>
-                <div style="font-size:13px; color:var(--dim-text); font-weight:500;" id="selectedDateText"></div>
+                <h2>İstatistikler</h2>
+                <button class="icon-btn" onclick="closeModal('statsModal')">✕</button>
             </div>
-            <h2 class="dd-title" id="planTitle"></h2>
-            <p class="dd-desc" id="planDesc"></p>
+            <p style="font-size:0.9rem; color:var(--text-muted)">Son 14 gün Kilo Takibi</p>
+            <canvas id="weightCanvas"></canvas>
             
-            <div class="smart-tip hidden" id="smartTip">
-                <span class="tip-icon">💡</span>
-                <span class="tip-text"></span>
-            </div>
-
-            <div class="action-row">
-                <button class="btn-primary" onclick="startSession()">ANTRENMANA BAŞLA</button>
-                <button class="btn-outline" onclick="openEditor()">PLANLA</button>
-            </div>
-        </div>
-
-        <h3 style="margin-top: 35px; text-align: center; color:var(--dim-text);">ENERJİ SEVİYELERİ</h3>
-        <div class="heatmap-container">
-            <div class="hm-part" id="hm-upper">
-                <div class="hm-level-bar" id="bar-upper"></div>
-                <span>ÜST VÜCUT</span>
-            </div>
-            <div class="hm-part" id="hm-core">
-                <div class="hm-level-bar" id="bar-core"></div>
-                <span>CORE</span>
-            </div>
-            <div class="hm-part" id="hm-legs">
-                <div class="hm-level-bar" id="bar-legs"></div>
-                <span>BACAKLAR</span>
-            </div>
+            <h3 style="margin-top:20px;">Araçlar</h3>
+            <button class="btn-block" onclick="exportData()">📤 Verileri Yedekle</button>
+            <button class="btn-block btn-danger" onclick="resetApp()">🗑 Verileri Sıfırla</button>
+            <input type="file" id="importFile" style="display:none" onchange="importData(this)">
+            <button class="btn-block" onclick="document.getElementById('importFile').click()">📥 Yedek Yükle</button>
         </div>
     </div>
 
-    <div id="view-session" class="screen">
-        <div class="session-header">
-            <h1 style="font-size:24px;">Antrenman</h1>
-            <div class="timer-badge" id="sessionTimer">00:00</div>
-        </div>
-        <div id="sessionList"></div>
-        <button class="btn-primary" style="background:var(--danger); margin-top:25px;" onclick="finishSession()">BİTİR VE KAYDET</button>
-    </div>
-
-    <div id="view-vault" class="screen">
-        <h1 style="margin-bottom:5px;">THE VAULT</h1>
-        <p style="font-size:15px; color:var(--dim-text); margin-bottom:25px;">Bio-Hacking & Uzman Protokolleri</p>
-        
-        <input type="text" class="vault-search" placeholder="Ara (Örn: Diz, Kreatin, Uyku)..." onkeyup="renderVault(this.value)">
-        
-        <div id="vaultGrid">
-            </div>
-    </div>
-
-    <div class="tab-bar">
-        <div class="tab-btn active" onclick="nav('dash')">
-            <div class="tab-icon">📅</div>
-            <div>Plan</div>
-        </div>
-        <div class="tab-btn" onclick="nav('session')">
-            <div class="tab-icon">🏋️</div>
-            <div>Antrenman</div>
-        </div>
-        <div class="tab-btn" onclick="nav('vault')">
-            <div class="tab-icon">🧠</div>
-            <div>Vault</div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="editModal" onclick="if(event.target===this) closeModal()">
-        <div class="modal-box">
-            <h3 style="margin-top:0; margin-bottom:20px; color:white;">PLAN SEÇ</h3>
-            <div id="templateList"></div>
-            <button class="btn-flat" onclick="closeModal()">İptal</button>
-        </div>
-    </div>
-
-<script>
-    /* --- VERİTABANI: ŞABLONLAR & BİLGİ --- */
-    const templates = {
-        'gym_pzt': { name: "Gym: Maksimum Güç", tag:"GYM", tip:"Set arası 3dk dinlen. ATP yenilensin. Büyük kas gruplarına odaklan.", moves: ["Barbell Squat", "Bench Press", "Bent Over Row", "Overhead Press"], energy: [60, 40, 80] },
-        'gym_cum': { name: "Gym: Hipertrofi", tag:"GYM", tip:"Her sette kası hisset. Negatifleri yavaş yap (3 saniye).", moves: ["Incline Dumbbell Press", "Lat Pulldown", "Lateral Raise", "Bicep Curl", "Tricep Pushdown"], energy: [80, 70, 50] },
-        'gym_cmt': { name: "Gym: Patlayıcılık", tag:"GYM", tip:"Yorgun hissedersen sıçramaları yapma. Hızlı ve kontrollü ol.", moves: ["Trap Bar Deadlift", "Box Jump", "Plyo Push-up"], energy: [40, 60, 90] },
-        'basket': { name: "Basketbol İdmanı", tag:"SPORT", tip:"Maçtan 4 saat önce kompleks karbonhidrat yüklemesi yap.", moves: ["Isınma & Esneme", "Basketbol Drilleri", "Maç Simülasyonu", "Soğuma"], energy: [70, 80, 70] },
-        'active': { name: "Aktif Dinlenme", tag:"RECOVERY", tip:"Nabzı 120'nin altında tut, sadece kan dolaşımı için.", moves: ["Hafif Yürüyüş (45dk)", "Yoga / Esneme"], energy: [90, 90, 90] },
-        'rest': { name: "Tam Dinlenme", tag:"OFF", tip:"Bugün tam dinlenme. Büyüme hormonu için kaliteli uyku şart.", moves: [], energy: [100, 100, 100] }
-    };
-
-    const vaultContent = [
-        { title: "Maç Günü Beslenmesi", tag: "BESLENME", body: `
-            <p>Müsabaka günü beslenme stratejin, performansının anahtarıdır. Kanı mideden çekip kaslara ve beyne pompalamak için sindirimi kolay gıdalar seçmelisin.</p>
-            <h3>Protokol</h3>
-            <ul>
-                <li><strong>4 Saat Önce:</strong> Yağsız Tavuk Göğsü + Yasmin Pirinç. (Yavaş sindirilen karbonhidrat ve protein).</li>
-                <li><strong>45 Dakika Önce:</strong> 200mg Kafein + 1/2 Çay Kaşığı Tuz + 400ml Su. (Odaklanma, kramp önleme).</li>
-                <li><strong>Devre Arası:</strong> Jel veya Meyve Suyu. (Hızlı enerji, çiğneme yapma).</li>
-            </ul>
-        `},
-        { title: "Jumper's Knee (Patellar Tendinopati)", tag: "SAKATLIK", body: `
-            <p>Diz kapağının hemen altındaki batma hissi, atlama ve sıçrama sporcularında sık görülür. Tendonun aşırı yüklenmesiyle oluşur.</p>
-            <h3>Tedavi Egzersizi: Spanish Squat</h3>
-            <p>Bir direnç bandını (veya havluyu) dizlerinin arkasına, bir direğe bağla. Geriye doğru yaslanarak dizlerin 90 derece olana kadar otur. Bu izometrik bekleme, tendondaki ağrıyı azaltır ve güçlenmesini sağlar.</p>
-            <ul>
-                <li><strong>Dozaj:</strong> 5 Set x 45 Saniye Bekleme.</li>
-                <li><strong>Sıklık:</strong> Ağrı geçene kadar günde 1-2 kez.</li>
-            </ul>
-        `},
-        { title: "Sirkadiyen Ritme Göre Uyku", tag: "RECOVERY", body: `
-            <p>Uyku kaliteni artırarak hem fiziksel hem zihinsel toparlanmayı hızlandırabilirsin. Sirkadiyen ritmini optimize etmek çok önemlidir.</p>
-            <h3>Protokol: 10-3-2-1 Kuralı</h3>
-            <ul>
-                <li><strong>10 Saat Önce:</strong> Kafeini kes.</li>
-                <li><strong>3 Saat Önce:</strong> Ağır yemeği ve alkolü kes.</li>
-                <li><strong>2 Saat Önce:</strong> İşle ilgili zihinsel aktiviteyi bırak.</li>
-                <li><strong>1 Saat Önce:</strong> Tüm ekranları kapat (telefon, tablet, TV).</li>
-            </ul>
-            <p>Ek olarak, sabah uyandıktan sonra ilk 30 dakika içinde doğal ışık almak (güneş veya parlak oda), melatonin döngünü düzenler.</p>
-        `},
-        { title: "Optimal Supplement Stack", tag: "KİMYA", body: `
-            <p>Piyasada binlerce takviye olsa da, bilimsel olarak kanıtlanmış ve gerçek fayda sağlayanlar sınırlıdır. Gereksiz harcamalardan kaçın.</p>
-            <h3>Olmazsa Olmazlar</h3>
-            <ul>
-                <li><strong>Kreatin Monohidrat:</strong> Günde 5g. (ATP depolarını artırır, güç ve performans sağlar. Saç dökmesi efsanedir).</li>
-                <li><strong>Magnezyum Bisglisinat:</strong> Gece yatmadan 400mg. (Kas gevşemesi, uyku kalitesi ve sinir sistemi desteği).</li>
-                <li><strong>D3 Vitamini (K2 ile):</strong> Günde 5000 IU. (Kemik sağlığı, bağışıklık, hormonal denge).</li>
-            </ul>
-        `},
-    ];
-
-    // --- JAVASCRIPT: TEMEL FONKSİYONLAR ---
-
-    // GLOBAL DURUM (STATE)
-    let currentMonth = new Date().getMonth();
-    let currentYear = new Date().getFullYear();
-    let selectedDate = new Date();
-    let workouts = {}; // 'YYYY-MM-DD': templateKey
-    let timerInterval;
-    let startTime;
-    let currentSession = null; // Aktif antrenman oturumu
-    let sessionTime = 0;
-
-    // GÜNÜN PLANINI ALMA
-    function getPlanForDate(date) {
-        const dateKey = formatDate(date);
-        const templateKey = workouts[dateKey] || 'rest'; 
-        return templates[templateKey];
-    }
-
-    // TARİH FORMATLAMA (YYYY-MM-DD)
-    function formatDate(date) {
-        const y = date.getFullYear();
-        const m = String(date.getMonth() + 1).padStart(2, '0');
-        const d = String(date.getDate()).padStart(2, '0');
-        return `${y}-${m}-${d}`;
-    }
-
-    // NAVİGASYON FONKSİYONU
-    function nav(viewId) {
-        const screens = document.querySelectorAll('.screen');
-        screens.forEach(screen => screen.classList.remove('active'));
-        document.getElementById('view-' + viewId).classList.add('active');
-
-        const tabs = document.querySelectorAll('.tab-btn');
-        tabs.forEach(tab => tab.classList.remove('active'));
-        document.querySelector(`.tab-btn[onclick="nav('${viewId}')"]`).classList.add('active');
-
-        if (viewId === 'dash') {
-            renderCalendar(); // Takvimi her dönüşte yeniden çiz
-        }
-        if (viewId === 'vault') {
-            renderVault(''); // Vault'u ilk açılışta yükle
-        }
-    }
-
-    // --- DASHBOARD: TAKVİM VE PLAN YÖNETİMİ ---
-
-    function renderCalendar() {
-        const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
-        const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
-        const dayCount = lastDayOfMonth.getDate();
-        const firstDayIndex = firstDayOfMonth.getDay(); // Pazar 0, Pazartesi 1...
-
-        document.getElementById('monthDisplay').textContent = 
-            firstDayOfMonth.toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' }).toUpperCase();
-        
-        const calendarGrid = document.getElementById('calendarGrid');
-        calendarGrid.innerHTML = ''; // Temizle
-
-        // Gün başlıklarını ekle (Pzt, Sal, Ça...)
-        const dayNames = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
-        dayNames.forEach(day => {
-            calendarGrid.innerHTML += `<div class="cal-day-head">${day}</div>`;
-        });
-
-        // Boş günleri ekle (Haftanın ilk günü Pzt olsun)
-        let startDay = (firstDayIndex === 0 ? 6 : firstDayIndex - 1);
-        for (let i = 0; i < startDay; i++) {
-            calendarGrid.innerHTML += `<div class="cal-day empty"></div>`;
-        }
-
-        // Günleri ekle
-        for (let i = 1; i <= dayCount; i++) {
-            const date = new Date(currentYear, currentMonth, i);
-            const dateKey = formatDate(date);
-            const isToday = date.toDateString() === new Date().toDateString();
-            const isSelected = dateKey === formatDate(selectedDate);
-            const hasWorkout = workouts[dateKey] && workouts[dateKey] !== 'rest';
-            
-            let classes = 'cal-day';
-            if (isToday) classes += ' today';
-            if (isSelected) classes += ' selected';
-            if (hasWorkout) classes += ' has-workout';
-
-            calendarGrid.innerHTML += `
-                <div class="${classes}" onclick="selectDate(new Date(${currentYear}, ${currentMonth}, ${i}))">
-                    <div class="cd-num">${i}</div>
-                </div>
-            `;
-        }
-
-        updateDayDetails();
-    }
-
-    function changeMonth(delta) {
-        currentMonth += delta;
-        if (currentMonth < 0) {
-            currentMonth = 11;
-            currentYear--;
-        } else if (currentMonth > 11) {
-            currentMonth = 0;
-            currentYear++;
-        }
-        selectedDate = new Date(currentYear, currentMonth, 1); // Yeni ayın 1. gününü seç
-        renderCalendar();
-    }
-
-    function selectDate(date) {
-        selectedDate = date;
-        renderCalendar(); // Takvimi yeniden çizmek, seçili günü vurgulayacaktır.
-    }
-
-    function updateDayDetails() {
-        const plan = getPlanForDate(selectedDate);
-        const dateKey = formatDate(selectedDate);
-        const dateDisplay = selectedDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' });
-
-        document.getElementById('selectedDateText').textContent = dateDisplay;
-        document.getElementById('planTag').textContent = plan.tag;
-        document.getElementById('planTitle').textContent = plan.name;
-        document.getElementById('planDesc').textContent = plan.moves.join(' / ');
-        
-        const smartTipEl = document.getElementById('smartTip');
-        smartTipEl.classList.add('hidden'); // Her zaman gizle
-        if (plan.tip) {
-            smartTipEl.classList.remove('hidden');
-            document.querySelector('#smartTip .tip-text').textContent = plan.tip;
-        }
-        
-        updateHeatmap(plan.energy);
-        
-        // Antrenmana Başla butonu durumunu ayarla
-        const startBtn = document.querySelector('.btn-primary');
-        if (currentSession) {
-            startBtn.textContent = 'OTURUMU DEVAM ETTİR';
-            startBtn.onclick = () => nav('session');
-        } else if (plan.tag === 'OFF') {
-            startBtn.textContent = 'DİNLENMEYİ KAYDET';
-            startBtn.onclick = () => alert('Dinlenme gününü kaydettin.');
-        } else {
-            startBtn.textContent = 'ANTRENMANA BAŞLA';
-            startBtn.onclick = startSession;
-        }
-    }
-
-    function updateHeatmap(energyLevels) { // [upper, core, legs]
-        const parts = ['upper', 'core', 'legs'];
-        parts.forEach((part, index) => {
-            const level = energyLevels[index];
-            const hmPart = document.getElementById(`hm-${part}`);
-            const bar = document.getElementById(`bar-${part}`);
-            
-            // Bar yüksekliği (0% - 100%)
-            bar.style.height = `${level}%`;
-            
-            // Renk sınıfı (Yüksek/Orta/Düşük enerji)
-            hmPart.className = 'hm-part';
-            if (level >= 80) {
-                hmPart.classList.add('high-energy');
-            } else if (level >= 50) {
-                hmPart.classList.add('medium-energy');
-            } else {
-                hmPart.classList.add('low-energy');
-            }
-        });
-    }
-
-    // --- PLANLAMA VE MODAL ---
-    function openEditor() {
-        renderTemplates();
-        document.getElementById('editModal').style.display = 'flex';
-    }
-
-    function closeModal() {
-        document.getElementById('editModal').style.display = 'none';
-    }
-
-    function renderTemplates() {
-        const templateList = document.getElementById('templateList');
-        templateList.innerHTML = '';
-        
-        for (const key in templates) {
-            const t = templates[key];
-            templateList.innerHTML += `
-                <div class="plan-opt" onclick="applyTemplate('${key}')">
-                    <div class="plan-opt-title">${t.name}</div>
-                    <div class="plan-opt-tag">${t.tag}</div>
-                </div>
-            `;
-        }
-    }
-
-    function applyTemplate(templateKey) {
-        const dateKey = formatDate(selectedDate);
-        workouts[dateKey] = templateKey;
-        closeModal();
-        renderCalendar(); // Takvimi ve detayları güncelle
-    }
-
-
-    // --- ANTRENMAN OTURUMU (SESSION) ---
-    function startSession() {
-        const plan = getPlanForDate(selectedDate);
-        if (plan.tag === 'OFF') return; // Dinlenme günü ise başlatma
-
-        currentSession = {
-            date: formatDate(selectedDate),
-            template: plan.name,
-            exercises: plan.moves.map(move => ({ name: move, sets: [] })),
-            isRunning: true,
-            setsDone: 0
+    <script>
+        /* --- JS LOGIC --- */
+        const templates = {
+            0: { title: "Dinlenme", sub: "Pazar: Aktif Toparlanma", items: ["45 Dk Yürüyüş", "Foam Rolling", "Meal Prep"] },
+            1: { title: "Chest & Back", sub: "Pazartesi: Hipertrofi", items: ["Bench Press (4x8)", "Bent Over Row (4x10)", "Incline DB Press (3x10)", "Lat Pulldown (3x12)", "Face Pull (3x15)"] },
+            2: { title: "Legs & Core", sub: "Salı: Kuvvet", items: ["Squat (4x6)", "RDL (3x10)", "Leg Extension (3x15)", "Calf Raise (4x20)", "Plank (3x1 dk)"] },
+            3: { title: "Maç Günü", sub: "Çarşamba: Basketbol", items: ["Maç (21:45)", "Karbonhidrat Yüklemesi", "Magnezyum"], warning: "Maç için enerjini koru." },
+            4: { title: "Shoulders & Arms", sub: "Perşembe: Pump", items: ["Overhead Press (4x8)", "Lateral Raise (4x15)", "Barbell Curl (3x10)", "Tricep Pushdown (3x12)"] },
+            5: { title: "Mobility", sub: "Cuma: Pilates", items: ["Pilates (19:00)", "Kalça Mobilite", "Omurga Esnetme"] },
+            6: { title: "Upper Body", sub: "Cumartesi: Hacim", items: ["Pull Up (3xMax)", "Dips (3x10)", "DB Shoulder Press (3x12)", "Cable Fly (3x15)"] },
+            panic: { title: "Ev Modu", sub: "Ekipmansız Antrenman", items: ["50x Şınav", "50x Squat", "50x Mekik", "Burpees (3x10)", "Esneme"], warning: "Bahane yok!" }
         };
-        
-        // Oturumu başlat ve sayacı ayarla
-        startTime = Date.now();
-        sessionTime = 0;
-        timerInterval = setInterval(updateTimer, 1000);
-        
-        renderSession();
-        nav('session'); // Antrenman ekranına geç
-    }
 
-    function updateTimer() {
-        sessionTime = Math.floor((Date.now() - startTime) / 1000);
-        const minutes = String(Math.floor(sessionTime / 60)).padStart(2, '0');
-        const seconds = String(sessionTime % 60).padStart(2, '0');
-        document.getElementById('sessionTimer').textContent = `${minutes}:${seconds}`;
-    }
+        let currentDate = new Date();
+        let appData = JSON.parse(localStorage.getItem('legalMechApp')) || {};
+        let timerInt = null;
+        let timerSec = 0;
 
-    function renderSession() {
-        if (!currentSession) return;
+        const formatDate = d => d.toISOString().split('T')[0];
         
-        document.querySelector('#view-session h1').textContent = currentSession.template;
-        
-        const sessionList = document.getElementById('sessionList');
-        sessionList.innerHTML = '';
-        
-        currentSession.exercises.forEach((ex, exIndex) => {
-            let setsHtml = `<div style="display:grid; grid-template-columns: 30px 1fr 1fr 45px; gap: 10px; margin-bottom: 10px; font-weight:600; color:var(--dim-text);">
-                                <div style="text-align:center;">SET</div><div>KG/LBS</div><div>TEKRAR</div><div></div>
-                            </div>`;
-                            
-            ex.sets.forEach((set, setIndex) => {
-                setsHtml += `
-                    <div class="ex-row">
-                        <div class="set-num">${setIndex + 1}</div>
-                        <input type="number" class="inp" placeholder="Ağırlık" value="${set.weight || ''}" oninput="updateSet(${exIndex}, ${setIndex}, 'weight', this.value)">
-                        <input type="number" class="inp" placeholder="Tekrar" value="${set.reps || ''}" oninput="updateSet(${exIndex}, ${setIndex}, 'reps', this.value)">
-                        <div class="chk ${set.done ? 'done' : ''}" onclick="toggleSetDone(${exIndex}, ${setIndex})">${set.done ? '✅' : ' '}</div>
-                    </div>
-                `;
-            });
+        function init() {
+            // Touch delay fix for iOS
+            document.addEventListener('touchstart', function() {}, false);
+            render();
+            drawChart();
+            calcStreak();
+        }
+
+        function render() {
+            // Date UI
+            const dStr = currentDate.toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'short' });
+            document.getElementById('dateDisplay').innerText = dStr;
+
+            const key = formatDate(currentDate);
+            const dayIdx = currentDate.getDay();
             
-            setsHtml += `<button class="btn-flat" onclick="addSet(${exIndex})" style="margin-top:0; color:var(--accent); font-size:14px;">+ SET EKLE</button>`;
+            if (!appData[key]) appData[key] = { checked: [], sets: {}, weights: {}, notes: "", weight: "", isPanic: false };
+            const data = appData[key];
+            const tpl = data.isPanic ? templates['panic'] : templates[dayIdx];
 
-            sessionList.innerHTML += `
-                <div class="ex-card">
-                    <div class="ex-card-header">
-                        <div class="ex-name">${ex.name}</div>
+            document.getElementById('programName').innerText = tpl.title;
+            document.getElementById('programSub').innerText = tpl.sub;
+            document.getElementById('warningArea').innerHTML = tpl.warning ? `<div style="background:rgba(255,165,0,0.15); color:#ffa500; padding:10px; border-radius:8px; margin-bottom:15px; font-size:0.9rem;">⚠️ ${tpl.warning}</div>` : '';
+            document.getElementById('journalInput').value = data.notes || "";
+            document.getElementById('weightInput').value = data.weight || "";
+
+            const list = document.getElementById('workoutList');
+            list.innerHTML = '';
+            
+            tpl.items.forEach((item, idx) => {
+                const isChecked = data.checked.includes(idx);
+                const prev = getPrev(dayIdx, idx, data.isPanic);
+                
+                const div = document.createElement('div');
+                div.className = `task-item ${isChecked ? 'checked' : ''}`;
+                
+                // YouTube link logic
+                const ytUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(item + " exercise form")}`;
+                
+                div.innerHTML = `
+                    <div class="task-top">
+                        <div class="check-group" onclick="toggle(${idx})">
+                            <div class="circle-check">
+                                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                            </div>
+                            <span class="task-name">${item}</span>
+                        </div>
+                        <a href="${ytUrl}" target="_blank" class="yt-btn">
+                            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </a>
                     </div>
-                    ${setsHtml}
-                </div>
-            `;
-        });
-    }
-
-    function addSet(exIndex) {
-        if (!currentSession) return;
-        currentSession.exercises[exIndex].sets.push({ weight: '', reps: '', done: false });
-        renderSession();
-    }
-
-    function updateSet(exIndex, setIndex, field, value) {
-        if (!currentSession) return;
-        currentSession.exercises[exIndex].sets[setIndex][field] = value;
-        // Otomatik render yapmıyoruz, sadece veriyi güncelliyoruz.
-    }
-
-    function toggleSetDone(exIndex, setIndex) {
-        if (!currentSession) return;
-        const set = currentSession.exercises[exIndex].sets[setIndex];
-        set.done = !set.done;
-        
-        // Tamamlanan set sayısını güncelle (Basit bir örnek)
-        currentSession.setsDone = currentSession.exercises.reduce((count, ex) => 
-            count + ex.sets.filter(s => s.done).length, 0);
-
-        renderSession();
-    }
-
-    function finishSession() {
-        clearInterval(timerInterval);
-        alert(`Antrenman Tamamlandı! Süre: ${document.getElementById('sessionTimer').textContent}. Toplam Set: ${currentSession.setsDone}`);
-        
-        // Oturum verisini kaydetme (Şimdilik sadece konsola basıyoruz)
-        console.log("Kaydedilen Oturum:", currentSession);
-
-        currentSession = null;
-        document.getElementById('sessionTimer').textContent = '00:00';
-        
-        // Ana ekrana dön ve durumu güncelle
-        nav('dash'); 
-        updateDayDetails(); 
-    }
-
-    // --- VAULT (BİLGİ KAYNAĞI) ---
-    function renderVault(searchText) {
-        const vaultGrid = document.getElementById('vaultGrid');
-        vaultGrid.innerHTML = '';
-        const filteredContent = vaultContent.filter(item => 
-            item.title.toLowerCase().includes(searchText.toLowerCase()) || 
-            item.body.toLowerCase().includes(searchText.toLowerCase()) || 
-            item.tag.toLowerCase().includes(searchText.toLowerCase())
-        );
-
-        filteredContent.forEach((item, index) => {
-            vaultGrid.innerHTML += `
-                <div class="vault-item">
-                    <div class="vi-head" onclick="toggleVaultItem(${index})">
-                        <div class="vi-title">${item.title}</div>
-                        <div class="vi-tag">${item.tag}</div>
+                    <div class="task-inputs">
+                        <div class="data-pill">
+                            <span class="data-label">Set</span>
+                            <input type="text" class="data-input" value="${data.sets[idx]||''}" onchange="saveSub('sets', ${idx}, this.value)">
+                        </div>
+                        <div class="data-pill">
+                            <span class="data-label">Kg</span>
+                            <input type="number" class="data-input" value="${data.weights[idx]||''}" onchange="saveSub('weights', ${idx}, this.value)">
+                        </div>
                     </div>
-                    <div class="vi-body" id="vault-body-${index}">${item.body}</div>
-                </div>
-            `;
-        });
-    }
+                    ${prev ? `<div class="prev-data">Önceki: ${prev}kg</div>` : ''}
+                `;
+                list.appendChild(div);
+            });
 
-    function toggleVaultItem(index) {
-        const body = document.getElementById(`vault-body-${index}`);
-        body.classList.toggle('open');
-    }
+            // Progress Ring Logic
+            const total = tpl.items.length;
+            const done = data.checked.length;
+            const pct = total ? Math.round((done/total)*100) : 0;
+            document.getElementById('progressText').innerText = `${pct}%`;
+            document.getElementById('progressRing').style.setProperty('--deg', `${pct * 3.6}deg`);
+        }
 
+        function toggle(idx) {
+            const key = formatDate(currentDate);
+            const arr = appData[key].checked;
+            const pos = arr.indexOf(idx);
+            if(pos > -1) arr.splice(pos, 1); else arr.push(idx);
+            
+            // Konfeti (Sadece %100 olduğunda)
+            const dayIdx = currentDate.getDay();
+            const tpl = appData[key].isPanic ? templates['panic'] : templates[dayIdx];
+            if(arr.length === tpl.items.length) doConfetti();
 
-    // UYGULAMA BAŞLANGICI: DOM yüklendiğinde çalışacak ana fonksiyon
-    document.addEventListener('DOMContentLoaded', () => {
-        // Geçerli tarihi ayarla ve takvimi çiz
-        const today = new Date();
-        currentMonth = today.getMonth();
-        currentYear = today.getFullYear();
-        selectedDate = today;
+            save(); render(); calcStreak();
+        }
+
+        function saveSub(type, idx, val) {
+            appData[formatDate(currentDate)][type][idx] = val; save();
+        }
+        function saveWeight() {
+            appData[formatDate(currentDate)].weight = document.getElementById('weightInput').value; save(); drawChart();
+        }
+        function saveJournal() {
+            appData[formatDate(currentDate)].notes = document.getElementById('journalInput').value; save();
+        }
+        function changeDate(d) { currentDate.setDate(currentDate.getDate()+d); render(); }
         
-        // Başlangıç ekranını ayarla
-        nav('dash'); 
-    });
+        function getPrev(dIdx, iIdx, panic) {
+            let d = new Date(currentDate);
+            for(let i=1;i<45;i++){
+                d.setDate(d.getDate()-1);
+                const k = formatDate(d);
+                if(appData[k] && d.getDay()===dIdx && appData[k].isPanic===panic && appData[k].weights[iIdx]) return appData[k].weights[iIdx];
+            }
+            return null;
+        }
 
-</script>
+        function togglePanic() {
+            const k = formatDate(currentDate);
+            appData[k].isPanic = !appData[k].isPanic;
+            appData[k].checked = [];
+            save(); render();
+        }
+
+        function calcStreak() {
+            let s=0, d=new Date();
+            for(let i=0;i<365;i++){
+                const k=formatDate(d);
+                if(appData[k] && (appData[k].checked.length>0 || appData[k].notes)) s++;
+                else if(k !== formatDate(new Date())) break;
+                d.setDate(d.getDate()-1);
+            }
+            document.getElementById('streakCount').innerText = s;
+        }
+
+        /* --- TIMER --- */
+        function startTimer() {
+            document.getElementById('timerOverlay').classList.add('active');
+            if(timerInt) clearInterval(timerInt);
+            timerSec = 90; updateTimer();
+            timerInt = setInterval(()=>{
+                timerSec--; updateTimer();
+                if(timerSec<=0) { stopTimer(); alert("Süre bitti!"); }
+            },1000);
+        }
+        function addTime(s) { timerSec+=s; updateTimer(); }
+        function stopTimer() { clearInterval(timerInt); document.getElementById('timerOverlay').classList.remove('active'); }
+        function updateTimer() {
+            const m=Math.floor(timerSec/60), s=timerSec%60;
+            document.getElementById('timerDisplay').innerText = `${m}:${s<10?'0'+s:s}`;
+        }
+
+        /* --- CHART (Canvas) --- */
+        function drawChart() {
+            const ctx = document.getElementById('weightCanvas').getContext('2d');
+            const w=ctx.canvas.width=ctx.canvas.clientWidth, h=ctx.canvas.height=ctx.canvas.clientHeight;
+            
+            let pts=[]; let d=new Date();
+            for(let i=13;i>=0;i--){
+                let temp=new Date(); temp.setDate(d.getDate()-i);
+                let val = appData[formatDate(temp)]?.weight;
+                if(val) pts.push({x:i, y:parseFloat(val)});
+            }
+
+            ctx.clearRect(0,0,w,h);
+            if(pts.length<2) { ctx.fillStyle="#555"; ctx.fillText("Veri girildikçe grafik oluşur.", 20, h/2); return; }
+
+            const min = Math.min(...pts.map(p=>p.y))-1, max = Math.max(...pts.map(p=>p.y))+1;
+            
+            // Draw Gradient Line
+            const grad = ctx.createLinearGradient(0,0,0,h);
+            grad.addColorStop(0, "rgba(10,132,255,0.5)"); grad.addColorStop(1, "transparent");
+
+            ctx.beginPath();
+            pts.forEach((p,i)=>{
+                const x=(i/(pts.length-1))*(w-20)+10;
+                const y=h - ((p.y-min)/(max-min))*(h-40)-20;
+                if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+            });
+            ctx.strokeStyle="#0a84ff"; ctx.lineWidth=3; ctx.stroke();
+            
+            // Fill
+            ctx.lineTo(w-10, h); ctx.lineTo(10,h); ctx.fill();
+        }
+
+        /* --- UTILS --- */
+        function save(){ localStorage.setItem('legalMechApp', JSON.stringify(appData)); }
+        function openModal(id){ document.getElementById(id).classList.add('active'); if(id==='statsModal') drawChart(); }
+        function closeModal(id){ document.getElementById(id).classList.remove('active'); }
+        function resetApp(){ if(confirm('Silinsin mi?')) { localStorage.clear(); location.reload(); } }
+        function exportData(){
+            const a=document.createElement('a');
+            a.href="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(appData));
+            a.download="backup.json"; a.click();
+        }
+        function importData(inp){
+            const r=new FileReader(); r.onload=e=>{ appData=JSON.parse(e.target.result); save(); location.reload(); };
+            if(inp.files[0]) r.readAsText(inp.files[0]);
+        }
+        function doConfetti() {
+            const c=document.getElementById('confetti'); const x=c.getContext('2d');
+            c.width=window.innerWidth; c.height=window.innerHeight;
+            let p=[]; for(let i=0;i<60;i++)p.push({x:Math.random()*c.width,y:-10,v:Math.random()*5+2,c:`hsl(${Math.random()*360},100%,50%)`});
+            function anim(){ x.clearRect(0,0,c.width,c.height); let act=false;
+            p.forEach(o=>{o.y+=o.v; if(o.y<c.height){act=true;x.fillStyle=o.c;x.fillRect(o.x,o.y,6,6)}});
+            if(act)requestAnimationFrame(anim); else x.clearRect(0,0,c.width,c.height); }
+            anim();
+        }
+
+        init();
+    </script>
 </body>
 </html>
+
