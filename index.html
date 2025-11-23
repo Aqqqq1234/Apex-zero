@@ -2,532 +2,512 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Atlas</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#000000">
-    <title>ATLAS v2 Ultimate</title>
-
+    <meta name="apple-mobile-web-app-title" content="Atlas">
+    
     <style>
-        /* --- ATLAS v2 DESIGN SYSTEM --- */
         :root {
-            --bg: #050505; --card: #121212; --text: #e5e5e5; --muted: #737373;
-            --accent: #ef4444; /* Aggressive Red */
-            --blue: #3b82f6; /* Tech Blue */
-            --gold: #eab308; /* Champion Gold */
-            --green: #22c55e; /* Success */
-            --glass: rgba(18, 18, 18, 0.95); --radius: 16px;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary: #4ADE80; /* Canlı yeşil - Enerji */
+            --accent: #3B82F6; /* Mavi - Sakinlik/Zeka */
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+            --danger: #ef4444;
         }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; }
-        body { margin: 0; background: var(--bg); color: var(--text); padding-top: env(safe-area-inset-top); padding-bottom: 110px; user-select: none; }
 
-        /* HEADER */
-        header { position: sticky; top: 0; z-index: 100; background: var(--glass); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); padding: 15px 20px; }
-        .header-row { display: flex; justify-content: space-between; align-items: center; }
-        .app-logo { font-size: 1.5rem; font-weight: 900; font-style: italic; letter-spacing: -1px; background: linear-gradient(to right, #fff, var(--muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 90px; /* Menü payı */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Üst Başlık */
+        header {
+            padding: 40px 20px 20px 20px;
+            background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(18,18,18,0) 100%);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        /* Kart Yapısı */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 0 20px 20px 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Spor Durumu */
+        .status-box {
+            text-align: center;
+            padding: 30px;
+        }
+        .status-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .status-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        .status-sub {
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        /* Beslenme Sihirbazı */
+        .nutrition-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .macro-card {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .macro-val {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        .macro-label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .quick-add-btn {
+            background-color: #2a2a2a;
+            border: 1px solid #333;
+            color: var(--text-main);
+            padding: 12px;
+            border-radius: 12px;
+            width: 100%;
+            margin-bottom: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .quick-add-btn span {
+            font-size: 12px;
+            color: var(--primary);
+        }
+
+        /* Alt Menü */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #1a1a1a;
+            border-top: 1px solid #333;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            padding-bottom: 25px; /* iPhone home bar payı */
+            z-index: 100;
+        }
+        .nav-item {
+            color: var(--text-muted);
+            text-align: center;
+            font-size: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 25%;
+        }
+        .nav-item.active {
+            color: var(--primary);
+        }
+        .nav-icon {
+            font-size: 20px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Sayfa Geçişleri */
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Form Elemanları */
+        input, select {
+            width: 100%;
+            background: #2a2a2a;
+            border: 1px solid #333;
+            padding: 12px;
+            border-radius: 10px;
+            color: white;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
         
-        /* XP & LEVEL */
-        .xp-container { margin-top: 8px; display: flex; align-items: center; gap: 10px; font-size: 0.75rem; color: var(--muted); font-weight: bold; }
-        .xp-track { flex: 1; height: 6px; background: #262626; border-radius: 3px; overflow: hidden; }
-        .xp-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.5s ease; }
+        button.primary-btn {
+            background-color: var(--primary);
+            color: #000;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+        }
 
-        /* CONTAINER */
-        .container { padding: 15px; max-width: 600px; margin: 0 auto; }
-        .card { background: var(--card); border-radius: var(--radius); padding: 20px; margin-bottom: 15px; border: 1px solid #262626; position: relative; }
-        .box-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; text-transform: uppercase; font-size: 0.8rem; font-weight: 800; letter-spacing: 0.5px; color: var(--muted); }
+        /* Takvim Listesi */
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #333;
+        }
+        .schedule-item:last-child { border-bottom: none; }
+        .day { font-weight: bold; width: 80px; }
+        .activity { color: var(--accent); flex-grow: 1; }
+        .time { color: var(--text-muted); font-size: 14px; }
 
-        /* SENTINEL ALERT */
-        .sentinel-box { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); display: none; }
-        .sentinel-active { color: var(--accent); font-weight: bold; display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
-
-        /* WORKOUT ITEMS */
-        .task-item { padding: 12px 0; border-bottom: 1px solid #262626; }
-        .task-top { display: flex; align-items: center; gap: 12px; }
-        .visual { width: 42px; height: 42px; background: #1f1f1f; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid #333; color: #fff; }
-        .info { flex: 1; }
-        .name { font-weight: 700; font-size: 0.95rem; }
-        .meta { font-size: 0.75rem; color: var(--muted); display: flex; gap: 8px; align-items: center; }
-        .auto-badge { background: rgba(59, 130, 246, 0.2); color: var(--blue); padding: 1px 4px; border-radius: 4px; font-size: 0.6rem; }
-        .check { width: 24px; height: 24px; border: 2px solid #404040; border-radius: 6px; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
-        
-        .checked .name { text-decoration: line-through; color: #525252; }
-        .checked .check { background: var(--green); border-color: var(--green); color: #000; }
-        .checked .visual { border-color: var(--green); color: var(--green); }
-
-        .input-row { display: flex; gap: 8px; margin-top: 10px; padding-left: 54px; align-items: center; }
-        .mini-inp { background: #000; border: 1px solid #333; color: #fff; width: 65px; padding: 8px; border-radius: 8px; text-align: center; font-weight: bold; }
-        .btn-icon { background: transparent; border: 1px solid transparent; color: var(--muted); padding: 5px; cursor: pointer; border-radius: 6px; }
-        .btn-icon:hover { background: #262626; color: #fff; }
-
-        /* CLUTCH MODE */
-        .clutch-section { text-align: center; padding-top: 10px; border-top: 1px dashed #333; margin-top: 10px; }
-        .clutch-btn { background: linear-gradient(135deg, #b91c1c, #ef4444); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4); }
-        .clutch-result { margin-top: 10px; font-weight: bold; color: var(--gold); display: none; animation: popIn 0.3s; }
-
-        /* SWITCH TOGGLE */
-        .switch-container { display: flex; background: #000; border-radius: 20px; padding: 2px; border: 1px solid #333; }
-        .switch-opt { padding: 6px 12px; font-size: 0.75rem; color: #777; border-radius: 18px; cursor: pointer; font-weight: 600; flex: 1; text-align: center; transition: 0.2s; }
-        .switch-opt.active { background: #262626; color: #fff; }
-        
-        /* BOTTOM NAV */
-        .nav { position: fixed; bottom: 0; width: 100%; background: var(--glass); border-top: 1px solid #262626; display: flex; justify-content: space-around; padding: 15px 0; padding-bottom: max(15px, env(safe-area-inset-bottom)); z-index: 200; }
-        .nav-item { font-size: 1.5rem; opacity: 0.4; transition: 0.2s; } .nav-item.active { opacity: 1; color: var(--text); transform: scale(1.1); }
-
-        /* MODALS */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 300; align-items: flex-end; backdrop-filter: blur(5px); }
-        .modal.open { display: flex; }
-        .sheet { background: #171717; width: 100%; border-radius: 24px 24px 0 0; padding: 25px; max-height: 90vh; overflow-y: auto; border-top: 1px solid #333; animation: slideUp 0.3s; }
-        .sheet-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .close-x { font-size: 1.5rem; padding: 5px; cursor: pointer; color: var(--muted); }
-
-        /* PAIN GRID (SENTINEL) */
-        .pain-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
-        .pain-btn { background: #262626; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #333; color: #888; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
-        .pain-btn.active { background: rgba(239, 68, 68, 0.2); border-color: var(--accent); color: var(--accent); }
-
-        /* GAME LEDGER */
-        .stat-inp-row { display: flex; gap: 10px; margin-bottom: 10px; }
-        .stat-inp { background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; flex: 1; text-align: center; }
-
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="header-row">
-            <div class="app-logo">ATLAS <span style="font-size:0.8rem; color:var(--muted); font-style:normal">v2 Ultimate</span></div>
-            <div class="switch-container">
-                <div class="switch-opt active" id="modeGym" onclick="setMode('gym')">SALON</div>
-                <div class="switch-opt" id="modeHome" onclick="setMode('home')">EV</div>
-            </div>
-        </div>
-        <div class="xp-container">
-            <span>LVL 5</span>
-            <div class="xp-track"><div class="xp-fill" id="xpBar" style="width:72%"></div></div>
-            <span id="xpVal">720 XP</span>
-        </div>
+        <h1>Atlas</h1>
+        <div class="subtitle" id="date-display">Yükleniyor...</div>
     </header>
 
-    <div class="container">
+    <div id="home-page" class="page active">
         
-        <div class="card sentinel-box" id="sentinelBox">
-            <div class="sentinel-active">
-                <span style="font-size:1.2rem">🛡️</span>
-                <div>
-                    <div>SENTINEL AKTİF</div>
-                    <div style="font-size:0.75rem; color:#fca5a5; font-weight:normal" id="painMsg">Bel ağrısı nedeniyle Squat iptal edildi.</div>
-                </div>
-            </div>
-            <button onclick="openModal('sentinelModal')" style="position:absolute; right:15px; top:15px; background:none; border:none; color:var(--accent); font-weight:bold; font-size:0.8rem">Değiştir</button>
-        </div>
-
-        <div class="card" id="jumpCard" style="background:rgba(59, 130, 246, 0.05); border-color:rgba(59, 130, 246, 0.2)">
-            <div class="box-header" style="color:var(--blue); margin-bottom:10px">
-                <span>🚀 Patlayıcı Güç</span>
-                <span onclick="openModal('jumpModal')" style="cursor:pointer; font-size:1.2rem">+</span>
-            </div>
-            <div id="jumpList"></div>
+        <div class="card status-box">
+            <span class="status-icon" id="sport-icon">🤔</span>
+            <div class="status-text" id="sport-status">Kontrol Ediliyor...</div>
+            <div class="status-sub" id="sport-detail"></div>
         </div>
 
         <div class="card">
-            <div class="box-header">
-                <span id="workoutTitle">Yükleniyor...</span>
-                <span id="totalVol" style="color:#e5e5e5">0 KG</span>
+            <h2>Günün Özeti</h2>
+            <div class="schedule-item">
+                <span class="day">Kalori</span>
+                <span class="activity" style="color: var(--text-main)"><span id="total-cal">0</span> / 2500</span>
             </div>
-            <div id="workoutList"></div>
+            <div class="schedule-item">
+                <span class="day">Protein</span>
+                <span class="activity" style="color: var(--text-main)"><span id="total-prot">0</span>g Hedef</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Hızlı Notlar</h2>
+            <textarea id="quick-note" rows="4" style="width:100%; background:#2a2a2a; border:none; color:white; padding:10px; border-radius:8px;" placeholder="Akla gelenleri buraya yaz..."></textarea>
+        </div>
+    </div>
+
+    <div id="sports-page" class="page">
+        <div class="card">
+            <h2>Haftalık Rutin</h2>
+            <div id="weekly-schedule">
+                </div>
+        </div>
+
+        <div class="card">
+            <h2>Antrenman Notları</h2>
+            <p style="color:var(--text-muted); font-size:14px;">Setler ve ağırlık takibi için burayı kullanabilirsin.</p>
+            <textarea id="gym-notes" rows="6" style="width:100%; background:#2a2a2a; border:none; color:white; padding:10px; border-radius:8px;" placeholder="Bugünkü bench press: 80kg..."></textarea>
+        </div>
+    </div>
+
+    <div id="nutrition-page" class="page">
+        <div class="card">
+            <h2>Beslenme Sihirbazı</h2>
             
-            <div class="clutch-section">
-                <button class="clutch-btn" onclick="rollClutch()">
-                    <span>🎲 CLUTCH MODE</span>
-                </button>
-                <div class="clutch-result" id="clutchDisplay"></div>
+            <div class="nutrition-grid">
+                <div class="macro-card">
+                    <div class="macro-val" id="wiz-cal">0</div>
+                    <div class="macro-label">Kcal Alındı</div>
+                </div>
+                <div class="macro-card">
+                    <div class="macro-val" id="wiz-prot">0</div>
+                    <div class="macro-label">Protein (g)</div>
+                </div>
             </div>
-        </div>
 
-        <div class="card" id="gameCard" style="background:rgba(234, 179, 8, 0.05); border-color:rgba(234, 179, 8, 0.2); display:none">
-            <div class="box-header" style="color:var(--gold)">
-                <span>🏀 Maç Günü</span>
-                <button onclick="openModal('gameLogModal')" style="background:#222; color:var(--gold); border:1px solid #333; border-radius:6px; padding:4px 10px; cursor:pointer">Karne Gir</button>
-            </div>
-            <div style="font-size:0.85rem; color:#aaa; text-align:center">Son Maç: <span id="lastGameStat" style="color:#fff; font-weight:bold">--</span></div>
+            <h3 style="font-size:16px; margin-top:20px;">Hızlı Ekle</h3>
+            <button class="quick-add-btn" onclick="addFood('Tavuk & Pilav', 450, 40)">
+                Tavuk & Pilav (Standart) <span>+450 kcal</span>
+            </button>
+            <button class="quick-add-btn" onclick="addFood('Protein Shake', 120, 24)">
+                Protein Shake <span>+120 kcal</span>
+            </button>
+            <button class="quick-add-btn" onclick="addFood('Yulaf Lapası', 300, 10)">
+                Yulaf & Kahvaltı <span>+300 kcal</span>
+            </button>
+
+            <h3 style="font-size:16px; margin-top:20px;">Manuel Ekle</h3>
+            <input type="text" id="food-name" placeholder="Yiyecek adı (Örn: Muz)">
+            <input type="number" id="food-cal" placeholder="Kalori">
+            <input type="number" id="food-prot" placeholder="Protein (g)">
+            <button class="primary-btn" onclick="addManualFood()">Listeye Ekle</button>
         </div>
 
         <div class="card">
-            <div class="box-header">
-                <span>🔥 Makro</span>
-                <span style="font-size:0.8rem; cursor:pointer; color:var(--muted)" onclick="openModal('nutriModal')">Detay ›</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; align-items:flex-end">
-                <div>
-                    <div style="font-size:1.5rem; font-weight:bold" id="calDisp">0</div>
-                    <div style="font-size:0.7rem; color:var(--muted)">kcal / 2800</div>
-                </div>
-                <div style="text-align:right">
-                    <div style="font-size:1.5rem; font-weight:bold; color:var(--blue)" id="proDisp">0</div>
-                    <div style="font-size:0.7rem; color:var(--muted)">g Protein / 170</div>
-                </div>
-            </div>
+            <h2>Bugün Yenilenler</h2>
+            <ul id="food-list" style="padding-left: 20px; color: var(--text-muted); font-size: 14px;">
+                </ul>
+            <button onclick="resetNutrition()" style="background:transparent; border:1px solid var(--danger); color:var(--danger); width:100%; padding:10px; border-radius:8px; margin-top:10px;">Sıfırla</button>
         </div>
     </div>
 
-    <div class="nav">
-        <div class="nav-item active" onclick="openModal('sentinelModal')">🛡️</div>
-        <div class="nav-item" onclick="openModal('nutriModal')">🍎</div>
-        <div class="nav-item" onclick="openModal('gameLogModal')">📊</div>
-    </div>
-
-    <div class="modal" id="sentinelModal">
-        <div class="sheet">
-            <div class="sheet-head">
-                <div style="font-size:1.2rem; font-weight:900; color:var(--accent)">🛡️ Sentinel Protokolü</div>
-                <div class="close-x" onclick="closeModal('sentinelModal')">✕</div>
-            </div>
-            <p style="color:#888; font-size:0.9rem; margin-bottom:15px">Ağrı hissettiğin bölgeyi seç. Atlas, programı otomatik revize edip riskli hareketleri silecek.</p>
-            <div class="pain-grid">
-                <div class="pain-btn" id="pain-bel" onclick="togglePain('bel')">Bel</div>
-                <div class="pain-btn" id="pain-diz" onclick="togglePain('diz')">Diz</div>
-                <div class="pain-btn" id="pain-omuz" onclick="togglePain('omuz')">Omuz</div>
-                <div class="pain-btn" id="pain-bilek" onclick="togglePain('bilek')">El Bileği</div>
-                <div class="pain-btn" id="pain-dirsek" onclick="togglePain('dirsek')">Dirsek</div>
-            </div>
-            <button onclick="closeModal('sentinelModal')" style="width:100%; padding:15px; margin-top:20px; background:#262626; color:#fff; border:none; border-radius:12px; font-weight:bold">Tamam</button>
-        </div>
-    </div>
-
-    <div class="modal" id="infoModal">
-        <div class="sheet">
-            <div class="sheet-head">
-                <div style="font-size:1.2rem; font-weight:900" id="infoTitle">Hareket</div>
-                <div class="close-x" onclick="closeModal('infoModal')">✕</div>
-            </div>
-            <div id="infoDesc" style="color:#ccc; line-height:1.5; font-size:0.95rem">...</div>
-            <div style="margin-top:15px; background:rgba(234, 179, 8, 0.1); padding:15px; border-radius:8px; border-left:3px solid var(--gold); color:#fef08a" id="infoCue">...</div>
-            <a href="#" id="ytLink" target="_blank" style="display:block; text-align:center; margin-top:15px; background:#cc0000; color:white; padding:12px; border-radius:10px; text-decoration:none; font-weight:bold">YouTube'da İzle</a>
-        </div>
-    </div>
-
-    <div class="modal" id="gameLogModal">
-        <div class="sheet">
-            <div class="sheet-head">
-                <div style="font-size:1.2rem; font-weight:900; color:var(--gold)">🏀 Game Ledger</div>
-                <div class="close-x" onclick="closeModal('gameLogModal')">✕</div>
-            </div>
-            <div class="stat-inp-row">
-                <input type="number" id="gPts" class="stat-inp" placeholder="Sayı">
-                <input type="number" id="gAst" class="stat-inp" placeholder="Asist">
-            </div>
-            <div class="stat-inp-row">
-                <select id="gWin" class="stat-inp"><option value="W">Galibiyet (W)</option><option value="L">Mağlubiyet (L)</option></select>
-                <input type="number" id="gEnergy" class="stat-inp" placeholder="Enerji (1-10)">
-            </div>
-            <button onclick="saveGame()" style="width:100%; padding:15px; background:var(--gold); color:#000; font-weight:bold; border:none; border-radius:12px">Kaydet</button>
-            <div style="margin-top:20px; border-top:1px solid #333; padding-top:10px">
-                <div class="box-header">Son Maçlar</div>
-                <div id="gameHistoryList" style="font-size:0.85rem; color:#888"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="nutriModal">
-        <div class="sheet" style="height:90vh">
-            <div class="sheet-head">
-                <div style="font-size:1.2rem; font-weight:900">Beslenme</div>
-                <div class="close-x" onclick="closeModal('nutriModal')">✕</div>
-            </div>
-            <input type="text" placeholder="Yiyecek Ara..." oninput="searchFood(this.value)" style="width:100%; padding:12px; background:#000; border:1px solid #333; color:#fff; border-radius:10px; margin-bottom:10px">
-            <div id="foodResults" style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:20px"></div>
-            <div class="box-header">Bugün Yenilenler</div>
-            <div id="eatenList" style="color:#aaa; font-size:0.9rem"></div>
-        </div>
-    </div>
-    
-    <div class="modal" id="jumpModal">
-        <div class="sheet">
-            <div class="sheet-head"><h3>Manuel Zıplama</h3><span class="close-x" onclick="closeModal('jumpModal')">✕</span></div>
-            <div id="jumpSelectGrid" style="display:grid; gap:10px"></div>
-        </div>
-    </div>
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="showPage('home-page', this)">
+            <span class="nav-icon">🏠</span>
+            Ana Sayfa
+        </button>
+        <button class="nav-item" onclick="showPage('sports-page', this)">
+            <span class="nav-icon">💪</span>
+            Spor
+        </button>
+        <button class="nav-item" onclick="showPage('nutrition-page', this)">
+            <span class="nav-icon">🍗</span>
+            Beslenme
+        </button>
+    </nav>
 
     <script>
-        // --- DATA & CONFIG ---
-        const icons = {
-            push: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h16v2H4zM4 10h16v2H4zM8 6h8v2H8z"/></svg>`,
-            pull: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M8 6l4-4 4 4M8 18l4 4 4-4"/></svg>`,
-            leg: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16M12 2v10M8 12l4 10 4-10"/></svg>`,
-            cardio: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9v8l10-12h-9l9-8z"/></svg>`
-        };
-
-        // EXERCISE DATABASE (Includes Sentinel & Tactical Switch Logic)
-        const exerciseDB = {
-            "Bench Press": { d:"Sırtı kilitle, ayaklardan güç al.", c:"Dirsek 45°.", yt:"bench press", type:"push", home:"Push Ups (Weighted)", pain_omuz:"Floor Press", pain_bilek:"Machine Press" },
-            "Incline DB Press": { d:"Üst göğüs odaklı.", c:"Omuzları kulaktan uzaklaştır.", yt:"incline dumbbell press", type:"push", home:"Decline Push Ups", pain_omuz:"Neutral Grip Press" },
-            "Squat": { d:"Kalçayı geriye it.", c:"Dizler içe çökmesin.", yt:"squat form", type:"leg", home:"Goblet Squat / Lunges", pain_diz:"Glute Bridge", pain_bel:"Leg Press / Extension" },
-            "Deadlift": { d:"Bar kaval kemiğine yapışık.", c:"Barı bükerek koltuk altını sık.", yt:"deadlift form", type:"leg", home:"Single Leg RDL", pain_bel:"Chest Supported Row" },
-            "OH Press": { d:"Karnı sık, barı dik it.", c:"Geriye yatma.", yt:"overhead press", type:"push", home:"Pike Push Ups", pain_omuz:"Lateral Raise", pain_bel:"Seated DB Press" },
-            "Pull Up": { d:"Çeneyi barın üstüne çek.", c:"Göğsü değdirmeye çalış.", yt:"pull up", type:"pull", home:"Door Pull Ins", pain_omuz:"Lat Pulldown", pain_bilek:"Straps Lat Pulldown" },
-            "Cable Row": { d:"Kürek kemiklerini sıkıştır.", c:"Gövde sabit.", yt:"cable row", type:"pull", home:"Band Rows", pain_bel:"Chest Supported Row" },
-            "Lateral Raise": { d:"Dirsekler hafif bükülü.", c:"Serçe parmak tavanı görsün.", yt:"lateral raise", type:"push", home:"Band Lateral Raise", pain_omuz:"Front Raise" },
-            "Plank": { d:"Vücut düz çizgi.", c:"Dirsekleri ayaklara çek.", yt:"plank", type:"core", home:"Plank", pain_bel:"Dead Bug" },
-            "Bicep Curl": { d:"Sallanmadan kaldır.", c:"Dirsekler sabit.", yt:"bicep curl", type:"pull", home:"Band Curl", pain_bilek:"Hammer Curl" },
-            "Tricep Pushdown": { d:"Dirsekleri kilitle.", c:"Sadece ön kol hareket etsin.", yt:"tricep pushdown", type:"push", home:"Diamond Push Ups", pain_dirsek:"Cable Kickback" },
-            "Şut Antrenmanı": { d:"Maç temposu.", c:"Mekanik tekrarı.", yt:"basketball shooting", type:"cardio", home:"Form Shooting (Yatarak)", pain_bilek:"Sol El Turnike" }
-        };
-
+        // --- VERİ & AYARLAR ---
         const schedule = [
-            {t:"Active Recovery", i:[], pre:["Yürüyüş"]}, // Paz
-            {t:"Chest & Back", i:[{n:"Bench Press",s:4},{n:"Pull Up",s:4},{n:"Incline DB Press",s:3},{n:"Cable Row",s:3}], pre:["Rotator Cuff"]}, // Pzt
-            {t:"Core & Arms", i:[{n:"Plank",s:3},{n:"Bicep Curl",s:3},{n:"Tricep Pushdown",s:3}], pre:[]}, // Salı
-            {t:"Legs & Shoulders", i:[{n:"Squat",s:4},{n:"OH Press",s:4},{n:"Lateral Raise",s:3}], pre:["Tibialis Raise"]}, // Çarş
-            {t:"Recovery / Mobility", i:[], pre:["Stretching"]}, // Perş
-            {t:"Full Body Power", i:[{n:"Deadlift",s:3},{n:"Dips",s:3},{n:"Chin Up",s:3}], pre:["Pogo Hops"]}, // Cum
-            {t:"GAME DAY 🏀", i:[{n:"Şut Antrenmanı",s:1}], pre:["Box Jump"], isGame:true} // Cmt
+            { day: 1, name: "Pazartesi", activity: "Dinlenme / Serbest", time: "-" },
+            { day: 2, name: "Salı", activity: "Pilates", time: "19:00" },
+            { day: 2, name: "Salı", activity: "Basketbol", time: "20:45" },
+            { day: 3, name: "Çarşamba", activity: "Basketbol", time: "21:45" },
+            { day: 4, name: "Perşembe", activity: "Pilates", time: "19:00" },
+            { day: 5, name: "Cuma", activity: "Gym / Serbest", time: "Esnek" },
+            { day: 6, name: "Cumartesi", activity: "Dinlenme", time: "-" },
+            { day: 0, name: "Pazar", activity: "Dinlenme", time: "-" }
         ];
 
-        const foodDB = [
-            {n:"Yumurta",c:70,p:6}, {n:"Tavuk Göğsü (150g)",c:240,p:45}, {n:"Pilav (1 Kase)",c:200,p:4},
-            {n:"Yulaf (50g)",c:180,p:6}, {n:"Muz",c:105,p:1}, {n:"Lor Peyniri (100g)",c:100,p:18},
-            {n:"Köfte (3 Adet)",c:250,p:18}, {n:"Mercimek Çorbası",c:150,p:8}, {n:"Protein Shake",c:120,p:24}
-        ];
+        // --- SAYFA YÖNETİMİ ---
+        function showPage(pageId, btn) {
+            // Sayfaları gizle
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            // Buton aktifliği
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+        }
 
-        const clutchTasks = [
-            "1 Dakika Plank yapmadan çıkamazsın!", "50 Şınav. Hemen. Şimdi.", "Duvara yaslanıp (Wall Sit) 2 dakika bekle.", "Maksimum tekrar Barfiks denemesi!"
-        ];
+        // --- TARİH VE SPOR KONTROLÜ ---
+        function updateDateAndStatus() {
+            const now = new Date();
+            const days = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+            const months = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+            
+            // Tarih yazısı
+            const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${days[now.getDay()]}`;
+            document.getElementById('date-display').innerText = dateStr;
 
-        let state = {
-            date: new Date().toISOString().split('T')[0],
-            mode: 'gym', // gym or home
-            pain: [], // areas: 'bel', 'diz', etc.
-            workouts: {}, // { 'date-idx': {w:80, done:true} }
-            nutrition: {c:0, p:0, l:[]},
-            jumps: [],
-            games: [],
-            xp: 0
+            // Spor kontrolü
+            const currentDay = now.getDay();
+            const todaysActivities = schedule.filter(s => s.day === currentDay && s.activity !== "Dinlenme" && s.activity !== "Dinlenme / Serbest");
+
+            const iconEl = document.getElementById('sport-icon');
+            const statusEl = document.getElementById('sport-status');
+            const detailEl = document.getElementById('sport-detail');
+
+            if (todaysActivities.length > 0) {
+                iconEl.innerText = "🔥";
+                statusEl.innerText = "Bugün Spor Var!";
+                statusEl.style.color = "var(--primary)";
+                
+                let details = "";
+                todaysActivities.forEach(act => {
+                    details += `<div>${act.time} - ${act.activity}</div>`;
+                });
+                detailEl.innerHTML = details;
+            } else {
+                iconEl.innerText = "💤";
+                statusEl.innerText = "Bugün Dinlenme";
+                statusEl.style.color = "var(--text-muted)";
+                detailEl.innerText = "Kasları büyütme zamanı.";
+            }
+        }
+
+        // --- BESLENME SİHİRBAZI MANTIĞI ---
+        let totalCal = 0;
+        let totalProt = 0;
+        let foods = [];
+
+        function loadNutrition() {
+            const saved = localStorage.getItem('atlas_nutrition');
+            if(saved) {
+                const data = JSON.parse(saved);
+                // Eğer gün değiştiyse sıfırla (basit kontrol)
+                const savedDate = localStorage.getItem('atlas_date');
+                const today = new Date().toDateString();
+                
+                if(savedDate === today) {
+                    totalCal = data.cal;
+                    totalProt = data.prot;
+                    foods = data.foods;
+                } else {
+                    resetNutrition(); // Yeni gün
+                    localStorage.setItem('atlas_date', today);
+                }
+            }
+            updateNutritionUI();
+        }
+
+        function addFood(name, cal, prot) {
+            totalCal += parseInt(cal);
+            totalProt += parseInt(prot);
+            foods.push({name, cal, prot});
+            saveNutrition();
+            updateNutritionUI();
+        }
+
+        function addManualFood() {
+            const name = document.getElementById('food-name').value;
+            const cal = document.getElementById('food-cal').value;
+            const prot = document.getElementById('food-prot').value;
+
+            if(name && cal) {
+                addFood(name, cal, prot || 0);
+                // Inputları temizle
+                document.getElementById('food-name').value = '';
+                document.getElementById('food-cal').value = '';
+                document.getElementById('food-prot').value = '';
+            } else {
+                alert("İsim ve Kalori zorunlu!");
+            }
+        }
+
+        function resetNutrition() {
+            totalCal = 0;
+            totalProt = 0;
+            foods = [];
+            saveNutrition();
+            updateNutritionUI();
+        }
+
+        function saveNutrition() {
+            const data = { cal: totalCal, prot: totalProt, foods: foods };
+            localStorage.setItem('atlas_nutrition', JSON.stringify(data));
+            localStorage.setItem('atlas_date', new Date().toDateString());
+        }
+
+        function updateNutritionUI() {
+            // Dashboard
+            document.getElementById('total-cal').innerText = totalCal;
+            document.getElementById('total-prot').innerText = totalProt;
+            
+            // Beslenme Sayfası
+            document.getElementById('wiz-cal').innerText = totalCal;
+            document.getElementById('wiz-prot').innerText = totalProt;
+
+            // Liste
+            const list = document.getElementById('food-list');
+            list.innerHTML = "";
+            foods.forEach(f => {
+                const li = document.createElement('li');
+                li.innerText = `${f.name} (${f.cal} kcal, ${f.prot}g prot)`;
+                list.appendChild(li);
+            });
+        }
+
+        // --- TAKVİM OLUŞTURMA ---
+        function renderSchedule() {
+            const container = document.getElementById('weekly-schedule');
+            let html = "";
+            
+            // Günleri sırala (Pazartesi'den başla)
+            const sortedSchedule = [...schedule].sort((a,b) => {
+                let da = a.day === 0 ? 7 : a.day;
+                let db = b.day === 0 ? 7 : b.day;
+                return da - db;
+            });
+
+            // Tekrar eden günleri birleştir veya alt alta göster
+            sortedSchedule.forEach(item => {
+                // Sadece önemli olanları veya hepsini gösterelim
+                if(item.activity) {
+                     html += `
+                    <div class="schedule-item">
+                        <span class="day">${item.name}</span>
+                        <span class="activity">${item.activity}</span>
+                        <span class="time">${item.time}</span>
+                    </div>
+                    `;
+                }
+            });
+            container.innerHTML = html;
+        }
+
+        // --- NOT KAYDETME ---
+        function setupNotes() {
+            const qNote = document.getElementById('quick-note');
+            const gNote = document.getElementById('gym-notes');
+
+            qNote.value = localStorage.getItem('atlas_qnote') || "";
+            gNote.value = localStorage.getItem('atlas_gnote') || "";
+
+            qNote.addEventListener('input', () => localStorage.setItem('atlas_qnote', qNote.value));
+            gNote.addEventListener('input', () => localStorage.setItem('atlas_gnote', gNote.value));
+        }
+
+        // --- BAŞLAT ---
+        window.onload = function() {
+            updateDateAndStatus();
+            loadNutrition();
+            renderSchedule();
+            setupNotes();
         };
 
-        // --- CORE FUNCTIONS ---
-        function init() {
-            const saved = JSON.parse(localStorage.getItem('atlas_v2_ult'));
-            if(saved) {
-                if(saved.date === state.date) state = saved;
-                else { 
-                    state.xp = saved.xp; 
-                    state.games = saved.games; 
-                    // New day reset details but keep stats
-                }
-            }
-            
-            // Auto-detect Match Day
-            if(new Date().getDay() === 6) document.getElementById('gameCard').style.display = 'block';
-
-            renderHeader();
-            renderSentinel();
-            renderWorkout();
-            renderNutrition();
-            updateGameHistory();
-        }
-
-        function renderHeader() {
-            document.getElementById('xpBar').style.width = (state.xp % 1000) / 10 + '%';
-            document.getElementById('xpVal').innerText = state.xp + " XP";
-            
-            document.getElementById('modeGym').className = state.mode === 'gym' ? 'switch-opt active' : 'switch-opt';
-            document.getElementById('modeHome').className = state.mode === 'home' ? 'switch-opt active' : 'switch-opt';
-        }
-
-        function setMode(m) {
-            state.mode = m;
-            save(); renderHeader(); renderWorkout();
-        }
-
-        // --- SENTINEL LOGIC ---
-        function togglePain(area) {
-            const btn = document.getElementById('pain-'+area);
-            if(state.pain.includes(area)) {
-                state.pain = state.pain.filter(x => x !== area);
-                btn.classList.remove('active');
-            } else {
-                state.pain.push(area);
-                btn.classList.add('active');
-            }
-            save(); renderSentinel(); renderWorkout();
-        }
-
-        function renderSentinel() {
-            const box = document.getElementById('sentinelBox');
-            if(state.pain.length > 0) {
-                box.style.display = 'block';
-                document.getElementById('painMsg').innerText = `${state.pain.join(', ').toUpperCase()} ağrısı için program revize edildi.`;
-                // Keep buttons active in modal
-                state.pain.forEach(p => document.getElementById('pain-'+p)?.classList.add('active'));
-            } else {
-                box.style.display = 'none';
-            }
-        }
-
-        // --- WORKOUT RENDER (The Brain) ---
-        function renderWorkout() {
-            const d = new Date().getDay();
-            const s = schedule[d];
-            const list = document.getElementById('workoutList');
-            document.getElementById('workoutTitle').innerText = s.t;
-
-            // Render Jumps
-            const jumpList = document.getElementById('jumpList');
-            const dailyJumps = [...(s.pre || []), ...state.jumps];
-            jumpList.innerHTML = dailyJumps.map(j => `<div style="padding:10px; border-bottom:1px solid rgba(59,130,246,0.1); font-size:0.9rem" onclick="showInfo('${j}')">🚀 ${j}</div>`).join('');
-
-            list.innerHTML = '';
-            let totalV = 0;
-
-            if(s.i.length === 0) {
-                list.innerHTML = "<div style='text-align:center; color:#555; padding:20px'>Dinlenme Günü.</div>";
-                return;
-            }
-
-            s.i.forEach((ex, idx) => {
-                let name = ex.n;
-                let isSubbed = false;
-                let isAuto = false;
-                const db = exerciseDB[ex.n] || {type:'push'};
-                
-                // 1. Sentinel Check (Pain Substitution)
-                state.pain.forEach(p => {
-                    if(db['pain_'+p]) { name = db['pain_'+p]; isSubbed = true; }
-                });
-
-                // 2. Tactical Switch Check (Home Mode)
-                if(state.mode === 'home' && db.home) {
-                    name = db.home; isSubbed = true;
-                }
-
-                // 3. Auto-Pilot (Weight Suggestion logic would go here via history lookup)
-                // Simplified for this view:
-                const uid = `${state.date}-${idx}`;
-                const val = state.workouts[uid]?.w || "";
-                const done = state.workouts[uid]?.done;
-                
-                if(val) totalV += parseInt(val) * ex.s;
-
-                let icon = icons[db.type] || icons.push;
-
-                list.innerHTML += `
-                <div class="task-item ${done?'checked':''}">
-                    <div class="task-top">
-                        <div class="visual" onclick="showInfo('${name}')">${icon}</div>
-                        <div class="info" onclick="toggleTask(${idx})">
-                            <div class="name">${name}</div>
-                            <div class="meta">
-                                <span>${ex.s} Set</span>
-                                ${isSubbed ? '<span style="color:var(--accent)">• Değişti</span>' : ''}
-                                ${isAuto ? '<span class="auto-badge">Auto</span>' : ''}
-                            </div>
-                        </div>
-                        <div class="check" onclick="toggleTask(${idx})">✓</div>
-                    </div>
-                    ${!name.includes('Şut') ? `
-                    <div class="input-row">
-                        <input type="number" class="mini-inp" placeholder="KG" value="${val}" onchange="saveW(${idx}, this.value)">
-                        <button class="btn-icon" onclick="showInfo('${name}')">ℹ️</button>
-                    </div>` : ''}
-                </div>`;
-            });
-            document.getElementById('totalVol').innerText = totalV + " KG";
-        }
-
-        function toggleTask(idx) {
-            const uid = `${state.date}-${idx}`;
-            if(!state.workouts[uid]) state.workouts[uid]={};
-            state.workouts[uid].done = !state.workouts[uid].done;
-            if(state.workouts[uid].done) state.xp += 10; else state.xp -= 10;
-            save(); renderWorkout(); renderHeader();
-        }
-
-        function saveW(idx, val) {
-            const uid = `${state.date}-${idx}`;
-            if(!state.workouts[uid]) state.workouts[uid]={};
-            state.workouts[uid].w = val;
-            save(); renderWorkout();
-        }
-
-        // --- INFO & EXTRAS ---
-        function showInfo(n) {
-            // strip variations
-            let clean = n.split('(')[0].trim();
-            // Reverse lookup if subbed
-            const db = exerciseDB[clean] || {d:"Standart egzersiz.", c:"Formuna dikkat et.", yt:clean};
-            
-            document.getElementById('infoTitle').innerText = clean;
-            document.getElementById('infoDesc').innerText = db.d;
-            document.getElementById('infoCue').innerText = "💡 " + db.c;
-            document.getElementById('ytLink').href = `https://www.youtube.com/results?search_query=${encodeURIComponent(db.yt)}`;
-            openModal('infoModal');
-        }
-
-        function rollClutch() {
-            const task = clutchTasks[Math.floor(Math.random() * clutchTasks.length)];
-            const d = document.getElementById('clutchDisplay');
-            d.innerText = task;
-            d.style.display = 'block';
-            state.xp += 50; // Bonus
-            save(); renderHeader();
-        }
-
-        // --- NUTRITION ---
-        function searchFood(q) {
-            const r = document.getElementById('foodResults');
-            r.innerHTML = '';
-            if(q.length<2) return;
-            foodDB.filter(f=>f.n.toLowerCase().includes(q.toLowerCase())).forEach(f=>{
-                r.innerHTML += `<div style="background:#222; padding:10px; border-radius:8px; font-size:0.85rem; cursor:pointer" onclick="addFood('${f.n}',${f.c},${f.p})"><b>${f.n}</b><br><span style="color:#777">${f.c}kcal / ${f.p}g</span></div>`;
-            });
-        }
-        function addFood(n,c,p) {
-            state.nutrition.c += c; state.nutrition.p += p; state.nutrition.l.push({n,c,p});
-            save(); renderNutrition();
-        }
-        function renderNutrition() {
-            document.getElementById('calDisp').innerText = state.nutrition.c;
-            document.getElementById('proDisp').innerText = state.nutrition.p;
-            document.getElementById('eatenList').innerHTML = state.nutrition.l.map(x=>`• ${x.n}`).join('<br>') || "Henüz veri yok.";
-        }
-
-        // --- GAME LEDGER ---
-        function saveGame() {
-            const g = {
-                date: state.date,
-                pts: document.getElementById('gPts').value,
-                ast: document.getElementById('gAst').value,
-                win: document.getElementById('gWin').value,
-                nrg: document.getElementById('gEnergy').value
-            };
-            state.games.push(g);
-            save(); closeModal('gameLogModal'); updateGameHistory();
-        }
-        function updateGameHistory() {
-            const l = document.getElementById('gameHistoryList');
-            l.innerHTML = state.games.slice(-3).reverse().map(g => `<div>${g.date}: ${g.pts} Sayı, ${g.ast} Asist (${g.win}) - Enerji: ${g.nrg}/10</div>`).join('');
-            if(state.games.length>0) {
-                const last = state.games[state.games.length-1];
-                document.getElementById('lastGameStat').innerText = `${last.pts} Sayı / ${last.ast} Asist`;
-            }
-        }
-
-        // --- UTILS ---
-        function openModal(id) { document.getElementById(id).classList.add('open'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-        function save() { localStorage.setItem('atlas_v2_ult', JSON.stringify(state)); }
-
-        // --- JUMP MANUAL ---
-        function addJump(n){ state.jumps.push(n); save(); renderWorkout(); closeModal('jumpModal'); }
-        // Populate Jump Modal
-        const jumpGrid = document.getElementById('jumpSelectGrid');
-        ["Pogo Hops", "Box Jump", "Depth Jump", "Tuck Jump"].forEach(j => {
-            jumpGrid.innerHTML += `<button onclick="addJump('${j}')" style="padding:15px; background:#222; border:1px solid #333; color:#fff; border-radius:10px">${j}</button>`;
-        });
-
-        init();
     </script>
 </body>
 </html>
