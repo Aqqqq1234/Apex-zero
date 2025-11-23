@@ -100,8 +100,7 @@
         .close-sticky { position: fixed; top: 20px; right: 20px; z-index: 999; background: rgba(0,0,0,0.5); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #fff; backdrop-filter: blur(10px); border: 1px solid #444; cursor: pointer; }
 
         /* UTILS & NUTRITION */
-        .tab-btn { font-size: 1.7rem; opacity: 0.5; transition: 0.2s; cursor: pointer; } 
-        .tab-btn.active { opacity: 1; transform: scale(1.1); color: var(--accent); }
+        .tab-btn { font-size: 1.7rem; opacity: 0.5; transition: 0.2s; cursor: pointer; } .tab-btn.active { opacity: 1; transform: scale(1.1); color: var(--accent); }
         .timer-float { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(150px); background: #1c1c1e; border: 1px solid var(--accent); padding: 12px 24px; border-radius: 40px; display: flex; align-items: center; gap: 15px; z-index: 250; box-shadow: 0 10px 40px rgba(0,0,0,0.8); transition: 0.4s; }
         .timer-float.active { transform: translateX(-50%) translateY(0); }
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px; }
@@ -268,7 +267,7 @@
         <div class="sheet" style="text-align:center; border-color:var(--gold)">
             <div style="font-size:3rem; margin-bottom:10px">🎉</div>
             <h2 style="color:var(--gold); font-size:1.8rem; margin:0">ANTRENMAN TAMAMLANDI!</h2>
-            <div class="wrap-stats" style="display:flex; justify-content:space-around; margin:20px 0;">
+            <div class="wrap-stats">
                 <div class="wrap-box">
                     <div class="wrap-val" id="wrapVol">0</div>
                     <div style="font-size:0.8rem; color:#777">Toplam Yük (Kg)</div>
@@ -288,14 +287,15 @@
             <h2 style="padding:0 20px">Beslenme Merkezi</h2>
             <div style="padding:0 20px">
                 <div class="nutri-tabs">
-                    <div class="n-tab active" onclick="switchToolTab('track', this)">Takip</div>
-                    <div class="n-tab" onclick="switchToolTab('wizard', this)">Sihirbaz</div>
-                    <div class="n-tab" onclick="switchToolTab('1rm', this)">1RM & Hesap</div>
+                    <div class="n-tab active" onclick="switchToolTab('track')">Takip</div>
+                    <div class="n-tab" onclick="switchToolTab('wizard')">Sihirbaz</div>
+                    <div class="n-tab" onclick="switchToolTab('1rm')">1RM & Hesap</div>
                 </div>
 
                 <div id="tool-track" class="tool-content active">
                     <div style="text-align:center;margin-bottom:15px">
-                        HEDEF: <span id="targetCalDisplay" style="color:var(--gold);font-weight:bold">--</span> kcal / <span style="color:var(--accent);font-weight:bold">160g</span> Prot
+                        HEDEF: <span id="targetCalDisplay" style="color:var(--gold);font-weight:bold">--</span> kcal / 
+                        <span style="color:var(--accent);font-weight:bold">160g</span> Prot
                     </div>
                     <div class="macro-bar-container">
                         <div class="macro-label"><span>Kalori</span><span id="calText">0</span></div>
@@ -354,10 +354,7 @@
                 <input type="number" min="0" id="userHeight" class="mini-input" style="width:50%; padding:15px" placeholder="Boy (cm)" onchange="saveStats()">
                 <input type="number" min="0" id="dailyWeight" class="mini-input" style="width:50%; padding:15px" placeholder="Kilo (kg)" onchange="saveData()">
             </div>
-            <div class="alert-box alert-imbalance" id="legAlert">
-                <span>🐔</span> 
-                <div><b>Chicken Leg Uyarısı!</b><br>Üst vücudun gelişti ama bacakları ihmal ediyorsun.</div>
-            </div>
+            <div class="alert-box alert-imbalance" id="legAlert"><span>🐔</span> <div><b>Chicken Leg Uyarısı!</b><br>Üst vücudun gelişti ama bacakları ihmal ediyorsun.</div></div>
             <h4 style="margin-top:20px; border-top:1px solid #333; padding-top:10px; text-align:center">Kas Yoğunluk Haritası</h4>
             <div class="anatomy-container">
                 <svg class="anatomy-svg" viewBox="0 0 100 200">
@@ -455,6 +452,17 @@
                 <input type="number" min="0" id="gamePoints" class="mini-input" style="width:50%; padding:15px" placeholder="Sayı">
                 <input type="number" min="0" id="gameAssists" class="mini-input" style="width:50%; padding:15px" placeholder="Asist">
             </div>
+            <div style="display:flex; gap:10px; margin:10px 0;">
+                <input type="number" min="0" id="gameRebounds" class="mini-input" style="width:50%; padding:15px" placeholder="Rib">
+                <input type="number" min="0" id="gameSteals" class="mini-input" style="width:50%; padding:15px" placeholder="TÇ">
+            </div>
+            <div style="display:flex; gap:10px; margin-bottom:10px;">
+                <select id="gameResult" style="width:100%; padding:12px; background:#222; color:#fff; border:1px solid #333; border-radius:8px;">
+                    <option value="">Sonuç Seç</option>
+                    <option value="W">Galibiyet (W)</option>
+                    <option value="L">Mağlubiyet (L)</option>
+                </select>
+            </div>
             <textarea id="gameNotes" style="width:100%; background:#000; border:1px solid #333; color:#fff; padding:10px; border-radius:8px" placeholder="Maç yorumu..."></textarea>
             <button onclick="saveGameLog()" style="width:100%; padding:15px; background:var(--accent); border:none; border-radius:10px; margin-top:15px; font-weight:bold">Kaydet</button>
         </div>
@@ -462,6 +470,7 @@
 
     <div class="modal" id="settingsModal">
         <div class="sheet">
+            <div class="close-sticky" onclick="closeModal('settingsModal')">✕</div>
             <h2>Ayarlar</h2>
             <div class="toggle-row">
                 <span>🏀 Sezon İçi</span>
@@ -507,7 +516,7 @@
     </div>
     
     <script>
-        // --- VISUALS & DB ---
+        // --- DATA & CONFIG ---
         const visuals = { 
             push: `<svg viewBox="0 0 24 24"><path d="M4 18h16v-2H4v2zM8 6h8v2H8V6zm4 4c-1.1 0-2 .9-2 2v4h4v-4c0-1.1-.9-2-2-2z" fill="#fff"/></svg>`, 
             pull: `<svg viewBox="0 0 24 24"><path d="M12 2C9.24 2 7 4.24 7 7v4h2V7h10v4h2V7c0-2.76-2.24-5-5-5h-4zm-2 12v8h4v-8h-4z" fill="#fff"/></svg>`, 
@@ -544,8 +553,21 @@
         ];
 
         const finishers = { 
-            gym: ["🔥 1 Dakika Plank", "🔥 50 Mekik", "🔥 Tabata Burpee"], 
-            basket: ["🏀 5 Noktadan 10'ar Şut", "🏀 50 Serbest Atış"] 
+            gym: [
+                "🔥 1 Dakika Plank", 
+                "🔥 50 Mekik", 
+                "🔥 Tabata Burpee (4dk)", 
+                "🔥 100 Şınav (Toplam)", 
+                "🔥 Farmer's Walk (Ağırlıkla Yürü)",
+                "🔥 Dead Hang (Barfixte Asılı Kal - Max Süre)"
+            ], 
+            basket: [
+                "🏀 5 Noktadan 10'ar Şut", 
+                "🏀 50 Serbest Atış (Sokmadan Çıkma)", 
+                "🏀 Mikan Drill (2 Dakika)",
+                "🏀 3 Sayı Yarışması (Kendinle - 10'da kaç?)",
+                "🏀 Sahayı 5 Kere Tam Tur Koş"
+            ] 
         };
         
         const clutchTasks = [
@@ -555,26 +577,37 @@
         ];
         
         const foodDB = [
-            {n:"Yumurta (1 Adet)", c:70, p:6}, {n:"Tavuk Göğsü (150g)", c:165, p:31},
-            {n:"Pilav (1 Kase)", c:200, p:4}, {n:"Yulaf (50g)", c:190, p:6}, 
-            {n:"Muz (Orta)", c:105, p:1}, {n:"Protein Shake", c:120, p:24},
-            {n:"Ton Balığı (100g)", c:130, p:25}, {n:"Makarna (1 Tabak)", c:250, p:8}, 
-            {n:"Fıstık Ezmesi (1 tk)", c:90, p:3}, {n:"Yoğurt (1 Kase)", c:100, p:10},
-            {n:"Elma", c:52, p:0}, {n:"Badem (1 Avuç)", c:160, p:6}, 
-            {n:"Lor Peyniri (100g)", c:90, p:15}, {n:"Köfte (100g)", c:250, p:18},
-            {n:"Mercimek (1 Tabak)", c:230, p:18}, {n:"Pirinç Patlağı (1 ad)", c:30, p:1}
+            {n:"Yumurta (1 Adet)", c:70, p:6}, 
+            {n:"Tavuk Göğsü (150g)", c:165, p:31}, 
+            {n:"Pilav (1 Kase)", c:200, p:4}, 
+            {n:"Yulaf (50g)", c:190, p:6}, 
+            {n:"Muz (Orta)", c:105, p:1}, 
+            {n:"Protein Shake", c:120, p:24}, 
+            {n:"Ton Balığı (100g)", c:130, p:25}, 
+            {n:"Makarna (1 Tabak)", c:250, p:8}, 
+            {n:"Fıstık Ezmesi (1 tk)", c:90, p:3}, 
+            {n:"Yoğurt (1 Kase)", c:100, p:10}, 
+            {n:"Elma", c:52, p:0}, 
+            {n:"Badem/Ceviz (1 Avuç)", c:160, p:6}, 
+            {n:"Lor Peyniri (100g)", c:90, p:15}, 
+            {n:"Izgara Köfte (150g)", c:350, p:25}, 
+            {n:"Mercimek (1 Tabak)", c:230, p:18}, 
+            {n:"Pirinç Patlağı (1 ad)", c:30, p:1},
+            {n:"Protein Bar", c:200, p:20},
+            {n:"Hindi Füme (2 Dilim)", c:60, p:10},
+            {n:"Patates Haşlama (Orta)", c:160, p:4}
         ];
 
         const warmupDB = { 
-            "Yürüyüş": {d:"Hafif tempo, kan dolaşımını artır."}, 
-            "Rotator Cuff": {d:"Omuz başlarını ısıt, sakatlığı önle."}, 
-            "Tibialis": {d:"Kaval kemiği kasını çalıştır, dizleri koru."}, 
-            "Patellar Tendon": {d:"Diz kapağı altı izometrik bekleme."}, 
-            "Kalça Flexor": {d:"Lunge pozisyonunda esnet."}, 
-            "Omuz Mob.": {d:"Lastikle omuz açma germe."}, 
-            "Kalça Akt.": {d:"Bantla yana yürüyüş veya glute bridge."}, 
-            "Dinamik Isınma": {d:"Kol çevirme, bacak savurma."}, 
-            "Jacks": {d:"Jumping Jacks, nabzı yükselt."} 
+            "Yürüyüş": {d:"Kan akışını başlat, zihni antrenmana hazırla."}, 
+            "Rotator Cuff": {d:"Lastikle dışa/içe rotasyon. Omuz sağlığı için şart."}, 
+            "Tibialis": {d:"Duvara yaslanıp parmak ucu kaldırma. Diz ağrısını önler."}, 
+            "Patellar Tendon": {d:"Diz kapağı altı izometrik bekleme (Spanish Squat)."}, 
+            "Kalça Flexor": {d:"Lunge pozisyonunda arka bacağı sıkıp esnet."}, 
+            "Omuz Mob.": {d:"Sopayla omuz çevirme (Dislocates)."}, 
+            "Kalça Akt.": {d:"Monster Walk veya Glute Bridge ile kalçayı uyandır."}, 
+            "Dinamik Isınma": {d:"High Knees, Butt Kicks, Kol savurma."}, 
+            "Jacks": {d:"Nabzı 120 üzerine çıkarmak için seri zıplama."} 
         };
 
         const seasonSchedule = { 
@@ -600,164 +633,104 @@
                 {n:"HIIT",v:"cardio",d:"Nabzı patlat."}
             ]
         };
-
-        // --- DEFAULT STATE ---
-        const defaultStats = {
-            xp: 0,
-            height: 0,
-            challenge: { target: 1000, current: 0, title: "1000 Şınav" },
-            streak: 0,
-            lastLogin: "",
-            max: {},
-            games: [],
-            heat: { chest:0, back:0, legs:0, shoulders:0, arms:0, core:0 },
-            history: {},
-            pain: []
-        };
-
-        const defaultSettings = {
-            sound: false,
-            inSeason: true
-        };
-
+        
         // --- GLOBAL STATE ---
         let today = new Date();
         let data, stats, settings;
         let timerInt = null, timerSec = 0;
-        let breathInterval = null;
 
-        // DATE KEY
-        const getK = d => d.toLocaleDateString('fr-CA'); // YYYY-MM-DD Local
+        // --- INITIALIZATION ---
+        const getK = d => d.toLocaleDateString('fr-CA'); // YYYY-MM-DD Local Time
 
-        // --- STORAGE HELPERS ---
-        function save() {
-            try {
-                localStorage.setItem('primeDataV21', JSON.stringify(data));
-            } catch (e) {
-                // iOS özel mod vs. hata verir: sessizce geç
-            }
-        }
-
-        function saveStats() { 
-            const hEl = document.getElementById('userHeight');
-            if (hEl) stats.height = hEl.value;
-            try {
-                localStorage.setItem('primeStatsV21', JSON.stringify(stats)); 
-            } catch (e) {}
-        }
-
-        // --- INIT ---
         function init() {
             try {
-                const rawData = localStorage.getItem('primeDataV21');
-                const rawStats = localStorage.getItem('primeStatsV21');
-                const rawSettings = localStorage.getItem('primeSettingsV21');
-
-                data = rawData ? JSON.parse(rawData) : {};
-                stats = rawStats ? JSON.parse(rawStats) : { ...defaultStats };
-                settings = rawSettings ? JSON.parse(rawSettings) : { ...defaultSettings };
-            } catch (e) {
-                alert("Veri okunamadı, bu oturumda sıfırdan başlıyorum.");
-                data = {};
-                stats = { ...defaultStats };
-                settings = { ...defaultSettings };
-            }
-
-            const k = getK(today);
-            if (!data[k]) {
-                data[k] = {
-                    c: [],
-                    s: {},
-                    w: {},
-                    rpe: {},
-                    n: "",
-                    wt: 0,
-                    nutri: { cal: 0, pro: 0, log: [], supps: [], timing: [] },
-                    panic: false,
-                    readiness: 0
+                data = JSON.parse(localStorage.getItem('primeDataV21')) || {};
+                stats = JSON.parse(localStorage.getItem('primeStatsV21')) || {
+                    xp:0,
+                    height:0,
+                    challenge:{target:1000, current:0, title:"1000 Şınav"},
+                    streak:0,
+                    lastLogin:"",
+                    max:{},
+                    games:[],
+                    heat:{},
+                    history:{},
+                    pain:[]
                 };
+                settings = JSON.parse(localStorage.getItem('primeSettingsV21')) || {sound:false, inSeason:true};
+                
+                const k = getK(today);
+                if(!data[k]) data[k] = {
+                    c:[],
+                    s:{},
+                    w:{},
+                    rpe:{},
+                    n:"",
+                    wt:0,
+                    bw:0,
+                    nutri:{cal:0, pro:0, log:[], supps:[], timing:[]},
+                    panic:false,
+                    readiness:0
+                };
+                if(!stats.heat) stats.heat = {chest:0,back:0,legs:0,shoulders:0,arms:0,core:0};
+                
+                document.getElementById('dailyQuote').innerHTML = `"${quotes[today.getDate() % quotes.length]}"`;
+                if(data[k].readiness === 0) openModal('readinessModal');
+                document.getElementById('seasonToggle').checked = settings.inSeason;
+                document.getElementById('soundToggle').checked = settings.sound;
+                document.getElementById('userHeight').value = stats.height || "";
+                
+                updateChallengeUI(); 
+                renderFoodList(); 
+                render(); 
+                renderXP(); 
+                renderHeatmap(); 
+                renderGameHistory(); 
+                renderPainMap();
+
+            } catch (e) { 
+                alert("Veri hatası algılandı. Uygulama sıfırlanıyor..."); 
+                localStorage.clear(); 
+                location.reload(); 
             }
-
-            if (!stats.heat) {
-                stats.heat = { chest:0, back:0, legs:0, shoulders:0, arms:0, core:0 };
-            }
-            if (!stats.challenge) {
-                stats.challenge = { target: 1000, current: 0, title: "1000 Şınav" };
-            }
-
-            const quoteEl = document.getElementById('dailyQuote');
-            if (quoteEl) {
-                quoteEl.innerHTML = `"${quotes[today.getDate() % quotes.length]}"`;
-            }
-
-            if (data[k].readiness === 0) {
-                openModal('readinessModal');
-            }
-
-            const seasonToggle = document.getElementById('seasonToggle');
-            const soundToggle = document.getElementById('soundToggle');
-            const heightEl = document.getElementById('userHeight');
-
-            if (seasonToggle) seasonToggle.checked = !!settings.inSeason;
-            if (soundToggle) soundToggle.checked = !!settings.sound;
-            if (heightEl) heightEl.value = stats.height || "";
-
-            updateChallengeUI();
-            renderFoodList(); 
-            render(); 
-            renderXP(); 
-            renderHeatmap(); 
-            renderGameHistory(); 
-            renderPainMap();
         }
 
-        // --- RENDER MAIN ---
+        function save() { localStorage.setItem('primeDataV21', JSON.stringify(data)); }
+        function saveStats() { 
+            stats.height = document.getElementById('userHeight').value; 
+            localStorage.setItem('primeStatsV21', JSON.stringify(stats)); 
+        }
+
         function render() {
             const k = getK(today); 
             const dd = data[k]; 
 
-            const dateEl = document.getElementById('dateDisplay');
-            if (dateEl) {
-                dateEl.innerText = today.toLocaleDateString('tr-TR', {weekday:'long', day:'numeric'});
-            }
-
-            const baseProg = dd.panic ? seasonSchedule.panic :
-                (dd.custom || (settings.inSeason ? seasonSchedule[today.getDay()] : offSeasonSchedule[today.getDay()]));
-            const p = baseProg;
-
-            const progTitle = document.getElementById('progTitle');
-            const progSub = document.getElementById('progSub');
-            const seasonBadge = document.getElementById('seasonBadge');
-            const readinessBadge = document.getElementById('readinessBadge');
-
-            if (progTitle) progTitle.innerText = p.t; 
-            if (progSub) progSub.innerText = p.s;
-            if (seasonBadge) seasonBadge.innerText = settings.inSeason ? "SEZON İÇİ" : "OFF-SEASON";
-            if (readinessBadge) readinessBadge.innerText = ["Enerji: ?", "😫", "🥱", "😐", "🙂", "🔥"][dd.readiness];
-
-            // Prehab
+            document.getElementById('dateDisplay').innerText = today.toLocaleDateString('tr-TR', {weekday:'long', day:'numeric'});
+            const baseProg = settings.inSeason ? seasonSchedule[today.getDay()] : offSeasonSchedule[today.getDay()];
+            const p = dd.panic ? seasonSchedule.panic : (dd.custom || baseProg);
+            
+            document.getElementById('progTitle').innerText = p.t; 
+            document.getElementById('progSub').innerText = p.s;
+            document.getElementById('seasonBadge').innerText = settings.inSeason ? "SEZON İÇİ" : "OFF-SEASON";
+            document.getElementById('readinessBadge').innerText = ["?", "😫", "🥱", "😐", "🙂", "🔥"][dd.readiness];
+            
             const phList = document.getElementById('prehabList'); 
-            if (phList) {
-                phList.innerHTML = "";
-                if (p.pre) p.pre.forEach(item => { 
-                    const meta = warmupDB[item] || {d: "Hazırlık."}; 
-                    phList.innerHTML += `
-                    <div class="prehab-item">
-                        <div>
-                            <div style="font-weight:600">${item}</div>
-                            <span class="prehab-desc">${meta.d}</span>
-                        </div>
-                        <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(item + " exercise")}" target="_blank" class="yt-btn">▶</a>
-                    </div>`; 
-                });
-            }
+            phList.innerHTML = "";
+            if(p.pre) p.pre.forEach(item => { 
+                const meta = warmupDB[item] || {d: "Hazırlık."}; 
+                phList.innerHTML += `
+                <div class="prehab-item">
+                    <div>
+                        <div style="font-weight:600">${item}</div>
+                        <span class="prehab-desc">${meta.d}</span>
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(item + " exercise")}" target="_blank" class="yt-btn">▶</a>
+                </div>`; 
+            });
 
-            // Workout list
             const list = document.getElementById('workoutList'); 
-            if (!list) return;
             list.innerHTML=''; 
             let vol=0;
-
             p.i.forEach((it,i) => {
                 const chk = dd.c.includes(i); 
                 const kg = parseInt(dd.w[i]||0); 
@@ -787,18 +760,18 @@
                 </div>`;
             });
             
-            const totalVolume = document.getElementById('totalVolume');
-            const progPercent = document.getElementById('progPercent');
-            if (totalVolume) totalVolume.innerText = vol + " kg"; 
-            if (progPercent) progPercent.innerText = "%" + (p.i.length ? Math.round((dd.c.length/p.i.length)*100) : 0); 
+            document.getElementById('totalVolume').innerText = vol + " kg"; 
+            document.getElementById('progPercent').innerText = "%" + (p.i.length ? Math.round((dd.c.length/p.i.length)*100) : 0); 
             updateTrackers(dd);
         }
 
         function toggle(i,s,t){ 
             const k=getK(today); 
             const a=data[k].c; 
+
             if(a.includes(i)) {
                 a.splice(a.indexOf(i),1); 
+                addXP(-10); // İşaret kaldırılınca XP geri al
             } else { 
                 a.push(i); 
                 startTimer(); 
@@ -830,7 +803,7 @@
             const k=getK(today); 
             const dt=data[k]; 
             let vol=0; 
-            Object.values(dt.w).forEach(v=>vol+=parseInt(v||0)); 
+            Object.values(dt.w).forEach(v=>vol+=parseInt(v)); 
             document.getElementById('wrapVol').innerText=vol; 
             document.getElementById('wrapXP').innerText="+"+(dt.c.length*10); 
             openModal('wrapUpModal'); 
@@ -842,7 +815,10 @@
             const idx=today.getDay(); 
             let cur=data[k].custom ? data[k].custom : (settings.inSeason ? seasonSchedule[idx] : offSeasonSchedule[idx]); 
             
-            if(cur.i.find(x => x.n === jumpR[0].n)) { alert("Zaten eklendi!"); return; }
+            if(cur.i.find(x => x.n === jumpR[0].n)) { 
+                alert("Zaten Eklendi!"); 
+                return; 
+            }
 
             data[k].custom = {
                 t: cur.t+" + Jump",
@@ -853,105 +829,73 @@
             }; 
             save(); 
             render(); 
-            alert("Zıplama eklendi!"); 
+            alert("Zıplama Eklendi!"); 
         }
 
         function saveW(n,i,v,s){ 
             const k=getK(today); 
-            if (!data[k].w) data[k].w = {};
             data[k].w[i]=v; 
             if(v>(stats.max[n]||0)){
                 stats.max[n]=v; 
                 alert("REKOR! 🏆");
             } 
-            if (!stats.history) stats.history = {};
             stats.history[n]={w:v,s:s,d:k}; 
             save(); 
-            saveStats();
             render(); 
         }
 
         function saveS(i,v){ 
-            const k = getK(today);
-            if (!data[k].s) data[k].s = {};
-            data[k].s[i]=v; 
+            data[getK(today)].s[i]=v; 
             save(); 
         }
 
         function addXP(x){ 
-            stats.xp+=x; 
+            stats.xp = Math.max(0, (stats.xp || 0) + x); 
             saveStats(); 
             renderXP(); 
         }
 
         function renderXP(){ 
-            const bar = document.getElementById('xpBar');
-            const txt = document.getElementById('xpText');
-            const lvl = document.getElementById('currentLvl');
-            if (!bar || !txt || !lvl) return;
-
-            bar.style.width = (stats.xp%1000)/10+"%"; 
-            txt.innerText = stats.xp+" XP"; 
-            lvl.innerText = "Lvl "+Math.floor(stats.xp/1000+1); 
+            document.getElementById('xpBar').style.width = (stats.xp%1000)/10+"%"; 
+            document.getElementById('xpText').innerText = stats.xp+" XP"; 
+            document.getElementById('currentLvl').innerText = "Lvl "+Math.floor(stats.xp/1000+1); 
         }
 
         function updateTrackers(dd){ 
-            const waterCount = document.getElementById('waterCount');
-            const journal = document.getElementById('journal');
-            const dailyWeight = document.getElementById('dailyWeight');
-
-            if (waterCount) waterCount.innerText = (dd.wt || 0) + " lt"; 
-            if (journal) journal.value = dd.n || ""; 
-            if (dailyWeight) dailyWeight.value = dd.bw || ""; 
+            document.getElementById('waterCount').innerText = dd.wt+" lt"; 
+            document.getElementById('journal').value = dd.n||""; 
+            document.getElementById('dailyWeight').value = dd.bw||""; 
             
             const cal = dd.nutri?.cal||0; 
             const pro = dd.nutri?.pro||0; 
-            const calStatus = document.getElementById('calStatus');
-            const proStatus = document.getElementById('proStatus');
-
-            if (calStatus) calStatus.innerText = cal+" kcal"; 
-            if (proStatus) proStatus.innerText = pro+"g"; 
+            document.getElementById('calStatus').innerText = cal+" kcal"; 
+            document.getElementById('proStatus').innerText = pro+"g"; 
             
             const tCal=2500; 
             const tPro=160; 
-            const targetCalDisplay = document.getElementById('targetCalDisplay');
-            const calText = document.getElementById('calText');
-            const proText = document.getElementById('proText');
-            const calBar = document.getElementById('calBar');
-            const proBar = document.getElementById('proBar');
-
-            if (targetCalDisplay) targetCalDisplay.innerText = tCal; 
-            if (calText) calText.innerText = `${cal} / ${tCal}`; 
-            if (proText) proText.innerText = `${pro} / ${tPro}g`; 
-            if (calBar) calBar.style.width = Math.min((cal/tCal)*100,100)+"%"; 
-            if (proBar) proBar.style.width = Math.min((pro/tPro)*100,100)+"%"; 
+            document.getElementById('targetCalDisplay').innerText = tCal; 
+            document.getElementById('calText').innerText = `${cal} / ${tCal}`; 
+            document.getElementById('proText').innerText = `${pro} / ${tPro}g`; 
+            document.getElementById('calBar').style.width = Math.min((cal/tCal)*100,100)+"%"; 
+            document.getElementById('proBar').style.width = Math.min((pro/tPro)*100,100)+"%"; 
             
             const l=document.getElementById('foodLog'); 
-            if (l) {
-                l.innerHTML=""; 
-                if(dd.nutri?.log) dd.nutri.log.forEach(f=>l.innerHTML+=`<div>• ${f.n} (${f.c}kcal, ${f.p}g)</div>`); 
-            }
-
-            const isGameDay = seasonSchedule[today.getDay()]?.j;
-            const timingBox = document.getElementById('nutrientTimingBox');
-            if (timingBox) timingBox.style.display = isGameDay ? 'block' : 'none';
+            l.innerHTML=""; 
+            if(dd.nutri?.log) dd.nutri.log.forEach(f=>l.innerHTML+=`<div>• ${f.n} (${f.c}kcal, ${f.p}g)</div>`); 
+            
+            const baseProg = settings.inSeason ? seasonSchedule[today.getDay()] : offSeasonSchedule[today.getDay()];
+            if(baseProg.j) document.getElementById('nutrientTimingBox').style.display='block'; 
+            else document.getElementById('nutrientTimingBox').style.display='none'; 
             
             document.querySelectorAll('.supp-icon').forEach(el=>el.classList.remove('active')); 
-            if(dd.nutri?.supps) dd.nutri.supps.forEach(s => {
-                const el = document.getElementById('supp-'+s);
-                if (el) el.classList.add('active');
-            });
+            if(dd.nutri?.supps) dd.nutri.supps.forEach(s => document.getElementById('supp-'+s)?.classList.add('active'));
             
             document.querySelectorAll('.timing-item').forEach(el=>el.classList.remove('timing-active')); 
-            if(dd.nutri?.timing) dd.nutri.timing.forEach(t => {
-                const el = document.getElementById('time-'+t);
-                if (el) el.classList.add('timing-active');
-            });
+            if(dd.nutri?.timing) dd.nutri.timing.forEach(t => document.getElementById('time-'+t)?.classList.add('timing-active'));
         }
 
         function renderFoodList(){ 
             const g=document.getElementById('foodGrid'); 
-            if (!g) return;
             g.innerHTML=""; 
             foodDB.forEach((f,i)=>{
                 g.innerHTML+=`<div class="food-item" onclick="addFood(${i})"><b>${f.n}</b><small>${f.c}kcal / ${f.p}g</small></div>`;
@@ -992,7 +936,7 @@
                 const k=getK(today); 
                 const supps = data[k].nutri?.supps || [];
                 const timing = data[k].nutri?.timing || [];
-                data[k].nutri={cal:0,pro:0,log:[],supps, timing}; 
+                data[k].nutri={cal:0,pro:0,log:[],supps:supps,timing:timing}; 
                 save(); 
                 render(); 
             } 
@@ -1017,60 +961,48 @@
         function updateHeatmap(i){ 
             const k=getK(today); 
             const dd=data[k]; 
-            const p=dd.custom||(settings.inSeason?seasonSchedule[today.getDay()]:offSeasonSchedule[today.getDay()]); 
-            const block = muscleDB[p.i[i].mb];
-            const mKey = block ? block.mb : "core";
-            if (!stats.heat[mKey]) stats.heat[mKey] = 0;
-            stats.heat[mKey] += 1; 
+            const baseProg = settings.inSeason ? seasonSchedule[today.getDay()] : offSeasonSchedule[today.getDay()];
+            const p=dd.custom || baseProg; 
+            const m=muscleDB[p.i[i].mb]||{mb:"core"}; 
+            stats.heat[m.mb]=(stats.heat[m.mb]||0)+1; 
             saveStats(); 
             renderHeatmap(); 
         }
 
         function renderGameHistory(){ 
             const d=document.getElementById('gameHistory'); 
-            if (!d) return;
             d.innerHTML=""; 
-            (stats.games || []).slice(-5).reverse().forEach(g=>{
-                d.innerHTML+=`<div style="background:#111; padding:10px; border-radius:8px; margin-bottom:5px; border:1px solid #333; font-size:0.8rem;">${g.date} - ${g.pts} Sayı / ${g.ast} Asist</div>`;
+            const games = (stats.games || []).slice(-5).reverse();
+            games.forEach(g=>{
+                const resTag = g.res 
+                    ? (g.res === "W" ? " | W" : " | L") 
+                    : "";
+                const extraStats = [];
+                if(g.reb) extraStats.push(`${g.reb} Rib`);
+                if(g.stl) extraStats.push(`${g.stl} TÇ`);
+                const extraText = extraStats.length ? " / " + extraStats.join(" / ") : "";
+                d.innerHTML+=`
+                    <div style="background:#111; padding:10px; border-radius:8px; margin-bottom:5px; border:1px solid #333; font-size:0.8rem;">
+                        ${g.date}${resTag} - ${g.pts||0} Sayı / ${g.ast||0} Asist${extraText}
+                    </div>`;
             }); 
         }
 
-        // --- MODAL HELPERS ---
-        function openModal(id){
-            const el = document.getElementById(id);
-            if (el) el.classList.add('open');
-        } 
-
-        function closeModal(id){
-            const el = document.getElementById(id);
-            if (el) el.classList.remove('open');
-        }
-
-        // Zone kapatma
-        function closeZone(){
-            closeModal('zoneModal');
-            if (breathInterval) clearInterval(breathInterval);
-            breathInterval = null;
-        }
-
-        // TAB switch
-        function switchToolTab(t, el){ 
+        function openModal(id){document.getElementById(id).classList.add('open');} 
+        function closeModal(id){document.getElementById(id).classList.remove('open');}
+        
+        function switchToolTab(t){ 
             document.querySelectorAll('.tool-content').forEach(e=>e.style.display='none'); 
-            const target = document.getElementById('tool-'+t);
-            if (target) target.style.display='block'; 
+            document.getElementById('tool-'+t).style.display='block'; 
             document.querySelectorAll('.n-tab').forEach(e=>e.classList.remove('active')); 
-            if (el) el.classList.add('active'); 
+            event.target.classList.add('active'); 
         }
 
-        function toggleGuide(i){ 
-            const row = document.getElementById(`task-${i}`);
-            if (row) row.classList.toggle('show-guide'); 
-        }
+        function toggleGuide(i){ document.getElementById(`task-${i}`).classList.toggle('show-guide'); }
 
-        // --- TIMER ---
         function startTimer(){ 
             const el=document.getElementById('timerFloat'); 
-            if (el) el.classList.add('active'); 
+            el.classList.add('active'); 
             if(timerInt) clearInterval(timerInt); 
             timerSec=90; 
             updT(); 
@@ -1081,78 +1013,23 @@
             },1000); 
         }
 
-        function addTimer(extra){
-            const el=document.getElementById('timerFloat'); 
-            if (!timerInt) {
-                timerSec = extra;
-                if (el) el.classList.add('active');
-                updT();
-                timerInt=setInterval(()=>{ 
-                    timerSec--; 
-                    updT(); 
-                    if(timerSec<=0){ stopTimer(); notify(); } 
-                },1000); 
-            } else {
-                timerSec += extra;
-                if (timerSec < 0) timerSec = 0;
-                updT();
-            }
-        }
-
-        function stopTimer(){ 
-            if (timerInt) clearInterval(timerInt); 
-            timerInt = null;
-            const el = document.getElementById('timerFloat');
-            if (el) el.classList.remove('active'); 
-        }
-
-        function updT(){ 
-            const m=Math.floor(timerSec/60);
-            const s=timerSec%60; 
-            const disp = document.getElementById('timerDisplay');
-            if (disp) disp.innerText=`0${m}:${s<10?'0'+s:s}`; 
-        }
+        function stopTimer(){ clearInterval(timerInt); document.getElementById('timerFloat').classList.remove('active'); }
+        function updT(){ const m=Math.floor(timerSec/60), s=timerSec%60; document.getElementById('timerDisplay').innerText=`0${m}:${s<10?'0'+s:s}`; }
         
         function notify(){ 
             if(settings.sound && 'speechSynthesis' in window){ 
                 const u=new SpeechSynthesisUtterance("Süre doldu!"); 
                 u.lang='tr-TR'; 
                 window.speechSynthesis.speak(u); 
-            } else if (navigator && typeof navigator.vibrate === 'function') {
+            } else if (navigator.vibrate) {
                 navigator.vibrate([200,100,200]); 
             }
         }
 
-        // --- MISC ---
-        function addWater(){ 
-            const k = getK(today);
-            if (!data[k]) data[k] = {};
-            data[k].wt = (data[k].wt || 0) + 0.5; 
-            save(); 
-            render(); 
-        }
-
-        function setReadiness(v){ 
-            const k = getK(today);
-            if (!data[k]) return;
-            data[k].readiness=v; 
-            save(); 
-            closeModal('readinessModal'); 
-            render(); 
-        }
-
-        function togglePanic(){ 
-            const k = getK(today);
-            if (!data[k]) return;
-            data[k].panic=!data[k].panic; 
-            save(); 
-            render(); 
-        }
-
-        function changeDate(d){ 
-            today.setDate(today.getDate()+d); 
-            init(); 
-        }
+        function addWater(){ data[getK(today)].wt+=0.5; save(); render(); }
+        function setReadiness(v){ data[getK(today)].readiness=v; save(); closeModal('readinessModal'); render(); }
+        function togglePanic(){ data[getK(today)].panic=!data[getK(today)].panic; save(); render(); }
+        function changeDate(d){ today.setDate(today.getDate()+d); init(); }
         
         function toggleSupp(s){ 
             const k=getK(today); 
@@ -1181,8 +1058,7 @@
         }
 
         function openCalc(kg){ 
-            const el = document.getElementById('plateTarget');
-            if (el) el.value=kg; 
+            document.getElementById('plateTarget').value=kg; 
             calcPlates(); 
             openModal('plateModal'); 
         }
@@ -1190,7 +1066,6 @@
         function calcPlates(){ 
             const t=parseFloat(document.getElementById('plateTarget').value); 
             const vis=document.getElementById('plateVisual'); 
-            if (!vis) return;
             vis.innerHTML=''; 
             if(!t||t<=20)return; 
             let w=(t-20)/2; 
@@ -1203,7 +1078,7 @@
         }
 
         function openHist(n){ 
-            const h = stats.history ? stats.history[n] : null;
+            const h=stats.history[n];
             const max = stats.max[n] || 0; 
             document.getElementById('histTitle').innerText=n+" Geçmişi"; 
             document.getElementById('histList').innerHTML = 
@@ -1215,14 +1090,13 @@
         function generateMenu(){ 
             const r=a=>a[Math.floor(Math.random()*a.length)]; 
             const m1=r(foodDB.filter(f=>f.n.includes('Yumurta')||f.n.includes('Yulaf'))); 
-            const m2=r(foodDB.filter(f=>f.n.includes('Tavuk')||f.n.includes('Ton'))); 
-            const m3=r(foodDB.filter(f=>f.n.includes('Pilav')||f.n.includes('Makarna'))); 
-            document.getElementById('menuResult').innerHTML=
-                `<div style="background:#222; padding:15px; margin-top:15px;">
-                    <b>Kahvaltı:</b> ${m1.n}<br>
-                    <b>Öğle:</b> ${m2.n}<br>
-                    <b>Akşam:</b> ${m3.n}
-                </div>`; 
+            const m2=r(foodDB.filter(f=>f.n.includes('Tavuk')||f.n.includes('Ton')||f.n.includes('Hindi'))); 
+            const m3=r(foodDB.filter(f=>f.n.includes('Pilav')||f.n.includes('Makarna')||f.n.includes('Patates'))); 
+            document.getElementById('menuResult').innerHTML=`<div style="background:#222; padding:15px; margin-top:15px;">
+                <b>Kahvaltı:</b> ${m1.n}<br>
+                <b>Öğle:</b> ${m2.n}<br>
+                <b>Akşam:</b> ${m3.n}
+            </div>`; 
         }
 
         function togglePain(p){ 
@@ -1236,34 +1110,25 @@
         function renderPainMap(){ 
             document.querySelectorAll('.pain-part').forEach(el => el.classList.remove('active')); 
             if(stats.pain) stats.pain.forEach(p => { 
-                document.querySelectorAll('.pain-part').forEach(el => {
-                    if (el.textContent === p.charAt(0).toUpperCase() + p.slice(1) || el.getAttribute('onclick') === `togglePain('${p}')`) {
-                        el.classList.add('active');
-                    }
-                });
+                const el = document.querySelector(`.pain-part[onclick="togglePain('${p}')"]`); 
+                if(el) el.classList.add('active'); 
             }); 
         }
 
         function toggleSeason(){ 
-            const el = document.getElementById('seasonToggle');
-            settings.inSeason = el ? el.checked : settings.inSeason; 
-            try {
-                localStorage.setItem('primeSettingsV21', JSON.stringify(settings)); 
-            } catch (e) {}
+            settings.inSeason = document.getElementById('seasonToggle').checked; 
+            localStorage.setItem('primeSettingsV21', JSON.stringify(settings)); 
             render(); 
         }
 
         function toggleSound(){ 
-            const el = document.getElementById('soundToggle');
-            settings.sound = el ? el.checked : settings.sound; 
-            try {
-                localStorage.setItem('primeSettingsV21', JSON.stringify(settings)); 
-            } catch (e) {}
+            settings.sound = document.getElementById('soundToggle').checked; 
+            localStorage.setItem('primeSettingsV21', JSON.stringify(settings)); 
         }
 
         function resetApp(){ 
             if(confirm("Sıfırla?")){ 
-                try { localStorage.clear(); } catch(e) {}
+                localStorage.clear(); 
                 location.reload(); 
             } 
         }
@@ -1272,36 +1137,46 @@
             const el = document.getElementById('breathCircle'); 
             const txt = document.getElementById('breathText'); 
             let phase = 0; 
-            if (breathInterval) clearInterval(breathInterval);
-
             const cycle = () => { 
-                if(!el || !txt) return;
-                if(phase===0){ el.innerText="AL"; el.style.transform="scale(1.5)"; txt.innerText="Nefes al"; } 
-                else if(phase===1){ el.innerText="TUT"; txt.innerText="Tut"; } 
-                else if(phase===2){ el.innerText="VER"; el.style.transform="scale(1)"; txt.innerText="Nefes ver"; } 
-                else if(phase===3){ el.innerText="TUT"; txt.innerText="Tut"; } 
+                if(phase===0){ el.innerText="AL"; el.style.transform="scale(1.5)"; txt.innerText="Nefes al (4 sn)"; } 
+                else if(phase===1){ el.innerText="TUT"; txt.innerText="Nefesi tut (4 sn)"; } 
+                else if(phase===2){ el.innerText="VER"; el.style.transform="scale(1)"; txt.innerText="Nefes ver (4 sn)"; } 
+                else if(phase===3){ el.innerText="TUT"; txt.innerText="Bekle (4 sn)"; } 
                 phase = (phase+1)%4; 
             }; 
             cycle(); 
-            breathInterval = setInterval(cycle, 4000); 
+            setInterval(cycle, 4000); 
         }
 
+        function closeZone(){ closeModal('zoneModal'); }
+
         function saveGameLog(){ 
-            const p=document.getElementById('gamePoints').value; 
-            const a=document.getElementById('gameAssists').value; 
-            const note=document.getElementById('gameNotes').value; 
-            if(p||a||note){ 
-                if (!stats.games) stats.games = [];
-                stats.games.push({date:getK(today), pts:p||0, ast:a||0, note}); 
-                saveStats(); 
-                closeModal('gameLogModal'); 
-                renderGameHistory(); 
-            } 
+            const p  = parseInt(document.getElementById('gamePoints').value)   || 0; 
+            const a  = parseInt(document.getElementById('gameAssists').value)  || 0; 
+            const r  = parseInt(document.getElementById('gameRebounds').value) || 0; 
+            const st = parseInt(document.getElementById('gameSteals').value)   || 0; 
+            const res = document.getElementById('gameResult').value || "";
+            const note = document.getElementById('gameNotes').value || "";
+
+            if(!(p || a || r || st || res || note)) return;
+
+            stats.games.push({
+                date: getK(today),
+                pts:  p,
+                ast:  a,
+                reb:  r,
+                stl:  st,
+                res:  res,
+                note: note
+            }); 
+
+            saveStats(); 
+            closeModal('gameLogModal'); 
+            renderGameHistory(); 
         }
 
         function fireConfetti(){
             const c=document.getElementById('confetti');
-            if (!c) return;
             const x=c.getContext('2d');
             c.width=window.innerWidth;
             c.height=window.innerHeight;
@@ -1315,7 +1190,7 @@
                     if(o.y<c.height){
                         a=true;
                         x.fillStyle=o.c;
-                        x.fillRect(o.x,o.y,5,5);
+                        x.fillRect(o.x,o.y,5,5)
                     }
                 });
                 if(a)requestAnimationFrame(l);
@@ -1338,149 +1213,36 @@
             const r = new FileReader(); 
             r.onload = (e) => { 
                 const d = JSON.parse(e.target.result); 
-                try {
-                    localStorage.setItem('primeDataV21', JSON.stringify(d.data)); 
-                    localStorage.setItem('primeStatsV21', JSON.stringify(d.stats)); 
-                    localStorage.setItem('primeSettingsV21', JSON.stringify(d.settings)); 
-                } catch(e2){}
+                localStorage.setItem('primeDataV21', JSON.stringify(d.data)); 
+                localStorage.setItem('primeStatsV21', JSON.stringify(d.stats)); 
+                localStorage.setItem('primeSettingsV21', JSON.stringify(d.settings)); 
                 location.reload(); 
             }; 
             r.readAsText(f); 
         }
 
-        // Challenge UI & logic
         function updateChallengeUI(){
-            if (!stats.challenge) {
-                stats.challenge = { target: 1000, current: 0, title: "1000 Şınav" };
-            }
-            const ch = stats.challenge;
-            const shortEl = document.getElementById('challengeShort');
-            const titleEl = document.getElementById('challengeTitle');
-            const displayEl = document.getElementById('challengeDisplay');
-            const barEl = document.getElementById('challengeBarFill');
-
-            if (shortEl) shortEl.textContent = (ch.current || 0) + "/" + (ch.target || 0);
-            if (titleEl) titleEl.textContent = ch.title || "Meydan Okuma";
-            if (displayEl) displayEl.textContent = (ch.current || 0) + " / " + (ch.target || 0);
-            if (barEl) {
-                const pct = ch.target ? Math.min((ch.current / ch.target) * 100, 100) : 0;
-                barEl.style.width = pct + "%";
-            }
+            const ch = stats.challenge || {target:1000, current:0, title:"1000 Şınav"};
+            document.getElementById('challengeTitle').innerText = ch.title;
+            document.getElementById('challengeDisplay').innerText = `${ch.current} / ${ch.target}`;
+            document.getElementById('challengeShort').innerText = `${ch.current}/${ch.target}`;
+            const pct = ch.target ? (ch.current / ch.target) * 100 : 0;
+            document.getElementById('challengeBarFill').style.width = Math.min(pct,100) + "%";
         }
 
-        function addChallenge(amount){
-            if (!stats.challenge) {
-                stats.challenge = { target: 1000, current: 0, title: "1000 Şınav" };
-            }
-            stats.challenge.current = (stats.challenge.current || 0) + amount;
+        function addChallenge(val){
+            if(!stats.challenge) stats.challenge = {target:1000, current:0, title:"1000 Şınav"};
+            stats.challenge.current += val;
             saveStats();
             updateChallengeUI();
         }
 
         function setChallenge(){
-            const currentTarget = (stats.challenge && stats.challenge.target) || 1000;
-            const currentTitle = (stats.challenge && stats.challenge.title) || "Meydan Okuma";
-            const newTarget = parseInt(prompt("Yeni hedef (toplam tekrar):", currentTarget), 10);
-            if (!newTarget || newTarget <= 0) return;
-            const newTitle = prompt("Meydan okuma başlığı:", currentTitle);
-            stats.challenge = {
-                target: newTarget,
-                current: 0,
-                title: newTitle || "Meydan Okuma"
-            };
+            const target = parseInt(prompt("Yeni hedef (tekrar):", stats.challenge?.target || 1000)) || 1000;
+            const title  = prompt("Başlık:", stats.challenge?.title || "Yeni Hedef") || "Yeni Hedef";
+            stats.challenge = {target:target, current:0, title:title};
             saveStats();
             updateChallengeUI();
-        }
-
-        // Journal + kilo kaydı
-        function saveData(){
-            const k = getK(today);
-            if (!data[k]) return;
-            const j = document.getElementById('journal');
-            const bw = document.getElementById('dailyWeight');
-            if (j) data[k].n = j.value;
-            if (bw) data[k].bw = bw.value;
-            save();
-        }
-
-        // Program builder
-        function updateSec(){
-            const mainSel = document.getElementById('mainMuscle');
-            const subSel = document.getElementById('subMuscle');
-            if (!mainSel || !subSel) return;
-
-            const main = mainSel.value;
-            subSel.innerHTML = "";
-            if (!main) {
-                subSel.disabled = true;
-                const op = document.createElement('option');
-                op.textContent = "2. Bölge";
-                op.value = "";
-                subSel.appendChild(op);
-                return;
-            }
-            subSel.disabled = false;
-            const placeholder = document.createElement('option');
-            placeholder.textContent = "2. Bölge";
-            placeholder.value = "";
-            subSel.appendChild(placeholder);
-
-            const list = compat[main] || [];
-            list.forEach(m => {
-                const o = document.createElement('option');
-                o.value = m;
-                o.textContent = muscleDB[m] ? muscleDB[m].t : m;
-                subSel.appendChild(o);
-            });
-        }
-
-        function buildProg(){
-            const mainSel = document.getElementById('mainMuscle');
-            const subSel = document.getElementById('subMuscle');
-            const addJumpCb = document.getElementById('addJump');
-            const main = mainSel ? mainSel.value : "";
-            const sub = subSel ? subSel.value : "";
-
-            if (!main) { 
-                alert("Önce 1. bölgeyi seç.");
-                return; 
-            }
-
-            const todayKey = getK(today);
-            if (!data[todayKey]) data[todayKey] = {};
-
-            const mainBlock = muscleDB[main];
-            let items = mainBlock ? [...mainBlock.i] : [];
-            let title = mainBlock ? mainBlock.t : "Program";
-            let subTitle = mainBlock ? mainBlock.mb : "";
-
-            if (sub) {
-                const subBlock = muscleDB[sub];
-                if (subBlock) {
-                    items = items.concat(subBlock.i);
-                    subTitle += " + " + subBlock.mb;
-                    title += " + " + subBlock.t;
-                }
-            }
-
-            const isJump = !!(addJumpCb && addJumpCb.checked);
-            if (isJump) {
-                items = items.concat(jumpR);
-            }
-
-            const basePre = (settings.inSeason ? seasonSchedule[today.getDay()] : offSeasonSchedule[today.getDay()])?.pre || [];
-
-            data[todayKey].custom = {
-                t: title,
-                s: subTitle || (mainBlock ? mainBlock.mb : ""),
-                j: isJump,
-                pre: basePre,
-                i: items
-            };
-
-            save();
-            closeModal('builderModal');
-            render();
         }
 
         window.onload = init;
