@@ -6,16 +6,15 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#000000">
-    <title>PRIME v23 UX Stable</title>
+    <title>PRIME v23.0 Coach Pack</title>
 
     <style>
-        /* --- CORE DESIGN --- */
         :root {
             --bg: #000000;
             --card: #161618;
             --text: #ffffff;
             --muted: #8e8e93;
-            --accent: #32d74b; /* Green */
+            --accent: #32d74b;
             --blue: #0a84ff;
             --danger: #ff453a;
             --warn: #ff9f0a;
@@ -24,13 +23,11 @@
             --glass: rgba(22, 22, 24, 0.95);
             --radius: 18px;
         }
-
         * {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
         }
-
         body {
             margin: 0;
             background: var(--bg);
@@ -38,22 +35,8 @@
             padding-top: env(safe-area-inset-top);
             padding-bottom: 120px;
             user-select: none;
-            position: relative;
         }
 
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            opacity: 0.04;
-            background-image:
-                radial-gradient(circle at 10% 20%, var(--accent) 0, transparent 45%),
-                radial-gradient(circle at 80% 80%, var(--blue) 0, transparent 55%);
-            z-index: -2;
-        }
-
-        /* --- LAYERING (Z-INDEX FIX) --- */
         #confetti {
             position: fixed;
             top: 0;
@@ -68,12 +51,12 @@
             background: var(--glass);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid #333;
-            padding: 10px 20px 8px;
+            padding: 10px 20px;
         }
         .container {
             position: relative;
             z-index: 10;
-            padding: 0 16px 40px;
+            padding: 0 16px;
             max-width: 600px;
             margin: 0 auto;
         }
@@ -86,2307 +69,1599 @@
             border-top: 0.5px solid #333;
             display: flex;
             justify-content: space-around;
-            padding: 8px 8px;
-            padding-bottom: calc(14px + env(safe-area-inset-bottom));
+            padding: 12px;
+            padding-bottom: calc(15px + env(safe-area-inset-bottom));
             z-index: 200;
         }
 
-        /* HEADER */
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        .app-title {
-            font-size: 1.4rem;
-            font-weight: 900;
-            font-style: italic;
-            letter-spacing: -1px;
-        }
-        .xp-container {
-            width: 100%;
-            height: 6px;
-            background: #333;
-            border-radius: 3px;
-            overflow: hidden;
-            margin-top: 4px;
-        }
-        .xp-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--blue));
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-        .level-badge {
-            font-size: 0.7rem;
-            color: var(--blue);
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            margin-top: 4px;
-        }
-        .icon-btn {
-            background: none;
-            border: none;
-            color: var(--text);
-            font-size: 1.2rem;
-            cursor: pointer;
-            opacity: 0.85;
-            position: relative;
-            z-index: 101;
-        }
-        .icon-btn:active {
-            transform: scale(0.95);
-            opacity: 1;
-        }
-        .challenge-badge {
-            background: linear-gradient(90deg, #ff9f0a, #ff3b30);
-            color: #fff;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            box-shadow: 0 0 10px rgba(255, 159, 10, 0.3);
-            cursor: pointer;
-        }
+        .header-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+        .app-title { font-size:1.4rem; font-weight:900; font-style:italic; letter-spacing:-1px; }
+        .xp-container { width:100%; height:6px; background:#333; border-radius:3px; overflow:hidden; }
+        .xp-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--blue)); width:0%; transition:width .5s ease; }
+        .level-badge { font-size:.7rem; color:var(--blue); font-weight:bold; display:flex; justify-content:space-between; margin-top:4px; }
+        .icon-btn { background:none; border:none; color:var(--text); font-size:1.2rem; cursor:pointer; opacity:.8; position:relative; z-index:101; }
+        .challenge-badge { background:linear-gradient(90deg,#ff9f0a,#ff3b30); color:#fff; padding:4px 10px; border-radius:12px; font-size:.7rem; font-weight:bold; display:flex; align-items:center; gap:5px; box-shadow:0 0 10px rgba(255,159,10,.3); cursor:pointer; }
 
-        .quote-box {
-            text-align: center;
-            padding: 10px 20px 5px;
-            font-style: italic;
-            color: #888;
-            font-size: 0.9rem;
-        }
+        .alert-box { padding:15px; border-radius:12px; margin:15px 16px; font-size:.9rem; display:flex; align-items:center; gap:15px; animation:fadeIn .5s; border:1px solid transparent; position:relative; z-index:15; }
+        .alert-low { background:rgba(10,132,255,.15); border-color:var(--blue); color:var(--blue); }
+        .alert-high { background:rgba(255,214,10,.15); border-color:var(--gold); color:var(--gold); }
+        .alert-deload { background:rgba(255,69,58,.15); border-color:var(--danger); color:var(--danger); }
+        .alert-imbalance { background:rgba(255,159,10,.15); border-color:var(--warn); color:var(--warn); display:none; }
 
-        .date-strip {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 16px;
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 10;
-        }
-        .nav-arrow {
-            font-size: 1.5rem;
-            padding: 6px 10px;
-            cursor: pointer;
-            opacity: 0.8;
-        }
+        .card { background:var(--card); border-radius:var(--radius); padding:20px; margin-bottom:20px; position:relative; border:1px solid #2c2c2e; box-shadow:0 10px 30px rgba(0,0,0,.3); }
+        .box-header { font-weight:bold; font-size:.85rem; text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+        .prehab-box { background:rgba(10,132,255,.1); border:1px solid rgba(10,132,255,.3); padding:15px; margin-bottom:15px; border-radius:12px; }
+        .prehab-item { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(10,132,255,.2); font-size:.9rem; }
+        .prehab-item:last-child { border-bottom:none; }
+        .prehab-desc { font-size:.75rem; color:#aaa; display:block; margin-top:2px; }
 
-        /* ALERTS */
-        .alert-box {
-            padding: 15px;
-            border-radius: 12px;
-            margin: 10px 16px;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            animation: fadeIn 0.5s;
-            border: 1px solid transparent;
-            position: relative;
-            z-index: 15;
-        }
-        .alert-low {
-            background: rgba(10, 132, 255, 0.15);
-            border-color: var(--blue);
-            color: var(--blue);
-        }
-        .alert-high {
-            background: rgba(255, 214, 10, 0.15);
-            border-color: var(--gold);
-            color: var(--gold);
-        }
-        .alert-deload {
-            background: rgba(255, 69, 58, 0.15);
-            border-color: var(--danger);
-            color: var(--danger);
-        }
-        .alert-imbalance {
-            background: rgba(255, 159, 10, 0.15);
-            border-color: var(--warn);
-            color: var(--warn);
-            display: none;
-        }
+        .task-item { padding:16px 0; border-bottom:1px solid #2a2a2a; position:relative; }
+        .task-top { display:flex; align-items:center; gap:12px; }
+        .task-visual { width:50px; height:50px; background:#252527; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; border:1px solid #333; cursor:pointer; }
+        .task-visual svg { width:30px; height:30px; fill:#fff; }
+        .checked .task-visual svg { fill:var(--accent); }
+        .check-group { display:flex; align-items:center; gap:12px; flex:1; cursor:pointer; }
+        .circle-check { width:24px; height:24px; border:2px solid #444; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:.2s; }
+        .checked .circle-check { background:var(--accent); border-color:var(--accent); }
+        .task-name { font-size:1rem; font-weight:600; transition:.2s; line-height:1.3; }
+        .checked .task-name { color:var(--muted); text-decoration:line-through; }
+        .guide-text { font-size:.8rem; color:var(--blue); margin-top:5px; display:none; background:rgba(10,132,255,.1); padding:8px; border-radius:6px; }
+        .task-item.show-guide .guide-text { display:block; animation:fadeIn .3s; }
+        .yt-btn { background:#222; color:var(--text); padding:8px 12px; border-radius:6px; text-decoration:none; font-size:.7rem; font-weight:bold; border:1px solid #333; display:flex; align-items:center; gap:5px; flex-shrink:0; cursor:pointer; position:relative; z-index:20; }
 
-        /* CARDS & BOXES */
-        .card {
-            background: var(--card);
-            border-radius: 24px;
-            padding: 18px 18px 16px;
-            margin-bottom: 18px;
-            position: relative;
-            border: 1px solid #2c2c2e;
-            box-shadow: 0 14px 35px rgba(0, 0, 0, 0.45);
-        }
-        .card-header-line {
-            height: 2px;
-            width: 60px;
-            border-radius: 999px;
-            background: linear-gradient(90deg, var(--accent), var(--blue));
-            margin-top: 6px;
-        }
-        .box-header {
-            font-weight: bold;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .box-header small {
-            color: var(--muted);
-            font-weight: 500;
-            text-transform: none;
-        }
+        .input-row { display:flex; gap:8px; margin-top:12px; padding-left:66px; align-items:center; flex-wrap:wrap; position:relative; z-index:20; }
+        .mini-input { background:#000; border:1px solid #333; color:#fff; width:65px; padding:10px; border-radius:8px; text-align:center; font-size:.9rem; font-weight:600; -webkit-appearance:none; }
+        .tool-btn { background:#222; border:1px solid #333; color:var(--muted); width:34px; height:34px; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+        .pr-active { border-color:var(--gold) !important; color:var(--gold) !important; box-shadow:0 0 10px rgba(255,214,10,.3); }
 
-        .prehab-box {
-            background: rgba(10, 132, 255, 0.06);
-            border: 1px solid rgba(10, 132, 255, 0.3);
-            padding: 15px;
-            margin: 0 16px 16px;
-            border-radius: 18px;
-        }
-        .prehab-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(10, 132, 255, 0.2);
-            font-size: 0.9rem;
-            gap: 6px;
-        }
-        .prehab-item:last-child {
-            border-bottom: none;
-        }
-        .prehab-desc {
-            font-size: 0.75rem;
-            color: #aaa;
-            display: block;
-            margin-top: 2px;
-        }
+        .rpe-container { width:100%; display:flex; align-items:center; gap:10px; margin-top:8px; padding-left:66px; opacity:.6; transition:.3s; position:relative; z-index:20; }
+        .rpe-container:hover,.rpe-container.active { opacity:1; }
+        .rpe-slider { -webkit-appearance:none; width:100%; height:4px; border-radius:5px; background:#333; outline:none; }
+        .rpe-slider::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:15px; height:15px; border-radius:50%; background:var(--blue); cursor:pointer; }
 
-        /* TASK ITEMS */
-        .task-item {
-            padding: 14px 0;
-            border-bottom: 1px solid #2a2a2a;
-            position: relative;
-            transition: transform 0.12s ease, opacity 0.12s ease;
-        }
-        .task-item.checked {
-            opacity: 0.85;
-        }
-        .task-top {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .task-visual {
-            width: 50px;
-            height: 50px;
-            background: #252527;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            border: 1px solid #333;
-            cursor: pointer;
-        }
-        .task-visual svg {
-            width: 30px;
-            height: 30px;
-            fill: #fff;
-        }
-        .checked .task-visual svg {
-            fill: var(--accent);
-        }
-        .check-group {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex: 1;
-            cursor: pointer;
-        }
-        .circle-check {
-            width: 24px;
-            height: 24px;
-            border: 2px solid #444;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: 0.2s;
-        }
-        .checked .circle-check {
-            background: var(--accent);
-            border-color: var(--accent);
-        }
-        .task-name {
-            font-size: 1rem;
-            font-weight: 600;
-            transition: 0.2s;
-            line-height: 1.3;
-        }
-        .checked .task-name {
-            color: var(--muted);
-            text-decoration: line-through;
-        }
-        .guide-text {
-            font-size: 0.8rem;
-            color: var(--blue);
-            margin-top: 6px;
-            display: none;
-            background: rgba(10, 132, 255, 0.06);
-            padding: 8px 10px;
-            border-radius: 8px;
-        }
-        .task-item.show-guide .guide-text {
-            display: block;
-            animation: fadeIn 0.3s;
-        }
-        .yt-btn {
-            background: #222;
-            color: var(--text);
-            padding: 8px 12px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 0.7rem;
-            font-weight: bold;
-            border: 1px solid #333;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            flex-shrink: 0;
-            cursor: pointer;
-            position: relative;
-            z-index: 20;
-        }
+        .toggle-row { display:flex; justify-content:space-between; align-items:center; background:#000; padding:15px; border-radius:12px; border:1px solid #333; margin-bottom:15px; }
+        .switch { position:relative; display:inline-block; width:50px; height:28px; }
+        .switch input { opacity:0; width:0; height:0; }
+        .slider { position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background-color:#333; transition:.4s; border-radius:34px; }
+        .slider:before { position:absolute; content:""; height:20px; width:20px; left:4px; bottom:4px; background-color:white; transition:.4s; border-radius:50%; }
+        input:checked + .slider { background-color:var(--blue); }
+        input:checked + .slider:before { transform:translateX(22px); }
 
-        /* INPUTS */
-        .input-row {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-            padding-left: 66px;
-            align-items: center;
-            flex-wrap: wrap;
-            position: relative;
-            z-index: 20;
-        }
-        .mini-input {
-            background: #000;
-            border: 1px solid #333;
-            color: #fff;
-            width: 65px;
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 0.9rem;
-            font-weight: 600;
-            -webkit-appearance: none;
-        }
-        .tool-btn {
-            background: #222;
-            border: 1px solid #333;
-            color: var(--muted);
-            width: 34px;
-            height: 34px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-        .pr-active {
-            border-color: var(--gold) !important;
-            color: var(--gold) !important;
-            box-shadow: 0 0 10px rgba(255, 214, 10, 0.35);
-        }
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.85); z-index:300; align-items:flex-end; backdrop-filter:blur(5px); }
+        .modal.open { display:flex; }
+        .sheet { background:#1c1c1e; width:100%; border-radius:24px 24px 0 0; padding:30px 25px; max-height:90vh; overflow-y:auto; animation:slideUp .3s; border-top:1px solid #333; position:relative; z-index:301; }
+        .full-modal { align-items:center; justify-content:center; }
+        .full-modal .sheet { border-radius:0; width:100%; height:100%; max-height:100%; max-width:100%; padding-top:env(safe-area-inset-top); }
+        .close-sticky { position:fixed; top:20px; right:20px; z-index:999; background:rgba(0,0,0,.5); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem; color:#fff; backdrop-filter:blur(10px); border:1px solid #444; cursor:pointer; }
 
-        /* TOGGLES */
-        .toggle-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #000;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid #333;
-            margin-bottom: 15px;
-        }
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 28px;
-        }
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #333;
-            transition: .4s;
-            border-radius: 34px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        input:checked + .slider {
-            background-color: var(--blue);
-        }
-        input:checked + .slider:before {
-            transform: translateX(22px);
-        }
+        .tab-btn { font-size:1.7rem; opacity:.5; transition:.2s; cursor:pointer; }
+        .tab-btn.active { opacity:1; transform:scale(1.1); color:var(--accent); }
 
-        /* MODALS */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 300;
-            align-items: flex-end;
-            backdrop-filter: blur(5px);
-        }
-        .modal.open {
-            display: flex;
-        }
-        .sheet {
-            background: #1c1c1e;
-            width: 100%;
-            border-radius: 24px 24px 0 0;
-            padding: 30px 25px 25px;
-            max-height: 90vh;
-            overflow-y: auto;
-            animation: slideUp 0.3s;
-            border-top: 1px solid #333;
-            position: relative;
-            z-index: 301;
-        }
-        .full-modal {
-            align-items: center;
-            justify-content: center;
-        }
-        .full-modal .sheet {
-            border-radius: 0;
-            width: 100%;
-            height: 100%;
-            max-height: 100%;
-            max-width: 100%;
-            padding-top: env(safe-area-inset-top);
-        }
-        .close-sticky {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 999;
-            background: rgba(0,0,0,0.5);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: #fff;
-            backdrop-filter: blur(10px);
-            border: 1px solid #444;
-            cursor: pointer;
-        }
+        .timer-float { position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(150px); background:#1c1c1e; border:1px solid var(--accent); padding:12px 24px; border-radius:40px; display:flex; align-items:center; gap:15px; z-index:250; box-shadow:0 10px 40px rgba(0,0,0,.8); transition:.4s; }
+        .timer-float.active { transform:translateX(-50%) translateY(0); }
 
-        /* UTILS & NUTRITION */
-        .tab-btn {
-            font-size: 1.4rem;
-            opacity: 0.6;
-            transition: 0.18s;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            padding: 4px 10px;
-            border-radius: 999px;
-        }
-        .tab-icon {
-            line-height: 1;
-        }
-        .tab-label {
-            font-size: 0.65rem;
-            color: var(--muted);
-        }
-        .tab-btn.active {
-            opacity: 1;
-            color: var(--accent);
-            background: rgba(50,215,75,0.12);
-            border: 1px solid rgba(50,215,75,0.6);
-            box-shadow: 0 0 16px rgba(50,215,75,0.25);
-        }
-        .timer-float {
-            position: fixed;
-            bottom: 90px;
-            left: 50%;
-            transform: translateX(-50%) translateY(150px);
-            background: #1c1c1e;
-            border: 1px solid var(--accent);
-            padding: 10px 20px;
-            border-radius: 40px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 250;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-            transition: 0.35s;
-            font-size: 0.9rem;
-        }
-        .timer-float.active {
-            transform: translateX(-50%) translateY(0);
-        }
-        .grid-3 {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-        .track-box {
-            background: #111;
-            padding: 14px 10px;
-            border-radius: 14px;
-            text-align: center;
-            cursor: pointer;
-            border: 1px solid #333;
-        }
-        .track-val {
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: #fff;
-        }
-        .nutri-container {
-            padding-top: 20px;
-            padding-bottom: 80px;
-        }
-        .nutri-tabs {
-            display: flex;
-            background: #111;
-            padding: 4px;
-            border-radius: 12px;
-            margin: 15px 0;
-            border: 1px solid #333;
-        }
-        .n-tab {
-            flex: 1;
-            text-align: center;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            color: #777;
-            transition: 0.2s;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .n-tab.active {
-            background: #222;
-            color: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        .macro-bar-container {
-            margin-bottom: 16px;
-            background: #111;
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid #333;
-        }
-        .macro-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-            color: #ccc;
-            font-weight: bold;
-        }
-        .progress-track {
-            width: 100%;
-            height: 10px;
-            background: #222;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            border-radius: 5px;
-            transition: width 0.5s;
-        }
-        .food-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            padding-bottom: 10px;
-        }
-        .food-item {
-            background: #1a1a1a;
-            padding: 10px;
-            border-radius: 12px;
-            border: 1px solid #333;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: 0.15s;
-            position: relative;
-            overflow: hidden;
-        }
-        .food-item:active {
-            transform: scale(0.97);
-            background: #222;
-        }
-        .supp-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-        .supp-icon {
-            background: #222;
-            border: 1px solid #333;
-            aspect-ratio: 1;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            font-size: 0.7rem;
-            cursor: pointer;
-            opacity: 0.5;
-            transition: 0.25s;
-        }
-        .supp-icon.active {
-            opacity: 1;
-            border-color: var(--blue);
-            background: rgba(10, 132, 255, 0.14);
-            box-shadow: 0 0 10px rgba(10, 132, 255, 0.45);
-        }
-        .timing-active {
-            background: rgba(255,214,10,0.16);
-            border-radius: 8px;
-        }
+        .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:15px; }
+        .track-box { background:#111; padding:15px; border-radius:14px; text-align:center; cursor:pointer; border:1px solid #333; }
+        .track-val { font-size:1.2rem; font-weight:800; color:#fff; }
 
-        /* ANATOMY & BUTTONS */
-        .anatomy-container {
-            position: relative;
-            width: 150px;
-            height: 260px;
-            margin: 16px auto 0;
-        }
-        .anatomy-svg {
-            width: 100%;
-            height: 100%;
-            overflow: visible;
-        }
-        .muscle-path {
-            fill: #333;
-            stroke: #222;
-            stroke-width: 1;
-            transition: fill 0.4s;
-        }
-        .pain-grid {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 10px;
-        }
-        .pain-part {
-            padding: 8px 16px;
-            background: #222;
-            border: 1px solid #333;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            cursor: pointer;
-        }
-        .pain-part.active {
-            background: var(--danger);
-            color: #fff;
-            border-color: var(--danger);
-        }
-        .action-btn {
-            width: 100%;
-            margin-top: 10px;
-            padding: 14px;
-            background: #222;
-            border: 1px solid #333;
-            color: var(--text);
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: 0.15s;
-            position: relative;
-            z-index: 10;
-        }
-        .action-btn:active {
-            background: #333;
-            transform: scale(0.99);
-        }
-        .btn-jump {
-            border-color: var(--purple);
-            color: var(--purple);
-            background: rgba(191, 90, 242, 0.12);
-        }
-        .spin-btn {
-            width: 100%;
-            padding: 14px;
-            background: #222;
-            border: 1px solid #333;
-            color: #fff;
-            border-radius: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            transition: 0.15s;
-        }
-        .spin-btn:active {
-            transform: scale(0.98);
-        }
+        .nutri-container { padding-top:20px; padding-bottom:80px; }
+        .nutri-tabs { display:flex; background:#111; padding:4px; border-radius:12px; margin:15px 0; border:1px solid #333; }
+        .n-tab { flex:1; text-align:center; padding:12px; border-radius:10px; font-size:.9rem; color:#777; transition:.2s; font-weight:bold; cursor:pointer; }
+        .n-tab.active { background:#222; color:#fff; box-shadow:0 2px 10px rgba(0,0,0,.2); }
 
-        .plate-visual {
-            display: flex;
-            gap: 2px;
-            justify-content: center;
-            align-items: flex-end;
-            height: 60px;
-            margin-top: 15px;
-        }
-        .plate {
-            height: 100%;
-            border-radius: 4px;
-            border: 1px solid rgba(255,255,255,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            color: #000;
-            font-weight: bold;
-        }
+        .macro-bar-container { margin-bottom:20px; background:#111; padding:15px; border-radius:12px; border:1px solid #333; }
+        .macro-label { display:flex; justify-content:space-between; font-size:.9rem; margin-bottom:8px; color:#ccc; font-weight:bold; }
+        .progress-track { width:100%; height:10px; background:#222; border-radius:5px; overflow:hidden; }
+        .progress-fill { height:100%; border-radius:5px; transition:width .5s; }
 
-        /* READINESS / BREATHING */
-        .breathing-circle {
-            width: 150px;
-            height: 150px;
-            border: 4px solid #333;
-            border-radius: 50%;
-            margin: 30px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--blue);
-            transition: all 4s ease-in-out;
-        }
+        .food-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding-bottom:20px; }
+        .food-item { background:#1a1a1a; padding:15px; border-radius:12px; border:1px solid #333; display:flex; flex-direction:column; gap:5px; font-size:.9rem; cursor:pointer; transition:.2s; position:relative; overflow:hidden; }
+        .food-item:active { transform:scale(.98); background:#222; }
 
-        /* COMPACT MODE */
-        body.compact .task-item {
-            padding: 10px 0;
-        }
-        body.compact .guide-text {
-            display: none !important;
-        }
-        body.compact .input-row {
-            margin-top: 6px;
-        }
-        body.compact .card {
-            padding: 14px 14px 12px;
-            margin-bottom: 14px;
-        }
+        .supp-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:15px; }
+        .supp-icon { background:#222; border:1px solid #333; aspect-ratio:1; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-direction:column; font-size:.7rem; cursor:pointer; opacity:.5; transition:.3s; }
+        .supp-icon.active { opacity:1; border-color:var(--blue); background:rgba(10,132,255,.1); box-shadow:0 0 10px rgba(10,132,255,.3); }
 
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to   { transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-6px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
+        .plate-visual { display:flex; gap:2px; justify-content:center; align-items:flex-end; height:60px; margin-top:15px; }
+        .plate { height:100%; border-radius:4px; border:1px solid rgba(255,255,255,.2); display:flex; align-items:center; justify-content:center; font-size:.7rem; color:#000; font-weight:bold; }
+
+        .anatomy-container { position:relative; width:150px; height:260px; margin:20px auto; }
+        .anatomy-svg { width:100%; height:100%; overflow:visible; }
+        .muscle-path { fill:#333; stroke:#222; stroke-width:1; transition:fill .5s; }
+
+        .pain-grid { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:10px; }
+        .pain-part { padding:8px 16px; background:#222; border:1px solid #333; border-radius:20px; font-size:.8rem; cursor:pointer; }
+        .pain-part.active { background:var(--danger); color:#fff; border-color:var(--danger); }
+
+        .action-btn { width:100%; margin-top:10px; padding:14px; background:#222; border:1px solid #333; color:var(--text); border-radius:12px; font-weight:600; font-size:.9rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:.2s; position:relative; z-index:10; }
+        .action-btn:active { background:#333; }
+        .btn-jump { border-color:var(--purple); color:var(--purple); background:rgba(191,90,242,.1); }
+
+        .spin-btn { width:100%; padding:14px; background:#222; border:1px solid #333; color:#fff; border-radius:12px; font-weight:bold; cursor:pointer; margin-top:10px; display:flex; align-items:center; justify-content:center; gap:5px; }
+
+        .mental-sub { font-size:.8rem; color:#aaa; margin-top:8px; }
+        .mental-row { display:flex; gap:10px; margin-top:10px; align-items:center; }
+        .mental-row input { flex:1; }
+
+        .recovery-badge { font-size:.75rem; color:#ccc; margin-top:8px; }
+
+        #painAdvice { margin-top:10px; font-size:.8rem; color:#ccc; background:#111; border-radius:10px; padding:10px; border:1px solid #333; }
+
+        @keyframes slideUp { from{transform:translateY(100%);} to{transform:translateY(0);} }
+        @keyframes fadeIn { from{opacity:0; transform:translateY(-10px);} to{opacity:1; transform:translateY(0);} }
     </style>
 </head>
 <body>
-    <canvas id="confetti"></canvas>
+<canvas id="confetti"></canvas>
 
-    <header>
-        <div class="header-top">
-            <div style="display:flex; flex-direction:column">
-                <div class="app-title">PRIME v23 <span style="font-size:0.8rem; color:var(--accent)">Stable</span></div>
-                <div id="seasonBadge" style="font-size:0.6rem; letter-spacing:2px; color:var(--blue); font-weight:bold">SEZON İÇİ</div>
-            </div>
-            <div style="display:flex; gap:12px; align-items: center;">
-                <div class="challenge-badge" onclick="openModal('challengeModal')">🏆 <span id="challengeShort">0/1000</span></div>
-                <button class="icon-btn" onclick="openModal('zoneModal')">🧘</button>
-                <button class="icon-btn" onclick="openModal('settingsModal')">⚙️</button>
-            </div>
+<header>
+    <div class="header-top">
+        <div style="display:flex; flex-direction:column">
+            <div class="app-title">PRIME v23.0 <span style="font-size:.8rem; color:var(--accent)">Coach Pack</span></div>
+            <div style="font-size:.6rem; letter-spacing:2px; color:var(--blue); font-weight:bold" id="seasonBadge">SEZON İÇİ</div>
         </div>
-        <div class="xp-container"><div class="xp-fill" id="xpBar"></div></div>
-        <div class="level-badge">
-            <span id="currentLvl">Lvl 1</span>
-            <span id="userRank">Rookie</span>
-            <span id="xpText">0 XP</span>
+        <div style="display:flex; gap:15px; align-items:center;">
+            <div class="challenge-badge" onclick="openModal('challengeModal')">🏆 <span id="challengeShort">0/1000</span></div>
+            <button class="icon-btn" onclick="openModal('zoneModal')">🧘</button>
+            <button class="icon-btn" onclick="openModal('settingsModal')">⚙️</button>
         </div>
-    </header>
+    </div>
+    <div class="xp-container"><div class="xp-fill" id="xpBar"></div></div>
+    <div class="level-badge">
+        <span id="currentLvl">Lvl 1</span>
+        <span id="userRank">Rookie</span>
+        <span id="xpText">0 XP</span>
+    </div>
+</header>
 
-    <div class="quote-box" id="dailyQuote">...</div>
+<div class="quote-box" id="dailyQuote" style="text-align:center; padding:15px; font-style:italic; color:#888; font-size:.9rem;">...</div>
 
-    <div class="date-strip">
-        <div class="nav-arrow" onclick="changeDate(-1)">❮</div>
-        <div style="font-weight:700; font-size:1.1rem;" id="dateDisplay">Bugün</div>
-        <div class="nav-arrow" onclick="changeDate(1)">❯</div>
-    </div>
+<div class="date-strip" style="display:flex; justify-content:space-between; align-items:center; padding:0 16px; margin-bottom:15px; position:relative; z-index:10;">
+    <div class="nav-arrow" onclick="changeDate(-1)" style="font-size:1.5rem; padding:10px; cursor:pointer;">❮</div>
+    <div style="font-weight:700; font-size:1.1rem;" id="dateDisplay">Bugün</div>
+    <div class="nav-arrow" onclick="changeDate(1)" style="font-size:1.5rem; padding:10px; cursor:pointer;">❯</div>
+</div>
 
-    <div class="alert-box alert-deload" id="deloadAlert" style="display:none;">
-        <span>⚠️</span>
-        <div><b>Yorgunluk Tespit Edildi!</b><br>Son 7 gün yükün yüksek. Hacmi %30–50 azalt.</div>
-    </div>
-    <div class="alert-box alert-low" id="lowEnergyAlert" style="display:none;">
-        <span>🐢</span>
-        <div><b>HAFİF ANTRENMAN</b><br>Enerjin düşük. Teknik odaklı, hafif bir gün yap.</div>
-    </div>
-    <div class="alert-box alert-high" id="highEnergyAlert" style="display:none;">
-        <span>🚀</span>
-        <div><b>REKOR GÜNÜ!</b><br>Enerjin tavan. PR için ideal gün.</div>
-    </div>
+<div class="container">
+    <div class="alert-box alert-deload" id="deloadAlert" style="display:none;"><span>⚠️</span> <div><b>Yorgunluk Tespit Edildi!</b><br>Son 7 gün yük + uyku verilerine göre bugün yükü azalt.</div></div>
+    <div class="alert-box alert-low" id="lowEnergyAlert" style="display:none;"><span>🐢</span> <div><b>HAFİF ANTRENMAN</b><br>Hazırlık derecen düşük. Tekniğe ve mobiliteye odaklan.</div></div>
+    <div class="alert-box alert-high" id="highEnergyAlert" style="display:none;"><span>🚀</span> <div><b>REKOR GÜNÜ!</b><br>Hazırlık yüksek. Isınmayı iyi yap, seçili 1–2 harekette PR dene.</div></div>
 
     <div class="prehab-box" id="prehabSection">
-        <div class="box-header" style="color:var(--blue)">
-            🛡️ Sakatlık Önleme & Isınma
-            <small>Maç ve ağır günlerde asla atlama</small>
-        </div>
+        <div class="box-header" style="color:var(--blue)">🛡️ Sakatlık Önleme & Isınma</div>
         <div id="prehabList"></div>
     </div>
 
-    <div class="container">
-        <div class="card">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; border-bottom:1px solid #333; padding-bottom:10px;">
-                <div>
-                    <h2 style="margin:0; font-size:1.25rem" id="progTitle">...</h2>
-                    <small style="color:var(--muted)" id="progSub">...</small>
-                    <div id="readinessBadge" style="font-size:0.65rem; background:#222; display:inline-block; padding:2px 6px; border-radius:4px; margin-top:4px; color:#aaa">Enerji: ?</div>
-                    <div class="card-header-line"></div>
-                </div>
-                <div style="text-align:right">
-                    <div style="font-size:1.5rem; font-weight:900; color:var(--accent)" id="progPercent">%0</div>
-                    <div style="font-size:0.7rem; color:#777; margin-top:4px">
-                        YÜK: <span id="totalVolume" style="color:#fff; font-weight:bold">0 kg</span><br>
-                        <span id="weeklyLoadText" style="font-size:0.65rem; color:var(--muted)">7g: 0 kg</span>
-                    </div>
-                </div>
-            </div>
-
-            <div id="workoutList"></div>
-
-            <button class="action-btn btn-jump" onclick="addJumpToToday()">🚀 + Anlık Zıplama Ekle</button>
-
-            <div class="finisher-box" style="margin-top:16px; position:relative; z-index:10;">
-                <button class="spin-btn" onclick="spinFinisher()">🎲 Cila (Finisher) Çevir</button>
-                <div class="finisher-result" id="finisherResult" style="margin-top:10px; font-weight:bold; color:var(--purple); display:none; text-align:center;"></div>
-                <div style="margin-top:8px; font-size:0.7rem; color:#666; text-align:center;">
-                    <label><input type="radio" name="fType" value="gym" checked> Salon</label>
-                    <label style="margin-left:10px"><input type="radio" name="fType" value="basket"> Saha</label>
-                </div>
-            </div>
-
-            <button class="action-btn" onclick="openModal('builderModal')" style="margin-top:12px; color:var(--blue)">🛠️ Programı Değiştir</button>
-        </div>
-
-        <div class="card tracker-section">
-            <h3 style="margin:0 0 10px 0">🔋 Günlük Takip</h3>
-            <div class="grid-3">
-                <div class="track-box" onclick="addWater()">
-                    <div class="track-val" id="waterCount">0 lt</div>
-                    <div style="font-size:0.7rem; color:#777; margin-top:5px">SU</div>
-                </div>
-                <div class="track-box" onclick="openModal('nutriModal')">
-                    <div class="track-val" id="calStatus">0</div>
-                    <div style="font-size:0.7rem; color:#777; margin-top:5px">KALORİ</div>
-                </div>
-                <div class="track-box" id="proBox" style="border-color:#333" onclick="openModal('nutriModal')">
-                    <div class="track-val" id="proStatus">0g</div>
-                    <div style="font-size:0.7rem; color:#777; margin-top:5px">PROTEİN</div>
-                </div>
-            </div>
-            <textarea id="journal" style="width:100%; background:#111; color:#fff; border:1px solid #333; border-radius:12px; padding:12px; min-height:80px; font-size:0.9rem;" placeholder="Bugün nasıldı? (antrenman, maç, mod, sakatlık hissi...)" oninput="saveData()"></textarea>
+    <div class="card" id="mentalCard" style="display:none;">
+        <div class="box-header">🧠 Maç / Önemli Gün Mental Rutin</div>
+        <div class="mental-sub">1 tur nefes, 30 sn görselleştirme, 1 cümle niyet → sonra alttan tamamla.</div>
+        <button class="action-btn" onclick="completeMentalRoutine()">Rutin Tamamlandı (+20 XP)</button>
+        <div class="mental-sub" style="margin-top:10px;">
+            Odak: <span id="focusLabel">3</span> • Özgüven: <span id="confLabel">3</span><br>
+            (Ayrıntılar Hazırlık ekranından)
         </div>
     </div>
 
-    <div class="timer-float" id="timerFloat">
-        <div style="font-size:0.7rem; color:var(--accent); font-weight:bold">REST</div>
-        <div class="timer-val" id="timerDisplay">01:30</div>
-        <button class="icon-btn" onclick="addTimer(10)" style="color:#fff; font-size:1.1rem">+10</button>
-        <button class="icon-btn" onclick="stopTimer()" style="color:var(--danger); font-size:1.1rem">✕</button>
-    </div>
-
-    <div class="bottom-bar">
-        <div class="tab-btn" data-tab="home" onclick="setActiveTab('home'); window.scrollTo({top:0, behavior:'smooth'});">
-            <span class="tab-icon">🏠</span>
-            <span class="tab-label">Ana</span>
-        </div>
-        <div class="tab-btn" data-tab="nutri" onclick="setActiveTab('nutri'); openModal('nutriModal');">
-            <span class="tab-icon">🍎</span>
-            <span class="tab-label">Beslenme</span>
-        </div>
-        <div class="tab-btn active" data-tab="workout" onclick="setActiveTab('workout'); window.scrollTo({top:0, behavior:'smooth'});">
-            <span class="tab-icon">💪</span>
-            <span class="tab-label">Antrenman</span>
-        </div>
-        <div class="tab-btn" data-tab="stats" onclick="setActiveTab('stats'); openModal('statsModal');">
-            <span class="tab-icon">📊</span>
-            <span class="tab-label">İstatistik</span>
-        </div>
-    </div>
-
-    <!-- CLUTCH / ZONE / WRAPUP -->
-    <div class="modal full-modal" id="clutchModal">
-        <div class="sheet clutch-modal" style="text-align:center;">
-            <div style="font-size:3rem; margin-bottom:10px">🔥</div>
-            <h2 class="clutch-title">CLUTCH TIME!</h2>
-            <p style="color:#ccc; margin-top:10px">Maçın son topu elinde.</p>
-            <div class="clutch-task" id="clutchTaskDisplay">...</div>
-            <div style="color:var(--gold); font-size:0.9rem; margin-bottom:20px">Ödül: 2x XP</div>
-            <button onclick="completeClutch()" class="spin-btn" style="width:100%; justify-content:center; background:var(--danger); margin-bottom:10px">YAPTIM (+XP)</button>
-            <button onclick="closeModal('clutchModal'); showWrapUp()" style="background:none; border:none; color:#777; text-decoration:underline">Pas Geç</button>
-        </div>
-    </div>
-
-    <div class="modal full-modal" id="zoneModal">
-        <div class="sheet" style="text-align:center">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h2>Zone Modu</h2>
-                <span style="font-size:1.5rem; cursor:pointer;" onclick="closeZone()">✕</span>
+    <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:10px;">
+            <div>
+                <h2 style="margin:0; font-size:1.3rem" id="progTitle">...</h2>
+                <small style="color:var(--muted)" id="progSub">...</small>
+                <div id="readinessBadge" style="font-size:.65rem; background:#222; display:inline-block; padding:2px 6px; border-radius:4px; margin-top:4px; color:#aaa">Enerji: ?</div>
+                <div id="recoveryBadge" class="recovery-badge">Recovery: -</div>
             </div>
-            <p style="color:#777; font-size:0.9rem">Kutu nefes: 4 Al - 4 Tut - 4 Ver - 4 Tut</p>
-            <div class="breathing-circle" id="breathCircle">BAŞLA</div>
-            <div class="breathing-text" id="breathText" style="color:#aaa;">Odaklan...</div>
-            <button onclick="startBreathing()" class="spin-btn" style="margin-top:30px; width:100%; justify-content:center">Başlat</button>
+            <div style="text-align:right">
+                <div style="font-size:1.5rem; font-weight:900; color:var(--accent)" id="progPercent">%0</div>
+                <div style="font-size:.7rem; color:#777; margin-top:4px">YÜK: <span id="totalVolume" style="color:#fff; font-weight:bold">0 kg</span></div>
+            </div>
         </div>
+
+        <div id="workoutList"></div>
+
+        <button class="action-btn btn-jump" onclick="addJumpToToday()">🚀 + Anlık Zıplama Ekle</button>
+
+        <div class="finisher-box" style="margin-top:20px; position:relative; z-index:10;">
+            <button class="spin-btn" onclick="spinFinisher()">🎲 Cila (Finisher) Çevir</button>
+            <div class="finisher-result" id="finisherResult" style="margin-top:10px; font-weight:bold; color:var(--purple); display:none; text-align:center;">...</div>
+            <div style="margin-top:10px; font-size:.7rem; color:#666; text-align:center;">
+                <label><input type="radio" name="fType" value="gym" checked> Salon</label>
+                <label style="margin-left:10px"><input type="radio" name="fType" value="basket"> Saha</label>
+            </div>
+        </div>
+
+        <button class="action-btn" onclick="openModal('builderModal')" style="margin-top:15px; color:var(--blue)">🛠️ Programı Değiştir</button>
     </div>
 
-    <div class="modal full-modal" id="wrapUpModal">
-        <div class="sheet" style="text-align:center; border-color:var(--gold)">
-            <div style="font-size:3rem; margin-bottom:10px">🎉</div>
-            <h2 style="color:var(--gold); font-size:1.8rem; margin:0">ANTRENMAN TAMAMLANDI!</h2>
-            <div class="wrap-stats" style="display:flex; justify-content:center; gap:18px; margin:18px 0;">
-                <div class="wrap-box">
-                    <div class="wrap-val" id="wrapVol" style="font-size:1.7rem; font-weight:bold;">0</div>
-                    <div style="font-size:0.8rem; color:#777">Toplam Yük (Kg)</div>
+    <div class="card tracker-section">
+        <h3 style="margin:0 0 15px 0">🔋 Günlük Takip</h3>
+        <div class="grid-3">
+            <div class="track-box" onclick="addWater()">
+                <div class="track-val" id="waterCount">0 lt</div>
+                <div style="font-size:.7rem; color:#777; margin-top:5px">SU</div>
+            </div>
+            <div class="track-box" onclick="openModal('nutriModal')">
+                <div class="track-val" id="calStatus">0</div>
+                <div style="font-size:.7rem; color:#777; margin-top:5px">KALORİ</div>
+            </div>
+            <div class="track-box" id="proBox" style="border-color:#333" onclick="openModal('nutriModal')">
+                <div class="track-val" id="proStatus">0g</div>
+                <div style="font-size:.7rem; color:#777; margin-top:5px">PROTEİN</div>
+            </div>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:10px; align-items:center;">
+            <input type="number" min="0" id="steps" class="mini-input" style="flex:1; width:auto;" placeholder="Adım" onchange="saveData()">
+            <div style="font-size:.7rem; color:#777;">Hedef: 8000+</div>
+        </div>
+        <textarea id="journal" style="width:100%; background:#111; color:#fff; border:1px solid #333; border-radius:12px; padding:15px; min-height:80px; margin-top:10px;" placeholder="Genel notlar..." oninput="saveData()"></textarea>
+        <textarea id="journalPride" style="width:100%; background:#111; color:#fff; border:1px solid #444; border-radius:12px; padding:10px; min-height:50px; margin-top:8px; font-size:.85rem;" placeholder="Bugün kendimle gurur duyduğum 1 şey..." oninput="saveData()"></textarea>
+    </div>
+</div>
+
+<div class="timer-float" id="timerFloat">
+    <div style="font-size:.7rem; color:var(--accent); font-weight:bold">REST</div>
+    <div class="timer-val" id="timerDisplay">01:30</div>
+    <button class="icon-btn" onclick="addTimer(10)" style="color:#fff; font-size:1.1rem">+10</button>
+    <button class="icon-btn" onclick="stopTimer()" style="color:var(--danger); font-size:1.1rem">✕</button>
+</div>
+
+<div class="bottom-bar">
+    <div class="tab-btn" onclick="togglePanic()">🏠</div>
+    <div class="tab-btn" onclick="openModal('nutriModal')">🍎</div>
+    <div class="tab-btn active" onclick="window.scrollTo(0,0)">💪</div>
+    <div class="tab-btn" onclick="openModal('statsModal')">📊</div>
+</div>
+
+<div class="modal full-modal" id="clutchModal">
+    <div class="sheet clutch-modal" style="text-align:center;">
+        <div style="font-size:3rem; margin-bottom:10px">🔥</div>
+        <h2 class="clutch-title">CLUTCH TIME!</h2>
+        <p style="color:#ccc; margin-top:10px">Maçın son topu elinde.</p>
+        <div class="clutch-task" id="clutchTaskDisplay">...</div>
+        <div style="color:var(--gold); font-size:.9rem; margin-bottom:20px">Ödül: 2x XP</div>
+        <button onclick="completeClutch()" class="spin-btn" style="width:100%; justify-content:center; background:var(--danger); margin-bottom:10px">YAPTIM (+XP)</button>
+        <button onclick="closeModal('clutchModal'); showWrapUp()" style="background:none; border:none; color:#777; text-decoration:underline">Pas Geç</button>
+    </div>
+</div>
+
+<div class="modal full-modal" id="zoneModal">
+    <div class="sheet" style="text-align:center">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2>Zone Modu</h2>
+            <span onclick="closeZone()">✕</span>
+        </div>
+        <p style="color:#777; font-size:.9rem">Kutu Nefes: 4 Al - 4 Tut - 4 Ver - 4 Tut</p>
+        <div class="breathing-circle" id="breathCircle" style="width:150px; height:150px; border:4px solid #333; border-radius:50%; margin:30px auto; display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:bold; color:var(--blue); transition:all 4s ease-in-out;">BAŞLA</div>
+        <div class="breathing-text" id="breathText">Odaklan...</div>
+        <button onclick="startBreathing()" class="spin-btn" style="margin-top:30px; width:100%; justify-content:center">Başlat</button>
+    </div>
+</div>
+
+<div class="modal full-modal" id="wrapUpModal">
+    <div class="sheet" style="text-align:center; border-color:var(--gold)">
+        <div style="font-size:3rem; margin-bottom:10px">🎉</div>
+        <h2 style="color:var(--gold); font-size:1.8rem; margin:0">ANTRENMAN TAMAMLANDI!</h2>
+        <div class="wrap-stats" style="display:flex; justify-content:space-around; margin:20px 0;">
+            <div class="wrap-box">
+                <div class="wrap-val" id="wrapVol">0</div>
+                <div style="font-size:.8rem; color:#777">Toplam Yük (Kg)</div>
+            </div>
+            <div class="wrap-box">
+                <div class="wrap-val" id="wrapXP">0</div>
+                <div style="font-size:.8rem; color:#777">Kazanılan XP</div>
+            </div>
+        </div>
+        <button onclick="closeModal('wrapUpModal')" class="spin-btn" style="width:100%; justify-content:center; background:#333; border:1px solid #555">Kapat</button>
+    </div>
+</div>
+
+<div class="modal full-modal" id="nutriModal">
+    <div class="sheet nutri-container">
+        <div class="close-sticky" onclick="closeModal('nutriModal')">✕</div>
+        <h2 style="padding:0 20px">Beslenme Merkezi</h2>
+        <div style="padding:0 20px">
+            <div class="nutri-tabs">
+                <div class="n-tab active" onclick="switchToolTab('track', this)">Takip</div>
+                <div class="n-tab" onclick="switchToolTab('wizard', this)">Sihirbaz</div>
+                <div class="n-tab" onclick="switchToolTab('1rm', this)">1RM & Hesap</div>
+            </div>
+
+            <div id="tool-track" class="tool-content active">
+                <div style="text-align:center;margin-bottom:15px">
+                    HEDEF:
+                    <span id="targetCalDisplay" style="color:var(--gold);font-weight:bold">--</span> kcal /
+                    <span style="color:var(--accent);font-weight:bold">160g</span> Prot
                 </div>
-                <div class="wrap-box">
-                    <div class="wrap-val" id="wrapXP" style="font-size:1.7rem; font-weight:bold;">0</div>
-                    <div style="font-size:0.8rem; color:#777">Kazanılan XP</div>
+                <div class="macro-bar-container">
+                    <div class="macro-label"><span>Kalori</span><span id="calText">0</span></div>
+                    <div class="progress-track"><div class="progress-fill" id="calBar" style="width:0%;background:var(--gold)"></div></div>
                 </div>
+                <div class="macro-bar-container">
+                    <div class="macro-label"><span>Protein</span><span id="proText">0</span></div>
+                    <div class="progress-track"><div class="progress-fill" id="proBar" style="width:0%;background:var(--accent)"></div></div>
+                </div>
+                <div style="display:flex; gap:10px; margin-bottom:15px; background:#1a1a1a; padding:10px; border-radius:12px; border:1px solid #333;">
+                    <input type="number" min="0" id="quickCal" class="mini-input" style="flex:1; width:auto;" placeholder="Kcal">
+                    <input type="number" min="0" id="quickPro" class="mini-input" style="flex:1; width:auto;" placeholder="Prot (g)">
+                    <button class="tool-btn" style="width:50px" onclick="addQuickMacros()">+</button>
+                </div>
+                <h4 style="margin-bottom:10px; color:#888;">Supplementler</h4>
+                <div class="supp-grid">
+                    <div class="supp-icon" id="supp-creatine" onclick="toggleSupp('creatine')">🧪<br>Kreatin</div>
+                    <div class="supp-icon" id="supp-omega" onclick="toggleSupp('omega')">🐟<br>Omega3</div>
+                    <div class="supp-icon" id="supp-multi" onclick="toggleSupp('multi')">💊<br>Vitamin</div>
+                    <div class="supp-icon" id="supp-caffeine" onclick="toggleSupp('caffeine')">☕<br>Kafein</div>
+                </div>
+                <div class="timing-box" id="nutrientTimingBox" style="display:none; background:rgba(255,214,10,.1); padding:10px; border-radius:10px; margin-bottom:15px;">
+                    <div style="font-weight:bold; color:var(--gold); margin-bottom:5px">⚡ MAÇ GÜNÜ ZAMANLAMASI</div>
+                    <div class="timing-item" onclick="toggleTiming('t1')" id="time-t1" style="padding:5px; cursor:pointer;">🔲 Maçtan 3-4 Saat Önce: Karbonhidrat</div>
+                    <div class="timing-item" onclick="toggleTiming('t2')" id="time-t2" style="padding:5px; cursor:pointer;">🔲 Maçtan 1 Saat Önce: Hafif Atıştırmalık</div>
+                    <div class="timing-item" onclick="toggleTiming('t3')" id="time-t3" style="padding:5px; cursor:pointer;">🔲 Maç Sonrası (30dk): Protein & Şeker</div>
+                </div>
+                <h4 style="margin-bottom:10px; color:#888;">Hızlı Menü</h4>
+                <div class="food-grid" id="foodGrid"></div>
+                <div id="foodLog" class="food-log-list" style="margin-top:15px; font-size:.8rem; color:#777;"></div>
+                <button onclick="clearNutrition()" style="width:100%; margin-top:20px; padding:10px; background:none; border:1px solid #333; color:#666; border-radius:8px;">Listeyi Temizle</button>
             </div>
-            <button onclick="closeModal('wrapUpModal')" class="spin-btn" style="width:100%; justify-content:center; background:#333; border:1px solid #555">Kapat</button>
-        </div>
-    </div>
 
-    <!-- NUTRITION MODAL -->
-    <div class="modal full-modal" id="nutriModal">
-        <div class="sheet nutri-container">
-            <div class="close-sticky" onclick="closeModal('nutriModal')">✕</div>
-            <h2 style="padding:0 20px">Beslenme Merkezi</h2>
-            <div style="padding:0 20px">
-                <div class="nutri-tabs">
-                    <div class="n-tab active" onclick="switchToolTab('track', event)">Takip</div>
-                    <div class="n-tab" onclick="switchToolTab('wizard', event)">Sihirbaz</div>
-                    <div class="n-tab" onclick="switchToolTab('1rm', event)">1RM & Hesap</div>
-                </div>
+            <div id="tool-wizard" class="tool-content" style="display:none;">
+                <button class="spin-btn" style="width:100%; justify-content:center; margin-bottom:15px" onclick="generateMenu()">🎲 Rastgele Günlük Menü Oluştur</button>
+                <div id="menuResult"></div>
+            </div>
 
-                <div id="tool-track" class="tool-content active">
-                    <div style="text-align:center;margin-bottom:10px">
-                        HEDEF: <span id="targetCalDisplay" style="color:var(--gold);font-weight:bold">--</span> kcal /
-                        <span id="targetProDisplay" style="color:var(--accent);font-weight:bold">160g</span> Prot
-                    </div>
-                    <div class="macro-bar-container">
-                        <div class="macro-label"><span>Kalori</span><span id="calText">0</span></div>
-                        <div class="progress-track"><div class="progress-fill" id="calBar" style="width:0%;background:var(--gold)"></div></div>
-                    </div>
-                    <div class="macro-bar-container">
-                        <div class="macro-label"><span>Protein</span><span id="proText">0</span></div>
-                        <div class="progress-track"><div class="progress-fill" id="proBar" style="width:0%;background:var(--accent)"></div></div>
-                    </div>
-                    <div style="display:flex; gap:10px; margin-bottom:12px; background:#1a1a1a; padding:10px; border-radius:12px; border:1px solid #333;">
-                        <input type="number" min="0" id="quickCal" class="mini-input" style="flex:1; width:auto;" placeholder="Kcal">
-                        <input type="number" min="0" id="quickPro" class="mini-input" style="flex:1; width:auto;" placeholder="Prot (g)">
-                        <button class="tool-btn" style="width:50px" onclick="addQuickMacros()">+</button>
-                    </div>
-                    <h4 style="margin-bottom:8px; color:#888;">Supplementler</h4>
-                    <div class="supp-grid">
-                        <div class="supp-icon" id="supp-creatine" onclick="toggleSupp('creatine')">🧪<br>Kreatin</div>
-                        <div class="supp-icon" id="supp-omega" onclick="toggleSupp('omega')">🐟<br>Omega3</div>
-                        <div class="supp-icon" id="supp-multi" onclick="toggleSupp('multi')">💊<br>Vitamin</div>
-                        <div class="supp-icon" id="supp-caffeine" onclick="toggleSupp('caffeine')">☕<br>Kafein</div>
-                    </div>
-                    <div class="timing-box" id="nutrientTimingBox" style="display:none; background:rgba(255,214,10,0.1); padding:10px; border-radius:10px; margin-bottom:12px;">
-                        <div style="font-weight:bold; color:var(--gold); margin-bottom:5px">⚡ MAÇ GÜNÜ ZAMANLAMASI</div>
-                        <div class="timing-item" onclick="toggleTiming('t1')" id="time-t1" style="padding:5px; cursor:pointer;">🔲 Maçtan 3-4 Saat Önce: Karbonhidrat ağırlıklı ana öğün</div>
-                        <div class="timing-item" onclick="toggleTiming('t2')" id="time-t2" style="padding:5px; cursor:pointer;">🔲 Maçtan 1 Saat Önce: Hafif atıştırmalık (muz, bar)</div>
-                        <div class="timing-item" onclick="toggleTiming('t3')" id="time-t3" style="padding:5px; cursor:pointer;">🔲 Maç Sonrası (30dk): Protein + hızlı karbonhidrat</div>
-                    </div>
-                    <h4 style="margin-bottom:8px; color:#888;">Hızlı Menü</h4>
-                    <div class="food-grid" id="foodGrid"></div>
-                    <div id="foodLog" class="food-log-list" style="margin-top:8px; font-size:0.8rem; color:#777;"></div>
-                    <button onclick="clearNutrition()" style="width:100%; margin-top:14px; padding:10px; background:none; border:1px solid #333; color:#666; border-radius:8px;">Listeyi Temizle</button>
+            <div id="tool-1rm" class="tool-content" style="display:none;">
+                <div style="display:flex;gap:10px">
+                    <input type="number" min="0" id="rmWeight" class="mini-input" style="width:50%" placeholder="Kilo">
+                    <input type="number" min="0" id="rmReps" class="mini-input" style="width:50%" placeholder="Tekrar">
                 </div>
-
-                <div id="tool-wizard" class="tool-content" style="display:none;">
-                    <button class="spin-btn" style="width:100%; justify-content:center; margin-bottom:12px" onclick="generateMenu()">🎲 Rastgele Günlük Menü Oluştur</button>
-                    <div id="menuResult"></div>
-                </div>
-
-                <div id="tool-1rm" class="tool-content" style="display:none;">
-                    <div style="display:flex;gap:10px">
-                        <input type="number" min="0" id="rmWeight" class="mini-input" style="width:50%; padding:15px" placeholder="Kilo">
-                        <input type="number" min="0" id="rmReps" class="mini-input" style="width:50%; padding:15px" placeholder="Tekrar">
-                    </div>
-                    <button onclick="calc1RM()" class="spin-btn" style="width:100%;margin-top:15px">1RM Hesapla</button>
-                    <div id="rmResult" style="font-size:2rem;text-align:center;margin-top:20px;color:var(--blue)"></div>
-                </div>
+                <button onclick="calc1RM()" class="spin-btn" style="width:100%;margin-top:15px">1RM Hesapla</button>
+                <div id="rmResult" style="font-size:2rem;text-align:center;margin-top:20px;color:var(--blue)"></div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- STATS MODAL -->
-    <div class="modal full-modal" id="statsModal">
-        <div class="sheet" style="padding-top:60px;">
-            <div class="close-sticky" onclick="closeModal('statsModal')">✕</div>
-            <h2>İstatistikler</h2>
-            <div style="display:flex; gap:10px; margin-bottom:12px">
-                <input type="number" min="0" id="userHeight" class="mini-input" style="width:50%; padding:15px" placeholder="Boy (cm)" onchange="saveStats()">
-                <input type="number" min="0" id="dailyWeight" class="mini-input" style="width:50%; padding:15px" placeholder="Kilo (kg)" onchange="saveData()">
-            </div>
-
-            <div class="alert-box alert-imbalance" id="legAlert">
-                <span>🐔</span>
-                <div><b>Chicken Leg Uyarısı!</b><br>Üst vücudun gelişiyor ama bacak günlerini sık atlıyorsun.</div>
-            </div>
-
-            <h4 style="margin-top:12px; border-top:1px solid #333; padding-top:10px; text-align:center">Kas Yoğunluk Haritası</h4>
-            <div class="anatomy-container">
-                <svg class="anatomy-svg" viewBox="0 0 100 200">
-                    <circle cx="50" cy="20" r="10" fill="#333" />
-                    <path id="svg-shoulders" class="muscle-path" d="M30 35 L70 35 L75 45 L25 45 Z" />
-                    <path id="svg-arms" class="muscle-path" d="M25 45 L15 80 L22 80 L30 45 Z M75 45 L85 80 L78 80 L70 45 Z" />
-                    <path id="svg-chest" class="muscle-path" d="M35 45 L65 45 L60 65 L40 65 Z" />
-                    <path id="svg-core" class="muscle-path" d="M40 65 L60 65 L58 90 L42 90 Z" />
-                    <path id="svg-legs" class="muscle-path" d="M38 90 L62 90 L65 140 L55 140 L52 100 L48 100 L45 140 L35 140 Z" />
-                </svg>
-            </div>
-
-            <h4 style="margin-top:16px; border-top:1px solid #333; padding-top:10px">Ağrı Haritası</h4>
-            <div class="pain-grid" id="painMapGrid">
-                <div class="pain-part" onclick="togglePain('diz')">Diz</div>
-                <div class="pain-part" onclick="togglePain('bel')">Bel</div>
-                <div class="pain-part" onclick="togglePain('omuz')">Omuz</div>
-                <div class="pain-part" onclick="togglePain('bilek')">Bilek</div>
-                <div class="pain-part" onclick="togglePain('kalca')">Kalça</div>
-            </div>
-
-            <h4 style="margin-top:16px; border-top:1px solid #333; padding-top:10px">Son Maçlar</h4>
-            <div id="gameHistory"></div>
+<div class="modal full-modal" id="statsModal">
+    <div class="sheet" style="padding-top:60px;">
+        <div class="close-sticky" onclick="closeModal('statsModal')">✕</div>
+        <h2>İstatistikler</h2>
+        <div style="display:flex; gap:10px; margin-bottom:15px;">
+            <input type="number" min="0" id="userHeight" class="mini-input" style="width:50%; padding:15px" placeholder="Boy (cm)" onchange="saveStats()">
+            <input type="number" min="0" id="dailyWeight" class="mini-input" style="width:50%; padding:15px" placeholder="Kilo (kg)" onchange="saveData()">
         </div>
-    </div>
-
-    <!-- PLATES / HISTORY / BUILDER / READINESS / GAME LOG -->
-    <div class="modal" id="plateModal">
-        <div class="sheet">
-            <h2>Plaka Hesaplayıcı</h2>
-            <input type="number" min="0" id="plateTarget" class="mini-input" style="width:100%; font-size:1.5rem; padding:15px; margin-bottom:10px;" placeholder="Hedef (kg)" oninput="calcPlates()">
-            <div id="plateResult" style="color:var(--accent);font-weight:bold;margin-bottom:10px"></div>
-            <div id="plateVisual" class="plate-visual"></div>
-            <span onclick="closeModal('plateModal')" style="position:absolute;top:20px;right:20px;font-size:1.5rem; cursor:pointer;">✕</span>
+        <div style="display:flex; gap:10px; margin-bottom:15px;">
+            <input type="number" min="0" max="24" id="sleepHours" class="mini-input" style="width:50%; padding:15px" placeholder="Uyku (saat)" onchange="saveData()">
+            <input type="number" min="1" max="5" id="sleepQuality" class="mini-input" style="width:50%; padding:15px" placeholder="Kalite (1-5)" onchange="saveData()">
         </div>
-    </div>
-
-    <div class="modal" id="historyModal">
-        <div class="sheet">
-            <h2 id="histTitle">Geçmiş</h2>
-            <div id="histList" style="margin-top:15px;"></div>
-            <span onclick="closeModal('historyModal')" style="position:absolute;top:20px;right:20px;font-size:1.5rem; cursor:pointer;">✕</span>
+        <div class="alert-box alert-imbalance" id="legAlert">
+            <span>🐔</span>
+            <div><b>Chicken Leg Uyarısı!</b><br>Üst vücudun gelişti ama bacakları ihmal ediyorsun.</div>
         </div>
-    </div>
+        <h4 style="margin-top:20px; border-top:1px solid #333; padding-top:10px; text-align:center">Kas Yoğunluk Haritası</h4>
+        <div class="anatomy-container">
+            <svg class="anatomy-svg" viewBox="0 0 100 200">
+                <circle cx="50" cy="20" r="10" fill="#333" />
+                <path id="svg-shoulders" class="muscle-path" d="M30 35 L70 35 L75 45 L25 45 Z" />
+                <path id="svg-arms" class="muscle-path" d="M25 45 L15 80 L22 80 L30 45 Z M75 45 L85 80 L78 80 L70 45 Z" />
+                <path id="svg-chest" class="muscle-path" d="M35 45 L65 45 L60 65 L40 65 Z" />
+                <path id="svg-core" class="muscle-path" d="M40 65 L60 65 L58 90 L42 90 Z" />
+                <path id="svg-legs" class="muscle-path" d="M38 90 L62 90 L65 140 L55 140 L52 100 L48 100 L45 140 L35 140 Z" />
+            </svg>
+        </div>
+        <h4 style="margin-top:20px; border-top:1px solid #333; padding-top:10px">Ağrı Haritası</h4>
+        <div class="pain-grid" id="painMapGrid">
+            <div class="pain-part" onclick="togglePain('diz')">Diz</div>
+            <div class="pain-part" onclick="togglePain('bel')">Bel</div>
+            <div class="pain-part" onclick="togglePain('omuz')">Omuz</div>
+            <div class="pain-part" onclick="togglePain('bilek')">Bilek</div>
+            <div class="pain-part" onclick="togglePain('kalca')">Kalça</div>
+        </div>
+        <div id="painAdvice"></div>
 
-    <div class="modal" id="builderModal">
-        <div class="sheet">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h2>Program Yap</h2>
-                <span onclick="closeModal('builderModal')" style="font-size:1.5rem; cursor:pointer;">✕</span>
-            </div>
-            <select id="mainMuscle" style="width:100%;padding:12px;background:#000;color:#fff;border:1px solid #333;border-radius:8px;margin-bottom:10px" onchange="updateSec()">
-                <option value="">1. Bölge</option>
-                <option value="chest">Göğüs</option>
-                <option value="back">Sırt</option>
-                <option value="legs">Bacak</option>
-                <option value="shoulders">Omuz</option>
-                <option value="arms">Kol</option>
-                <option value="core">Karın</option>
+        <h4 style="margin-top:20px; border-top:1px solid #333; padding-top:10px">Son Maçlar</h4>
+        <div id="gameInsights" style="font-size:.8rem; color:#aaa; margin-bottom:8px;"></div>
+        <div id="gameHistory"></div>
+    </div>
+</div>
+
+<div class="modal" id="plateModal">
+    <div class="sheet">
+        <h2>Plaka Hesaplayıcı</h2>
+        <input type="number" min="0" id="plateTarget" class="mini-input" style="width:100%; font-size:1.5rem; padding:15px; margin-bottom:10px;" placeholder="Hedef (kg)" oninput="calcPlates()">
+        <div id="plateResult" style="color:var(--accent);font-weight:bold;margin-bottom:10px"></div>
+        <div id="plateVisual" class="plate-visual"></div>
+        <span onclick="closeModal('plateModal')" style="position:absolute;top:20px;right:20px;font-size:1.5rem; cursor:pointer;">✕</span>
+    </div>
+</div>
+
+<div class="modal" id="historyModal">
+    <div class="sheet">
+        <h2 id="histTitle">Geçmiş</h2>
+        <div id="histList" style="margin-top:15px;"></div>
+        <span onclick="closeModal('historyModal')" style="position:absolute;top:20px;right:20px;font-size:1.5rem; cursor:pointer;">✕</span>
+    </div>
+</div>
+
+<div class="modal" id="builderModal">
+    <div class="sheet">
+        <div style="display:flex; justify-content:space-between;">
+            <h2>Program Yap</h2><span onclick="closeModal('builderModal')">✕</span>
+        </div>
+        <select id="mainMuscle" style="width:100%;padding:12px;background:#000;color:#fff;border:1px solid #333;border-radius:8px;margin-bottom:10px" onchange="updateSec()">
+            <option value="">1. Bölge</option>
+            <option value="chest">Göğüs</option>
+            <option value="back">Sırt</option>
+            <option value="legs">Bacak</option>
+            <option value="shoulders">Omuz</option>
+            <option value="arms">Kol</option>
+        </select>
+        <select id="subMuscle" style="width:100%;padding:12px;background:#000;color:#fff;border:1px solid #333;border-radius:8px;margin-bottom:10px" disabled>
+            <option>2. Bölge</option>
+        </select>
+        <div class="toggle-row">
+            <span>🏀 Sıçrama Ekle (Booster)</span>
+            <label class="switch"><input type="checkbox" id="addJump"><span class="slider"></span></label>
+        </div>
+        <button onclick="buildProg()" style="width:100%;padding:15px;background:var(--blue);border:none;border-radius:8px;color:#fff;font-weight:bold">Uygula</button>
+    </div>
+</div>
+
+<div class="modal" id="readinessModal">
+    <div class="sheet">
+        <div style="display:flex; justify-content:space-between;">
+            <h2>Günlük Hazırlık</h2><span onclick="closeModal('readinessModal')">✕</span>
+        </div>
+        <p style="color:#aaa; margin-bottom:10px">Bugün kendini nasıl hissediyorsun?</p>
+        <div class="readiness-scale" style="display:flex; justify-content:space-between; font-size:2rem;">
+            <div class="r-btn" onclick="setReadiness(1)">😫</div>
+            <div class="r-btn" onclick="setReadiness(2)">🥱</div>
+            <div class="r-btn" onclick="setReadiness(3)">😐</div>
+            <div class="r-btn" onclick="setReadiness(4)">🙂</div>
+            <div class="r-btn" onclick="setReadiness(5)">🔥</div>
+        </div>
+        <div class="mental-row">
+            <span style="font-size:.8rem; color:#ccc;">Odak</span>
+            <input type="range" id="focusInput" min="1" max="5" value="3" oninput="updateFocusLabel(this.value)">
+        </div>
+        <div class="mental-row">
+            <span style="font-size:.8rem; color:#ccc;">Özgüven</span>
+            <input type="range" id="confInput" min="1" max="5" value="3" oninput="updateConfLabel(this.value)">
+        </div>
+        <div style="font-size:.75rem; color:#777; margin-top:8px;">Bu değerler mental koç tarafından maç performanslarınle birlikte yorumlanır.</div>
+    </div>
+</div>
+
+<div class="modal" id="gameLogModal">
+    <div class="sheet">
+        <div style="display:flex; justify-content:space-between;">
+            <h2>🏀 Maç Karnesi</h2><span onclick="closeModal('gameLogModal')">✕</span>
+        </div>
+        <div style="display:flex; gap:10px; margin:20px 0;">
+            <input type="number" min="0" id="gamePoints" class="mini-input" style="width:50%; padding:15px" placeholder="Sayı">
+            <input type="number" min="0" id="gameAssists" class="mini-input" style="width:50%; padding:15px" placeholder="Asist">
+        </div>
+        <div style="display:flex; gap:10px; margin:10px 0;">
+            <input type="number" min="0" id="gameRebounds" class="mini-input" style="width:50%; padding:15px" placeholder="Rib">
+            <input type="number" min="0" id="gameSteals" class="mini-input" style="width:50%; padding:15px" placeholder="TÇ">
+        </div>
+        <div style="display:flex; gap:10px; margin-bottom:10px;">
+            <select id="gameResult" style="width:100%; padding:12px; background:#222; color:#fff; border:1px solid #333; border-radius:8px;">
+                <option value="W">Galibiyet (W)</option>
+                <option value="L">Mağlubiyet (L)</option>
             </select>
-            <select id="subMuscle" style="width:100%;padding:12px;background:#000;color:#fff;border:1px solid #333;border-radius:8px;margin-bottom:10px" disabled>
-                <option>2. Bölge</option>
-            </select>
-            <div class="toggle-row">
-                <span>🏀 Sıçrama Ekle (Booster)</span>
-                <label class="switch">
-                    <input type="checkbox" id="addJump">
-                    <span class="slider"></span>
-                </label>
+        </div>
+        <textarea id="gameNotes" style="width:100%; background:#000; border:1px solid #333; color:#fff; padding:10px; border-radius:8px" placeholder="Maç yorumu..."></textarea>
+        <button onclick="saveGameLog()" style="width:100%; padding:15px; background:var(--accent); border:none; border-radius:10px; margin-top:15px; font-weight:bold">Kaydet</button>
+    </div>
+</div>
+
+<div class="modal" id="settingsModal">
+    <div class="sheet">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2>Ayarlar</h2>
+            <span style="cursor:pointer;" onclick="closeModal('settingsModal')">✕</span>
+        </div>
+        <div class="toggle-row">
+            <span>🏀 Sezon İçi</span>
+            <label class="switch"><input type="checkbox" id="seasonToggle" onchange="toggleSeason()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+            <span>🔊 Ses Efektleri</span>
+            <label class="switch"><input type="checkbox" id="soundToggle" onchange="toggleSound()"><span class="slider"></span></label>
+        </div>
+        <div style="display:flex; gap:10px; margin:20px 0">
+            <button onclick="exportData()" class="backup-btn" style="width:100%; padding:10px; background:#222; color:var(--blue); border:1px solid var(--blue); border-radius:8px;">📥 İndir</button>
+            <button onclick="document.getElementById('importFile').click()" class="backup-btn" style="width:100%; padding:10px; background:#222; color:var(--warn); border:1px solid var(--warn); border-radius:8px;">📤 Yükle</button>
+            <input type="file" id="importFile" style="display:none" onchange="importData(this)">
+        </div>
+        <button onclick="resetApp()" style="width:100%; padding:15px; background:var(--danger); border:none; border-radius:10px; color:#fff; font-weight:bold">Sıfırla</button>
+    </div>
+</div>
+
+<div class="modal" id="challengeModal">
+    <div class="sheet">
+        <div style="display:flex; justify-content:space-between;">
+            <h2>Meydan Okuma</h2><span onclick="closeModal('challengeModal')">✕</span>
+        </div>
+        <div style="background:#111; padding:20px; border-radius:12px; text-align:center; margin-top:20px">
+            <h3 style="margin:0; color:var(--warn)" id="challengeTitle">1000 Şınav</h3>
+            <div style="font-size:2rem; font-weight:bold; margin:10px 0" id="challengeDisplay">0 / 1000</div>
+            <div class="progress-track"><div class="progress-fill" id="challengeBarFill" style="width:0%; background:var(--warn)"></div></div>
+            <div style="margin-top:20px; display:flex; gap:10px; justify-content:center">
+                <button class="mini-input" onclick="addChallenge(10)">+10</button>
+                <button class="mini-input" onclick="addChallenge(25)">+25</button>
+                <button class="mini-input" onclick="addChallenge(50)">+50</button>
             </div>
-            <button onclick="buildProg()" style="width:100%;padding:15px;background:var(--blue);border:none;border-radius:8px;color:#fff;font-weight:bold">Uygula</button>
+            <button onclick="setChallenge()" style="margin-top:15px; background:none; border:none; color:#555; font-size:.8rem; text-decoration:underline">Hedefi Değiştir</button>
         </div>
     </div>
+</div>
 
-    <div class="modal" id="readinessModal">
-        <div class="sheet">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h2>Günlük Hazırlık</h2>
-                <span onclick="closeModal('readinessModal')" style="font-size:1.5rem; cursor:pointer;">✕</span>
-            </div>
-            <p style="color:#aaa; margin-bottom:14px">Bugün kendini nasıl hissediyorsun?</p>
-            <div class="readiness-scale" style="display:flex; justify-content:space-between; font-size:2rem;">
-                <div class="r-btn" onclick="setReadiness(1)">😫</div>
-                <div class="r-btn" onclick="setReadiness(2)">🥱</div>
-                <div class="r-btn" onclick="setReadiness(3)">😐</div>
-                <div class="r-btn" onclick="setReadiness(4)">🙂</div>
-                <div class="r-btn" onclick="setReadiness(5)">🔥</div>
-            </div>
-        </div>
-    </div>
+<script>
+    const visuals = {
+        push:`<svg viewBox="0 0 24 24"><path d="M4 18h16v-2H4v2zM8 6h8v2H8V6zm4 4c-1.1 0-2 .9-2 2v4h4v-4c0-1.1-.9-2-2-2z" fill="#fff"/></svg>`,
+        pull:`<svg viewBox="0 0 24 24"><path d="M12 2C9.24 2 7 4.24 7 7v4h2V7h10v4h2V7c0-2.76-2.24-5-5-5h-4zm-2 12v8h4v-8h-4z" fill="#fff"/></svg>`,
+        legs:`<svg viewBox="0 0 24 24"><path d="M12 4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-2 16v-4h4v4h-4zm0-6h4v-2h-4v2zm-4 6h2v-6H6v6zm12 0h2v-6h-2v6z" fill="#fff"/></svg>`,
+        press:`<svg viewBox="0 0 24 24"><path d="M12 2L4 10h5v12h6V10h5L12 2z" fill="#fff"/></svg>`,
+        core:`<svg viewBox="0 0 24 24"><path d="M20 18h-2v-2h-2v2H8v-2H6v2H4v-6c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v6z" fill="#fff"/></svg>`,
+        arm:`<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 9h-2V7h-2v5H6v2h2v5h2v-5h2v-2z" fill="#fff"/></svg>`,
+        cardio:`<svg viewBox="0 0 24 24"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8.4L13 19v4h2v-5l-1.8-3.6 1.8-1.4c.6-.5 1.1-.7 1.7-.7.3 0 .5.1.8.2L20 13v-2l-2.1-.6c-1.1-.4-2.4-.1-3.2.7l-1.5 1.5-1.4-4.1z" fill="#fff"/></svg>`,
+        pilates:`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#fff"/></svg>`
+    };
 
-    <div class="modal" id="gameLogModal">
-        <div class="sheet">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h2>🏀 Maç Karnesi</h2>
-                <span onclick="closeModal('gameLogModal')" style="font-size:1.5rem; cursor:pointer;">✕</span>
-            </div>
-            <div style="display:flex; gap:10px; margin:16px 0 8px;">
-                <input type="number" min="0" id="gamePoints" class="mini-input" style="width:50%; padding:15px" placeholder="Sayı">
-                <input type="number" min="0" id="gameAssists" class="mini-input" style="width:50%; padding:15px" placeholder="Asist">
-            </div>
-            <div style="display:flex; gap:10px; margin:8px 0;">
-                <input type="number" min="0" id="gameRebounds" class="mini-input" style="width:50%; padding:15px" placeholder="Rib">
-                <input type="number" min="0" id="gameSteals" class="mini-input" style="width:50%; padding:15px" placeholder="TÇ">
-            </div>
-            <div style="display:flex; gap:10px; margin:8px 0 10px;">
-                <select id="gameResult" style="width:100%; padding:12px; background:#222; color:#fff; border:1px solid #333; border-radius:8px;">
-                    <option value="">Maç Sonucu</option>
-                    <option value="W">Galibiyet (W)</option>
-                    <option value="L">Mağlubiyet (L)</option>
-                </select>
-            </div>
-            <textarea id="gameNotes" style="width:100%; background:#000; border:1px solid #333; color:#fff; padding:10px; border-radius:8px; min-height:70px;" placeholder="Maç yorumu..."></textarea>
-            <button onclick="saveGameLog()" style="width:100%; padding:15px; background:var(--accent); border:none; border-radius:10px; margin-top:15px; font-weight:bold">Kaydet</button>
-        </div>
-    </div>
+    const quotes = [
+        "Yetenek seni zirveye taşır, karakter orada tutar.",
+        "Antrenman bittiğinde asıl gelişim başlar.",
+        "Bugün yaptığın her tekrar yarınki zaferin tuğlasıdır.",
+        "Yorgunluk sadece zihnindedir."
+    ];
 
-    <!-- SETTINGS / CHALLENGE -->
-    <div class="modal" id="settingsModal">
-        <div class="sheet">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h2>Ayarlar</h2>
-                <span style="font-size:1.5rem; cursor:pointer;" onclick="closeModal('settingsModal')">✕</span>
-            </div>
+    const muscleDB = {
+        chest:{t:"Göğüs", mb:"chest", i:[
+            {n:"Bench Press (4x8)",v:"push",d:"Barı göğüs ucuna indir, omuzları kilitleme."},
+            {n:"Incline Press (3x10)",v:"push",d:"Üst göğse odaklan, kontrolü kaybetme."},
+            {n:"Cable Fly",v:"push",d:"Hareketin sonunda göğüste sıkma hisset."}
+        ]},
+        back:{t:"Sırt", mb:"back", i:[
+            {n:"Pull Up",v:"pull",d:"Çeneni barın üzerine getir, salınma yok."},
+            {n:"Barbell Row",v:"pull",d:"Kürek kemiklerini sık, belini yuvarlama."},
+            {n:"Lat Pulldown",v:"pull",d:"Barı göğüs hizasına indir, trapeze yük bindirme."}
+        ]},
+        legs:{t:"Bacak", mb:"legs", i:[
+            {n:"Back Squat",v:"legs",d:"Topuklara bas, dizleri içe düşürme."},
+            {n:"RDL",v:"legs",d:"Kalçayı geriye it, belini kilitle."},
+            {n:"Walking Lunge",v:"legs",d:"Uzun adım, diz çizgisini geçirme."}
+        ]},
+        shoulders:{t:"Omuz", mb:"shoulders", i:[
+            {n:"OH Press",v:"press",d:"Karnı sık, barı düz hatta yukarı it."},
+            {n:"Lateral Raise",v:"press",d:"Dirsekten hafif kırık, kontrolü bırakma."}
+        ]},
+        arms:{t:"Kol", mb:"arms", i:[
+            {n:"Barbell Curl",v:"arm",d:"Dirsekleri sabit tut, savurma."},
+            {n:"Triceps Pushdown",v:"arm",d:"Dirsekleri kilitle, son noktada sık."}
+        ]},
+        core:{t:"Karın", mb:"core", i:[
+            {n:"Plank",v:"core",d:"Kalçayı düşürme, nefesini tutma."},
+            {n:"Dead Bug",v:"core",d:"Belini yere bastır, hareketi kontrollü yap."}
+        ]}
+    };
 
-            <div class="toggle-row" style="margin-top:16px;">
-                <span>🏀 Sezon İçi</span>
-                <label class="switch">
-                    <input type="checkbox" id="seasonToggle" onchange="toggleSeason()">
-                    <span class="slider"></span>
-                </label>
-            </div>
-            <div class="toggle-row">
-                <span>🔊 Ses Efektleri</span>
-                <label class="switch">
-                    <input type="checkbox" id="soundToggle" onchange="toggleSound()">
-                    <span class="slider"></span>
-                </label>
-            </div>
-            <div class="toggle-row">
-                <span>🪄 Kompakt Görünüm</span>
-                <label class="switch">
-                    <input type="checkbox" id="compactToggle" onchange="toggleCompact()">
-                    <span class="slider"></span>
-                </label>
-            </div>
-            <div style="margin:14px 0;">
-                <label style="font-size:0.9rem; color:#ccc;">🎨 Tema</label>
-                <select id="themeSelect" onchange="changeTheme(this.value)" style="width:100%; padding:12px; background:#000; color:#fff; border-radius:10px; border:1px solid #333; margin-top:4px;">
-                    <option value="prime">Prime (Varsayılan)</option>
-                    <option value="gameNight">Game Night</option>
-                    <option value="offSeason">Off-Season</option>
-                    <option value="minimal">Minimal</option>
-                </select>
-            </div>
+    const compat = { chest:['arms','shoulders'], back:['arms','shoulders'], legs:['core'], shoulders:['arms'], arms:['core'] };
 
-            <div style="display:flex; gap:10px; margin:18px 0 10px;">
-                <button onclick="exportData()" class="backup-btn" style="width:100%; padding:10px; background:#222; color:var(--blue); border:1px solid var(--blue); border-radius:8px;">📥 İndir</button>
-                <button onclick="document.getElementById('importFile').click()" class="backup-btn" style="width:100%; padding:10px; background:#222; color:var(--warn); border:1px solid var(--warn); border-radius:8px;">📤 Yükle</button>
-                <input type="file" id="importFile" style="display:none" onchange="importData(this)">
-            </div>
-            <button onclick="resetApp()" style="width:100%; padding:15px; background:var(--danger); border:none; border-radius:10px; color:#fff; font-weight:bold; margin-top:5px;">Sıfırla</button>
-        </div>
-    </div>
+    const jumpR = [
+        {n:"Pogo Hops (3x20)", v:"legs", d:"Bilekleri kilitle, hızlı ve hafif sıçra."},
+        {n:"Box Jump (3x8)", v:"legs", d:"Alçak kutuya patlayıcı sıçra, sessiz iniş."},
+        {n:"Depth Jump (3x5)", v:"legs", d:"Kutu üzerinden in, yere değer değmez zıpla."}
+    ];
 
-    <div class="modal" id="challengeModal">
-        <div class="sheet">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h2>Meydan Okuma</h2>
-                <span onclick="closeModal('challengeModal')" style="font-size:1.5rem; cursor:pointer;">✕</span>
-            </div>
-            <div style="background:#111; padding:20px; border-radius:12px; text-align:center; margin-top:16px">
-                <h3 style="margin:0; color:var(--warn)" id="challengeTitle">1000 Şınav</h3>
-                <div style="font-size:2rem; font-weight:bold; margin:10px 0" id="challengeDisplay">0 / 1000</div>
-                <div class="progress-track">
-                    <div class="progress-fill" id="challengeBarFill" style="width:0%; background:var(--warn)"></div>
-                </div>
-                <div style="margin-top:16px; display:flex; gap:10px; justify-content:center">
-                    <button class="mini-input" onclick="addChallenge(10)">+10</button>
-                    <button class="mini-input" onclick="addChallenge(25)">+25</button>
-                    <button class="mini-input" onclick="addChallenge(50)">+50</button>
-                </div>
-                <button onclick="setChallenge()" style="margin-top:12px; background:none; border:none; color:#555; font-size:0.8rem; text-decoration:underline">Hedefi Değiştir</button>
-            </div>
-        </div>
-    </div>
+    const finishers = {
+        gym: [
+            {n:"🔥 1 Dakika Plank", d:"Core stabilitesi ve mental dayanıklılık için.", y:"plank core exercise"},
+            {n:"🔥 50 Mekik", d:"Karın kaslarını yakmak için klasik finisher.", y:"crunches abs workout"},
+            {n:"🔥 Tabata Burpee (4dk)", d:"20 sn burpee / 10 sn dinlen – 8 tur.", y:"tabata burpee workout"},
+            {n:"🔥 100 Şınav (Toplam)", d:"Setlere böl, formu bozmadan tamamla.", y:"push up workout beginner"},
+            {n:"🔥 Farmer's Walk", d:"Ağırlıkları yanlarda taşı, kavrama + core.", y:"farmer walk exercise"},
+            {n:"🔥 Dead Hang (Max Süre)", d:"Barfixte asılı kal; omuz + kavrama için.", y:"dead hang grip strength"}
+        ],
+        basket: [
+            {n:"🏀 5 Noktadan 10'ar Şut", d:"Her bölgeden 10 şut, ritim odaklı.", y:"basketball shooting spots drill"},
+            {n:"🏀 50 Serbest Atış (Sokmadan Çıkma)", d:"Yorgunken serbest atış konsantrasyonu.", y:"basketball free throw routine"},
+            {n:"🏀 Mikan Drill (2 Dakika)", d:"Boyalı alanda bitiricilik için temel drill.", y:"mikan drill finishes"},
+            {n:"🏀 3 Sayı Yarışması (10'da Kaç?)", d:"10 üçlük dene, skorunu kaydet.", y:"basketball 3 point shooting drill"},
+            {n:"🏀 Sahayı 5 Kere Tam Tur Koş", d:"Kondisyon ve ritim için tempo koşusu.", y:"basketball suicide conditioning drill"}
+        ]
+    };
 
-    <script>
-        // --- THEMES ---
-        const themes = {
-            prime: {
-                bg:"#000000", card:"#161618", text:"#ffffff", muted:"#8e8e93",
-                accent:"#32d74b", blue:"#0a84ff", danger:"#ff453a",
-                warn:"#ff9f0a", purple:"#bf5af2", gold:"#ffd60a",
-                glass:"rgba(22,22,24,0.95)"
-            },
-            gameNight: {
-                bg:"#05010b", card:"#151122", text:"#fdfcff", muted:"#a19ab7",
-                accent:"#ff2d55", blue:"#5e5ce6", danger:"#ff453a",
-                warn:"#ffd60a", purple:"#bf5af2", gold:"#ffd60a",
-                glass:"rgba(15,11,30,0.96)"
-            },
-            offSeason: {
-                bg:"#050807", card:"#101313", text:"#f5f8f6", muted:"#9ca3af",
-                accent:"#34d399", blue:"#0ea5e9", danger:"#f97373",
-                warn:"#facc15", purple:"#a855f7", gold:"#facc15",
-                glass:"rgba(9,12,11,0.96)"
-            },
-            minimal: {
-                bg:"#000000", card:"#050506", text:"#f5f5f5", muted:"#909090",
-                accent:"#e5e5e5", blue:"#9ca3af", danger:"#f97373",
-                warn:"#eab308", purple:"#a855f7", gold:"#facc15",
-                glass:"rgba(10,10,10,0.96)"
-            }
-        };
+    const clutchTasks = [
+        "1 Dakika Plank yapmadan eve gidemezsin!",
+        "Üst üste 10 serbest atış sok!",
+        "50 Şınav çek, hemen!"
+    ];
 
-        function applyTheme(name){
-            const theme = themes[name] || themes.prime;
-            for(const [k,v] of Object.entries(theme)){
-                document.documentElement.style.setProperty(`--${k}`, v);
-            }
-        }
+    const foodDB = [
+        {n:"Yumurta (1 Adet)", c:70, p:6},
+        {n:"Tavuk Göğsü (150g)", c:165, p:31},
+        {n:"Pilav (1 Kase)", c:200, p:4},
+        {n:"Yulaf (50g)", c:190, p:6},
+        {n:"Muz (Orta)", c:105, p:1},
+        {n:"Protein Shake", c:120, p:24},
+        {n:"Ton Balığı (100g)", c:130, p:25},
+        {n:"Makarna (1 Tabak)", c:250, p:8},
+        {n:"Fıstık Ezmesi (1 tk)", c:90, p:3},
+        {n:"Yoğurt (1 Kase)", c:100, p:10},
+        {n:"Elma", c:52, p:0},
+        {n:"Badem/Ceviz (1 Avuç)", c:160, p:6},
+        {n:"Lor Peyniri (100g)", c:90, p:15},
+        {n:"Izgara Köfte (150g)", c:350, p:25},
+        {n:"Mercimek (1 Tabak)", c:230, p:18},
+        {n:"Pirinç Patlağı (1 ad)", c:30, p:1},
+        {n:"Protein Bar", c:200, p:20},
+        {n:"Hindi Füme (2 Dilim)", c:60, p:10},
+        {n:"Patates Haşlama (Orta)", c:160, p:4}
+    ];
 
-        function setActiveTab(tab){
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            const el = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
-            if(el) el.classList.add('active');
-        }
+    const warmupDB = {
+        "Yürüyüş": {d:"Kan akışını başlat, zihni antrenmana hazırla."},
+        "Rotator Cuff": {d:"Lastikle dışa/içe rotasyon. Omuz sağlığı için şart."},
+        "Tibialis": {d:"Duvara yaslanıp parmak ucu kaldırma. Diz ağrısını önlemeye yardımcı olur."},
+        "Patellar Tendon": {d:"Diz kapağı altı izometrik bekleme (Spanish Squat tarzı)."},
+        "Kalça Flexor": {d:"Lunge pozisyonunda arka bacağı sıkıp esnet."},
+        "Omuz Mob.": {d:"Sopayla omuz çevirme (Dislocates) ile hareket açıklığını artır."},
+        "Kalça Akt.": {d:"Monster Walk veya Glute Bridge ile kalçayı uyandır."},
+        "Dinamik Isınma": {d:"High Knees, Butt Kicks, kol/bacak savurma."},
+        "Jacks": {d:"Jumping Jacks ile nabzı 120 üzerine çıkar."}
+    };
 
-        // --- ICONS / CONTENT DB ---
-        const visuals = {
-            push: `<svg viewBox="0 0 24 24"><path d="M4 18h16v-2H4v2zM8 6h8v2H8V6zm4 4c-1.1 0-2 .9-2 2v4h4v-4c0-1.1-.9-2-2-2z" fill="#fff"/></svg>`,
-            pull: `<svg viewBox="0 0 24 24"><path d="M12 2C9.24 2 7 4.24 7 7v4h2V7h10v4h2V7c0-2.76-2.24-5-5-5h-4zm-2 12v8h4v-8h-4z" fill="#fff"/></svg>`,
-            legs: `<svg viewBox="0 0 24 24"><path d="M12 4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-2 16v-4h4v4h-4zm0-6h4v-2h-4v2zm-4 6h2v-6H6v6zm12 0h2v-6h-2v6z" fill="#fff"/></svg>`,
-            press: `<svg viewBox="0 0 24 24"><path d="M12 2L4 10h5v12h6V10h5L12 2z" fill="#fff"/></svg>`,
-            core: `<svg viewBox="0 0 24 24"><path d="M20 18h-2v-2h-2v2H8v-2H6v2H4v-6c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v6z" fill="#fff"/></svg>`,
-            arm: `<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 9h-2V7h-2v5H6v2h2v5h2v-5h2v-2z" fill="#fff"/></svg>`,
-            cardio: `<svg viewBox="0 0 24 24"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8.4L13 19v4h2v-5l-1.8-3.6 1.8-1.4c.6-.5 1.1-.7 1.7-.7.3 0 .5.1.8.2L20 13v-2l-2.1-.6c-1.1-.4-2.4-.1-3.2.7l-1.5 1.5-1.4-4.1z" fill="#fff"/></svg>`,
-            pilates: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#fff"/></svg>`
-        };
+    const painPrehab = {
+        diz: [
+            {n:"Spanish Squat", d:"Patellar tendona yükü dağıtmak için izometrik bekleme.", y:"spanish squat knee pain"},
+            {n:"Tibialis Raise", d:"Diz önü yükünü dengelemek için.", y:"tibialis raise exercise"}
+        ],
+        bel: [
+            {n:"Dead Bug", d:"Core stabilitesi ile bel yükünü azalt.", y:"dead bug core exercise"},
+            {n:"Bird Dog", d:"Omurga stabilitesi için temel hareket.", y:"bird dog exercise"}
+        ],
+        omuz: [
+            {n:"External Rotation Band", d:"Rotator cuff güçlendirme.", y:"band external rotation shoulder"},
+            {n:"Scap Push Up", d:"Kürek çevresi stabilitesi.", y:"scapular push ups drill"}
+        ],
+        bilek: [
+            {n:"Wrist Flex/Ext Stretch", d:"Bilek esnekliği ve kan akışı için.", y:"wrist flexion extension stretch"},
+            {n:"Farmer Carry Hafif", d:"Kavrama ve önkol için düşük yük.", y:"farmer carry light kettlebell"}
+        ],
+        kalca: [
+            {n:"Glute Bridge", d:"Kalça aktivasyonu; bel yükünü azaltır.", y:"glute bridge exercise"},
+            {n:"Hip Airplane (Destekli)", d:"Kalça stabilizasyonu için.", y:"hip airplane drill"}
+        ]
+    };
 
-        const quotes = [
-            "Yetenek seni zirveye taşır, karakter orada tutar.",
-            "Antrenman bittiğinde asıl gelişim başlar.",
-            "Bugün yaptığın her tekrar yarınki zaferin tuğlasıdır.",
-            "Yorgunluk çoğu zaman sadece zihindedir.",
-            "Hazırlık seviyen, özgüveninin tavanını belirler."
-        ];
+    const seasonSchedule = {
+        0:{t:"Dinlenme", s:"Recovery", j:false, pre:["Yürüyüş"], i:[{n:"Meal Prep",v:"rest",d:"Haftalık beslenmeni planla."}]},
+        1:{t:"Chest & Triceps", s:"İtme", j:false, pre:["Rotator Cuff"], i:[...muscleDB.chest.i,{n:"Extra Pushdown",v:"arm",d:"Triceps izolasyonu."}]},
+        2:{t:"Pilates & Basket", s:"Yoğun", j:false, pre:["Tibialis"], i:[
+            {n:"Pilates (19:00)",v:"pilates",d:"Core ve esneklik."},
+            {n:"Basketbol (20:45)",v:"cardio",d:"Şut, oyun okuma, kondisyon."}
+        ]},
+        3:{t:"Maç Günü", s:"Game Night", j:true, pre:["Patellar Tendon"], i:[
+            {n:"Maç (21:45)",v:"cardio", isGame:true, d:"Maça odaklan, ısınma ve mental hazırlığı tamamla."}
+        ]},
+        4:{t:"Pilates", s:"Recov", j:false, pre:["Kalça Flexor"], i:[
+            {n:"Pilates (19:00)",v:"pilates",d:"Esneklik ve nefes kontrolü."}
+        ]},
+        5:{t:"Back & Biceps", s:"Çekme", j:true, pre:["Omuz Mob."], i:[...muscleDB.back.i,{n:"Extra Curl",v:"arm",d:"Yavaş negatiflere odaklan."}]},
+        6:{t:"Legs & Shoulders", s:"Kuvvet", j:false, pre:["Kalça Akt."], i:[...muscleDB.legs.i,...muscleDB.shoulders.i]},
+        panic:{t:"Ev Modu", s:"Home", j:false, pre:["Jacks"], i:[
+            {n:"50 Şınav",v:"push",d:"Nizami formda, bölerek yap."},
+            {n:"50 Squat",v:"legs",d:"Derin squat, topuk yerde."}
+        ]}
+    };
 
-        const muscleDB = {
-            chest:{
-                t:"Göğüs",
-                mb:"chest",
-                i:[
-                    {n:"Bench Press (4x8)",v:"push",d:"Barı göğüs ucuna indir, kürek kemiklerini sabitle. Alternatif: Dumbbell Bench, Push-Up."},
-                    {n:"Incline DB Press (3x10)",v:"push",d:"Üst göğse odaklan, kontrollü negatif. Alternatif: Incline Barbell, Machine Press."}
-                ]
-            },
-            back:{
-                t:"Sırt",
-                mb:"back",
-                i:[
-                    {n:"Pull Up / Lat Pulldown",v:"pull",d:"Çeneni bar hizasına getir veya kabloyu göğse çek. Alternatif: Assisted Pull-Up, Neutral Grip Row."},
-                    {n:"Barbell / Cable Row",v:"pull",d:"Kürek kemiklerini sık, belini sabit tut. Alternatif: Chest Supported Row, Single Arm DB Row."}
-                ]
-            },
-            legs:{
-                t:"Bacak",
-                mb:"legs",
-                i:[
-                    {n:"Squat / Leg Press",v:"legs",d:"Topuklara bas, dizlerini içeri çökertme. Alternatif: Goblet Squat, Hack Squat."},
-                    {n:"RDL / Hip Hinge",v:"legs",d:"Kalçayı geriye it, bel nötr kalsın. Alternatif: Romanian Deadlift, Hip Thrust."}
-                ]
-            },
-            shoulders:{
-                t:"Omuz",
-                mb:"shoulders",
-                i:[
-                    {n:"Overhead Press",v:"press",d:"Karnını sık, barı düz yukarı it. Alternatif: Dumbbell Shoulder Press, Arnold Press."},
-                    {n:"Lateral Raise",v:"press",d:"Dirsek hafif kırık, omuz hattına kadar kaldır. Alternatif: Cable Lateral Raise."}
-                ]
-            },
-            arms:{
-                t:"Kol",
-                mb:"arms",
-                i:[
-                    {n:"Biceps Curl",v:"arm",d:"Vücudu sallamadan sadece dirsekten çalış. Alternatif: Incline Curl, Hammer Curl."},
-                    {n:"Triceps Pushdown",v:"arm",d:"Dirsekleri sabit tut, tam kilitlemeden uzat. Alternatif: Overhead Extension, Dips."}
-                ]
-            },
-            core:{
-                t:"Karın",
-                mb:"core",
-                i:[
-                    {n:"Plank",v:"core",d:"Kalçayı ne çok düşür ne çok kaldır. Alternatif: Side Plank, Dead Bug."},
-                    {n:"Dead Bug / Hollow Hold",v:"core",d:"Belini zemine yapıştır, nefesini kontrol et."}
-                ]
-            }
-        };
+    const offSeasonSchedule = JSON.parse(JSON.stringify(seasonSchedule));
+    offSeasonSchedule[3] = {
+        t:"CANAVAR MODU", s:"Off-Season", j:true, pre:["Dinamik Isınma"], i:[
+            {n:"Deadlift",v:"legs",d:"Ağır ama kontrollü."},
+            {n:"Heavy Rows",v:"pull",d:"Sırt kalınlığına odaklan."},
+            {n:"HIIT",v:"cardio",d:"Kısa ama sert interval."}
+        ]
+    };
 
-        const compat = {
-            chest:['arms','shoulders'],
-            back:['arms','shoulders'],
-            legs:['core'],
-            shoulders:['arms'],
-            arms:['core']
-        };
+    const getK = d => d.toLocaleDateString('fr-CA'); // YYYY-MM-DD
 
-        const jumpR = [
-            {n:"Pogo Hops (3x20)", v:"legs", d:"Bilekleri kilitle, hızlı ve hafif sıçra."},
-            {n:"Box Jump (3x8)", v:"legs", d:"Düşük kutuya patlayıcı zıpla, yumuşak iniş yap."},
-            {n:"Depth Jump (3x5)", v:"legs", d:"Yüksekten in, yere değer değmez tekrar zıpla."}
-        ];
+    let today = new Date();
+    let data, stats, settings;
+    let timerInt = null, timerSec = 0;
+    let breathInt = null;
 
-        const finisherDB = {
-            gym: [
-                {t:"🔥 1 Dakika Plank", d:"Core dayanıklılığını test et, kalça ve bel kontrolüne odaklan.", q:"plank core exercise"},
-                {t:"🔥 50 Mekik", d:"Aralıksız değil setlere böl, formdan taviz verme.", q:"crunch exercise"},
-                {t:"🔥 Tabata Burpee (4dk)", d:"20 sn burpee / 10 sn dinlenme x 8. Kardiyo ve mental sınır.", q:"tabata burpee workout"},
-                {t:"🔥 100 Şınav (Toplam)", d:"Setlere böl (mesela 10x10). Dirsek ve omuz sağlığına dikkat.", q:"push up variations"},
-                {t:"🔥 Farmer's Walk", d:"Ağır dambıllarla 20-30 metre yürü, kavrama ve core için mükemmel.", q:"farmer walk exercise"},
-                {t:"🔥 Dead Hang (Maksimum)", d:"Barfiks barına asılı kal, omuz ve kavrama gücünü geliştir.", q:"dead hang pull up bar"}
-            ],
-            basket: [
-                {t:"🏀 5 Noktadan 10'ar Şut", d:"Köşeler, wings ve tepe. Her bölgeden ritim yakalamaya odaklan.", q:"basketball spot shooting drill"},
-                {t:"🏀 50 Serbest Atış (Sokmadan Çıkma)", d:"Rutinini sabit tut, nefes ve ritme odaklan.", q:"basketball free throw routine"},
-                {t:"🏀 Mikan Drill (2 Dakika)", d:"Potanın iki yanından sıçrayarak bitiriş çalış.", q:"mikan drill basketball"},
-                {t:"🏀 3 Sayı Yarışması (10'da kaç?)", d:"Çizgi gerisinden 10 şut, skorunu kaydet.", q:"basketball 3 point shooting drill"},
-                {t:"🏀 Sahayı 5 Kere Tam Tur Koş", d:"Baseline'dan baseline'a tempo koşusu, kondisyon ve mental sertlik.", q:"basketball conditioning full court sprints"}
-            ]
-        };
+    function init(){
+        try{
+            data = JSON.parse(localStorage.getItem('primeDataV21')) || {};
+            stats = JSON.parse(localStorage.getItem('primeStatsV21')) || {
+                xp:0,
+                height:0,
+                challenge:{target:1000,current:0,title:"1000 Şınav"},
+                streak:0,
+                lastLogin:"",
+                max:{},
+                games:[],
+                heat:{},
+                history:{},
+                pain:[],
+                weekSummary:{}
+            };
+            settings = JSON.parse(localStorage.getItem('primeSettingsV21')) || {sound:false,inSeason:true};
 
-        const clutchTasks = [
-            "1 Dakika Plank yapmadan eve gidemezsin!",
-            "Üst üste 10 serbest atış sok!",
-            "50 Şınav çek, hemen!",
-            "Sahayı 3 tur sprint koş!"
-        ];
-
-        const foodDB = [
-            {n:"Yumurta (1 Adet)", c:70, p:6},
-            {n:"Tavuk Göğsü (150g)", c:165, p:31},
-            {n:"Pilav (1 Kase)", c:200, p:4},
-            {n:"Yulaf (50g)", c:190, p:6},
-            {n:"Muz (Orta)", c:105, p:1},
-            {n:"Protein Shake", c:120, p:24},
-            {n:"Ton Balığı (100g)", c:130, p:25},
-            {n:"Makarna (1 Tabak)", c:250, p:8},
-            {n:"Fıstık Ezmesi (1 tk)", c:90, p:3},
-            {n:"Yoğurt (1 Kase)", c:100, p:10},
-            {n:"Elma", c:52, p:0},
-            {n:"Badem/Ceviz (1 Avuç)", c:160, p:6},
-            {n:"Lor Peyniri (100g)", c:90, p:15},
-            {n:"Izgara Köfte (150g)", c:350, p:25},
-            {n:"Mercimek (1 Tabak)", c:230, p:18},
-            {n:"Pirinç Patlağı (1 ad)", c:30, p:1},
-            {n:"Protein Bar", c:200, p:20},
-            {n:"Hindi Füme (2 Dilim)", c:60, p:10},
-            {n:"Patates Haşlama (Orta)", c:160, p:4},
-            {n:"Tam Buğday Ekmek (1 Dilim)", c:80, p:3},
-            {n:"Karışık Sandviç (Tavuklu)", c:350, p:25}
-        ];
-
-        const warmupDB = {
-            "Yürüyüş": {d:"Hafif tempo yürüyüş. Kan akışını başlat, zihni antrenmana hazırla."},
-            "Rotator Cuff": {d:"Lastikle iç/dış rotasyon. Omuz sağlığı için şart, özellikle bench ve overhead günlerinde."},
-            "Tibialis": {d:"Duvara yaslanıp parmak ucu kaldırma. Diz ve bilek ön yüzünü güçlendirir, sıçrama ve koşu için kritik."},
-            "Patellar Tendon": {d:"Spanish Squat benzeri izometrik pozisyonda diz kapağı altını yükle. Diz ağrısını azaltmaya yardımcı olur."},
-            "Kalça Flexor": {d:"Lunge pozisyonunda arka bacağı sıkıp esnet. Uzun süre oturmanın yarattığı gerginliği azaltır."},
-            "Omuz Mob.": {d:"Sopa/lastik ile omuz çevirme (Dislocates). Overhead gün öncesi omuz açıklığını artırır."},
-            "Kalça Akt.": {d:"Monster Walk veya Glute Bridge ile kalçayı uyandır. Diz ve bel yükünü azaltır."},
-            "Dinamik Isınma": {d:"High Knees, Butt Kicks, kol-bacak savurma. Nabzı yavaşça yükselt."},
-            "Jacks": {d:"Jumping Jacks ile nabzı 120+ seviyesine getir, vücut ısısını artır."}
-        };
-
-        const seasonSchedule = {
-            0: {t:"Dinlenme", s:"Recovery", j:false, pre:["Yürüyüş","Kalça Akt."], i:[{n:"Hafif Yürüyüş / Mobilite",v:"cardio",d:"Gün içi 20-30 dk yürüyüş + hafif esneme."}]},
-            1: {t:"Chest & Triceps", s:"İtme", j:false, pre:["Rotator Cuff","Omuz Mob."], i:[...muscleDB.chest.i, {n:"Triceps Pushdown",v:"arm",d:"Gövdeni sabit tut, dirsekleri kilitlemeden uzat."}]},
-            2: {t:"Pilates & Basket", s:"Yoğun", j:false, pre:["Tibialis","Kalça Flexor"], i:[{n:"Pilates (19:00)",v:"pilates",d:"Core, nefes ve kontrol odaklı."},{n:"Basketbol (20:45)",v:"cardio",isGame:true,d:"Isınma + şut + oyun."}]},
-            3: {t:"Maç Günü", s:"Game Night", j:true, pre:["Patellar Tendon","Kalça Akt."], i:[{n:"Maç (21:45)",v:"cardio",isGame:true,d:"Rutinini uygula, savunma ve koşu disiplinine odaklan."}]},
-            4: {t:"Pilates", s:"Recovery", j:false, pre:["Kalça Flexor","Omuz Mob."], i:[{n:"Pilates (19:00)",v:"pilates",d:"Esneklik ve core aktifleştirme."}]},
-            5: {t:"Back & Biceps", s:"Çekme", j:true, pre:["Omuz Mob.","Tibialis"], i:[...muscleDB.back.i, {n:"Ek Biceps Çalışması",v:"arm",d:"Formu bozmadan kontrollü tekrarlar."}]},
-            6: {t:"Legs & Shoulders", s:"Kuvvet", j:false, pre:["Kalça Akt.","Patellar Tendon"], i:[...muscleDB.legs.i, ...muscleDB.shoulders.i]},
-            panic: {t:"Ev Modu", s:"Home", j:false, pre:["Jacks","Dinamik Isınma"], i:[
-                {n:"50 Şınav",v:"push",d:"Nizami formda, setlere bölerek tamamla."},
-                {n:"50 Squat",v:"legs",d:"Vücut ağırlığıyla derin squat, diz çizgisini kontrol et."}
-            ]}
-        };
-
-        const offSeasonSchedule = JSON.parse(JSON.stringify(seasonSchedule));
-        offSeasonSchedule[3] = {
-            t:"CANAVAR MODU",
-            s:"Off-Season",
-            j:true,
-            pre:["Dinamik Isınma","Kalça Akt."],
-            i:[
-                {n:"Deadlift (Ağır)",v:"legs",d:"Tekniği bozma, set aralarını uzun tut."},
-                {n:"Heavy Rows",v:"pull",d:"Güçlü çekiş, kürek kemiklerini tamamen sık."},
-                {n:"HIIT Koşu",v:"cardio",d:"Kısa sprintler + uzun dinlenme ile nabzı yukarı çek."}
-            ]
-        };
-
-        // --- GLOBAL STATE ---
-        let today = new Date();
-        let data, stats, settings;
-        let timerInt = null, timerSec = 0;
-        let breathInterval = null;
-
-        const getK = d => d.toLocaleDateString('fr-CA'); // YYYY-MM-DD
-
-        function save(){
-            localStorage.setItem('primeDataV21', JSON.stringify(data));
-        }
-        function saveStats(){
-            stats.height = document.getElementById('userHeight').value;
-            localStorage.setItem('primeStatsV21', JSON.stringify(stats));
-        }
-
-        function init(){
-            try{
-                data = JSON.parse(localStorage.getItem('primeDataV21')) || {};
-                stats = JSON.parse(localStorage.getItem('primeStatsV21')) || {
-                    xp:0,
-                    height:0,
-                    challenge:{target:1000, current:0, title:"1000 Şınav"},
-                    streak:0,
-                    lastLogin:"",
-                    max:{},
-                    games:[],
-                    heat:{},
-                    history:{},
-                    pain:[]
-                };
-                settings = JSON.parse(localStorage.getItem('primeSettingsV21')) || {
-                    sound:false,
-                    inSeason:true,
-                    theme:'prime',
-                    compact:false
-                };
-
-                if(!stats.heat) stats.heat = {chest:0,back:0,legs:0,shoulders:0,arms:0,core:0};
-
-                applyTheme(settings.theme || 'prime');
-                if(settings.compact) document.body.classList.add('compact');
-
-                document.getElementById('themeSelect').value = settings.theme || 'prime';
-                document.getElementById('seasonToggle').checked = settings.inSeason;
-                document.getElementById('soundToggle').checked = settings.sound;
-                document.getElementById('compactToggle').checked = !!settings.compact;
-
-                const k = getK(today);
-                if(!data[k]) data[k] = {c:[],s:{},w:{},rpe:{},n:"",wt:0,bw:"",nutri:{cal:0,pro:0,log:[],supps:[],timing:[]}, panic:false, readiness:0};
-
-                document.getElementById('dailyQuote').innerHTML = `"${quotes[today.getDate() % quotes.length]}"`;
-
-                if(!stats.lastLogin || stats.lastLogin !== k){
-                    stats.streak = (stats.lastLogin && (new Date(stats.lastLogin) > new Date(today.getTime()-86400000))) ? (stats.streak+1) : 1;
-                    stats.lastLogin = k;
-                    saveStats();
-                }
-
-                if(data[k].readiness === 0) openModal('readinessModal');
-
-                document.getElementById('userHeight').value = stats.height || "";
-                updateChallengeUI();
-                renderFoodList();
-                render();
-                renderXP();
-                renderHeatmap();
-                renderGameHistory();
-                renderPainMap();
-
-            } catch(e){
-                alert("Veri hatası algılandı. Uygulama sıfırlanıyor...");
-                localStorage.clear();
-                location.reload();
-            }
-        }
-
-        function render(){
             const k = getK(today);
-            if(!data[k]) data[k] = {c:[],s:{},w:{},rpe:{},n:"",wt:0,bw:"",nutri:{cal:0,pro:0,log:[],supps:[],timing:[]}, panic:false, readiness:0};
-            const dd = data[k];
+            if(!data[k]) data[k] = {c:[],s:{},w:{},rpe:{},n:"",wt:0,bw:0,nutri:{cal:0,pro:0,log:[],supps:[],timing:[]},panic:false,readiness:0,mental:{focus:3,confidence:3},pride:"",steps:0};
+            if(!stats.heat) stats.heat = {chest:0,back:0,legs:0,shoulders:0,arms:0,core:0};
+            if(!stats.weekSummary) stats.weekSummary = {};
 
-            document.getElementById('dateDisplay').innerText =
-                today.toLocaleDateString('tr-TR',{weekday:'long', day:'numeric'});
+            document.getElementById('dailyQuote').innerHTML = `"${quotes[today.getDate() % quotes.length]}"`;
+            if(data[k].readiness === 0) openModal('readinessModal');
 
-            const schedBase = dd.custom || (settings.inSeason ? seasonSchedule[today.getDay()] : offSeasonSchedule[today.getDay()]);
-            const p = dd.panic ? seasonSchedule.panic : schedBase;
+            document.getElementById('seasonToggle').checked = settings.inSeason;
+            document.getElementById('soundToggle').checked = settings.sound;
+            document.getElementById('userHeight').value = stats.height || "";
 
-            document.getElementById('progTitle').innerText = p.t;
-            document.getElementById('progSub').innerText = p.s;
-            document.getElementById('seasonBadge').innerText = settings.inSeason ? "SEZON İÇİ" : "OFF-SEASON";
-
-            const readinessMap = ["Enerji: ?", "Enerji: 😫", "Enerji: 🥱", "Enerji: 😐", "Enerji: 🙂", "Enerji: 🔥"];
-            document.getElementById('readinessBadge').innerText = readinessMap[dd.readiness || 0];
-
-            // Prehab
-            const phList = document.getElementById('prehabList');
-            phList.innerHTML = "";
-            if(p.pre){
-                p.pre.forEach(item => {
-                    const meta = warmupDB[item] || {d:"Hazırlık."};
-                    phList.innerHTML += `
-                        <div class="prehab-item">
-                            <div>
-                                <div style="font-weight:600">${item}</div>
-                                <span class="prehab-desc">${meta.d}</span>
-                            </div>
-                            <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(item + ' exercise')}" target="_blank" class="yt-btn">▶</a>
-                        </div>`;
-                });
-            }
-
-            const list = document.getElementById('workoutList');
-            list.innerHTML = "";
-            let vol = 0;
-
-            p.i.forEach((it,i)=>{
-                const chk = dd.c.includes(i);
-                const kg = parseInt(dd.w[i] || 0);
-                const sets = parseInt(dd.s[i] || 3);
-                if(chk && kg > 0) vol += kg * sets;
-
-                const name = it.n.split('(')[0].trim();
-                const isPR = kg > (stats.max[name] || 0) && kg > 0;
-
-                list.innerHTML += `
-                    <div class="task-item ${chk?'checked':''}" id="task-${i}">
-                        <div class="task-top">
-                            <div class="task-visual" onclick="toggleGuide(${i})">${visuals[it.v] || visuals.push}</div>
-                            <div class="check-group" onclick="toggle(${i},'${it.isGame?'game':''}',${p.i.length})">
-                                <div style="flex:1"><span class="task-name">${it.n}</span></div>
-                                <div class="circle-check"></div>
-                            </div>
-                            <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(name + ' nasıl yapılır')}" target="_blank" class="yt-btn">▶</a>
-                        </div>
-                        <div class="guide-text">
-                            💡 ${it.d || "Kontrollü çalış."}
-                        </div>
-                        ${(it.v!=='rest' && it.v!=='pilates' && it.v!=='cardio') ? `
-                        <div class="input-row">
-                            <input class="mini-input" type="number" min="0" placeholder="Set" value="${dd.s[i]||''}" onchange="saveS(${i},this.value)">
-                            <input class="mini-input ${isPR?'pr-active':''}" type="number" min="0" placeholder="Kg" value="${dd.w[i]||''}" onchange="saveW('${name.replace(/'/g,"\\'")}',${i},this.value,${sets})">
-                            <button class="tool-btn" onclick="openCalc(${kg||0})">🧮</button>
-                            <button class="tool-btn" onclick="openHist('${name.replace(/'/g,"\\'")}')">📜</button>
-                        </div>` : ''}
-                    </div>`;
-            });
-
-            document.getElementById('totalVolume').innerText = vol + " kg";
-            const percent = p.i.length ? Math.round((dd.c.length / p.i.length) * 100) : 0;
-            document.getElementById('progPercent').innerText = "%" + (isNaN(percent)?0:percent);
-
-            updateTrackers(dd);
-            updateFatigue();
-        }
-
-        function toggle(i,s,t){
-            const k = getK(today);
-            const a = data[k].c;
-            if(a.includes(i)){
-                a.splice(a.indexOf(i),1);
-                addXP(-10); // XP farm fix
-            } else {
-                a.push(i);
-                startTimer();
-                addXP(10);
-                updateHeatmap(i);
-                if(s === 'game') openModal('gameLogModal');
-                if(a.length === t) checkClutch();
-            }
-            save();
+            updateChallengeUI();
+            renderFoodList();
+            computeWeeklyStats();
             render();
+            renderXP();
+            renderHeatmap();
+            renderGameHistory();
+            renderPainMap();
+        }catch(e){
+            alert("Veri hatası algılandı. Uygulama sıfırlanıyor...");
+            localStorage.clear();
+            location.reload();
         }
+    }
 
-        function checkClutch(){
-            if(Math.random() < 0.3){
-                document.getElementById('clutchTaskDisplay').innerText =
-                    clutchTasks[Math.floor(Math.random()*clutchTasks.length)];
-                openModal('clutchModal');
-            } else {
-                showWrapUp();
+    function save(){ localStorage.setItem('primeDataV21', JSON.stringify(data)); }
+    function saveStats(){
+        stats.height = document.getElementById('userHeight').value || stats.height || 0;
+        localStorage.setItem('primeStatsV21', JSON.stringify(stats));
+    }
+
+    function saveData(){
+        const k = getK(today);
+        const dd = data[k] || (data[k] = {});
+        dd.n = document.getElementById('journal').value || "";
+        dd.bw = document.getElementById('dailyWeight').value || dd.bw || "";
+        dd.pride = document.getElementById('journalPride').value || "";
+        dd.steps = parseInt(document.getElementById('steps').value) || 0;
+        dd.sleepHours = parseFloat(document.getElementById('sleepHours').value) || dd.sleepHours || 0;
+        dd.sleepQuality = parseInt(document.getElementById('sleepQuality').value) || dd.sleepQuality || 0;
+        save();
+    }
+
+    function getProgramForDate(d, dd){
+        const idx = d.getDay();
+        const base = settings.inSeason ? seasonSchedule[idx] : offSeasonSchedule[idx];
+        if(dd.panic) return seasonSchedule.panic;
+        if(dd.custom) return dd.custom;
+        return base;
+    }
+
+    function computeDailyVolume(dKey, dObj, prog){
+        if(!dObj || !prog || !prog.i) return 0;
+        let vol = 0;
+        prog.i.forEach((it,i)=>{
+            const kg = parseInt(dObj.w && dObj.w[i] || 0);
+            const sets = parseInt(dObj.s && dObj.s[i] || 3);
+            if(kg > 0 && sets > 0) vol += kg * sets;
+        });
+        return vol;
+    }
+
+    function computeWeeklyStats(){
+        const summary = {avgVolume:0,jumpDays:0,avgSleep:0};
+        let totalVol = 0, volCount = 0;
+        let jumpDays = 0;
+        let sleepSum = 0, sleepCount = 0;
+
+        for(let i=0;i<7;i++){
+            const d = new Date(today);
+            d.setDate(today.getDate() - i);
+            const k = getK(d);
+            const dd = data[k];
+            if(!dd) continue;
+            const p = getProgramForDate(d, dd);
+            const v = computeDailyVolume(k, dd, p);
+            if(v > 0){ totalVol += v; volCount++; }
+            if(p.j) jumpDays++;
+            if(dd.sleepHours){
+                sleepSum += dd.sleepHours;
+                sleepCount++;
             }
         }
 
-        function completeClutch(){
-            addXP(100);
-            closeModal('clutchModal');
+        summary.avgVolume = volCount ? Math.round(totalVol / volCount) : 0;
+        summary.jumpDays = jumpDays;
+        summary.avgSleep = sleepCount ? (sleepSum / sleepCount) : 0;
+        stats.weekSummary = summary;
+        saveStats();
+    }
+
+    function render(){
+        const k = getK(today);
+        const dd = data[k];
+        const p = dd.panic ? seasonSchedule.panic : (dd.custom || (settings.inSeason ? seasonSchedule[today.getDay()] : offSeasonSchedule[today.getDay()]));
+
+        document.getElementById('dateDisplay').innerText = today.toLocaleDateString('tr-TR', {weekday:'long', day:'numeric'});
+        document.getElementById('progTitle').innerText = p.t;
+        document.getElementById('progSub').innerText = p.s;
+        document.getElementById('seasonBadge').innerText = settings.inSeason ? "SEZON İÇİ" : "OFF-SEASON";
+
+        const readinessMap = ["?","😫 Çok Yorgun","🥱 Düşük","😐 Orta","🙂 İyi","🔥 Çok İyi"];
+        document.getElementById('readinessBadge').innerText = "Enerji: " + (readinessMap[dd.readiness] || "?");
+
+        const mental = dd.mental || {focus:3,confidence:3};
+        document.getElementById('focusLabel').innerText = mental.focus;
+        document.getElementById('confLabel').innerText = mental.confidence;
+        const fIn = document.getElementById('focusInput');
+        const cIn = document.getElementById('confInput');
+        if(fIn) fIn.value = mental.focus;
+        if(cIn) cIn.value = mental.confidence;
+
+        const weekly = stats.weekSummary || {};
+        let recText = "Recovery: Veri az";
+        if(weekly.avgVolume || weekly.avgSleep){
+            if(weekly.avgVolume > 12000 && weekly.avgSleep < 6) recText = "Recovery: Kırmızı (Yük yüksek + uyku düşük)";
+            else if(weekly.avgVolume > 9000 || weekly.jumpDays >= 3) recText = "Recovery: Sarı (Yük yüksek, dikkat)";
+            else recText = "Recovery: Yeşil (Dengelisin)";
+        }
+        document.getElementById('recoveryBadge').innerText = recText;
+
+        const phList = document.getElementById('prehabList');
+        phList.innerHTML = "";
+        if(p.pre){
+            p.pre.forEach(item=>{
+                const meta = warmupDB[item] || {d:"Hazırlık."};
+                phList.innerHTML += `
+                <div class="prehab-item">
+                    <div>
+                        <div style="font-weight:600">${item}</div>
+                        <span class="prehab-desc">${meta.d}</span>
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(item + " exercise")}" target="_blank" class="yt-btn">▶</a>
+                </div>`;
+            });
+        }
+
+        // Pain bazlı ekstra prehab
+        if(stats.pain && stats.pain.length){
+            stats.pain.forEach(key=>{
+                (painPrehab[key] || []).forEach(extra=>{
+                    phList.innerHTML += `
+                    <div class="prehab-item">
+                        <div>
+                            <div style="font-weight:600">${extra.n}</div>
+                            <span class="prehab-desc">${extra.d}</span>
+                        </div>
+                        <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(extra.y)}" target="_blank" class="yt-btn">▶</a>
+                    </div>`;
+                });
+            });
+        }
+
+        const mentalCard = document.getElementById('mentalCard');
+        if(p.t.includes("Maç") || p.s.toLowerCase().includes("game")){
+            mentalCard.style.display = "block";
+        }else{
+            mentalCard.style.display = "none";
+        }
+
+        const list = document.getElementById('workoutList');
+        list.innerHTML = "";
+        let vol = 0;
+
+        p.i.forEach((it,i)=>{
+            const chk = dd.c.includes(i);
+            const kg = parseInt(dd.w[i] || 0);
+            const sets = parseInt(dd.s[i] || 3);
+            if(chk && kg > 0 && sets > 0) vol += kg * sets;
+
+            const name = it.n.split('(')[0].trim();
+            const isPR = kg > (stats.max[name] || 0) && kg > 0;
+            list.innerHTML += `
+            <div class="task-item ${chk?'checked':''}" id="task-${i}">
+                <div class="task-top">
+                    <div class="task-visual" onclick="toggleGuide(${i})">${visuals[it.v] || visuals.push}</div>
+                    <div class="check-group" onclick="toggle(${i},'${it.isGame?'game':''}',${p.i.length})">
+                        <div style="flex:1"><span class="task-name">${name}</span></div>
+                        <div class="circle-check"></div>
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(name + ' nasıl yapılır')}" target="_blank" class="yt-btn">▶</a>
+                </div>
+                <div class="guide-text">💡 ${it.d || "Kontrollü çalış."}</div>
+                ${it.v!=='rest' && it.v!=='pilates' && it.v!=='cardio' ? `
+                <div class="input-row">
+                    <input class="mini-input" type="number" min="0" placeholder="Set" value="${dd.s[i] || ''}" onchange="saveS(${i},this.value)">
+                    <input class="mini-input ${isPR?'pr-active':''}" type="number" min="0" placeholder="Kg" value="${dd.w[i] || ''}" onchange="saveW('${name}',${i},this.value,${dd.s[i] || 3})">
+                    <button class="tool-btn" onclick="openCalc(${kg || 0})">🧮</button>
+                    <button class="tool-btn" onclick="openHist('${name}')">📜</button>
+                </div>` : ''}
+            </div>`;
+        });
+
+        document.getElementById('totalVolume').innerText = vol + " kg";
+        document.getElementById('progPercent').innerText = "%" + (p.i.length ? Math.round((dd.c.length / p.i.length) * 100) : 0);
+
+        // Alert mantığı
+        document.getElementById('deloadAlert').style.display = "none";
+        document.getElementById('lowEnergyAlert').style.display = "none";
+        document.getElementById('highEnergyAlert').style.display = "none";
+
+        if(weekly.avgVolume && (weekly.avgVolume > 12000 || weekly.jumpDays >= 3 || (weekly.avgSleep && weekly.avgSleep < 6 && weekly.avgVolume > 8000))){
+            document.getElementById('deloadAlert').style.display = "flex";
+        }
+        if(dd.readiness && dd.readiness <= 2){
+            document.getElementById('lowEnergyAlert').style.display = "flex";
+        }else if(dd.readiness >= 4){
+            document.getElementById('highEnergyAlert').style.display = "flex";
+        }
+
+        updateTrackers(dd);
+    }
+
+    function toggle(i,s,t){
+        const k = getK(today);
+        const a = data[k].c;
+        if(a.includes(i)){
+            a.splice(a.indexOf(i),1);
+            addXP(-10);
+        }else{
+            a.push(i);
+            startTimer();
+            addXP(10);
+            updateHeatmap(i);
+            if(s === 'game') openModal('gameLogModal');
+            if(a.length === t) checkClutch();
+        }
+        save();
+        render();
+    }
+
+    function checkClutch(){
+        if(Math.random() < 0.3){
+            document.getElementById('clutchTaskDisplay').innerText = clutchTasks[Math.floor(Math.random()*clutchTasks.length)];
+            openModal('clutchModal');
+        }else{
             showWrapUp();
         }
+    }
 
-        function showWrapUp(){
-            const k = getK(today);
-            const dt = data[k];
-            let vol = 0;
-            Object.keys(dt.w || {}).forEach(idx=>{
-                const kg = parseInt(dt.w[idx] || 0);
-                const sets = parseInt(dt.s[idx] || 3);
-                if(dt.c.includes(parseInt(idx)) && kg>0) vol += kg*sets;
-            });
-            document.getElementById('wrapVol').innerText = vol;
-            document.getElementById('wrapXP').innerText = "+" + (dt.c.length*10);
-            openModal('wrapUpModal');
-            fireConfetti();
+    function completeClutch(){
+        addXP(100);
+        closeModal('clutchModal');
+        showWrapUp();
+    }
+
+    function showWrapUp(){
+        const k = getK(today);
+        const dt = data[k];
+        let vol = 0;
+        if(dt && dt.w){
+            Object.values(dt.w).forEach(v => vol += parseInt(v || 0));
         }
+        document.getElementById('wrapVol').innerText = vol;
+        document.getElementById('wrapXP').innerText = "+" + (dt.c.length * 10);
+        openModal('wrapUpModal');
+        fireConfetti();
+    }
 
-        function addJumpToToday(){
-            const k = getK(today);
-            const idx = today.getDay();
-            let cur = data[k].custom || (settings.inSeason ? seasonSchedule[idx] : offSeasonSchedule[idx]);
-
-            if(cur.i.find(x => x.n === jumpR[0].n)){
-                alert("Zaten zıplama eklendi!");
-                return;
-            }
-
-            data[k].custom = {
-                t: cur.t + " + Jump",
-                s: cur.s,
-                j: true,
-                pre: cur.pre,
-                i: [...cur.i, ...jumpR]
-            };
-            save();
-            render();
-            alert("Zıplama eklendi!");
+    function addJumpToToday(){
+        const k = getK(today);
+        const idx = today.getDay();
+        const dd = data[k];
+        let cur = dd.custom ? dd.custom : (settings.inSeason ? seasonSchedule[idx] : offSeasonSchedule[idx]);
+        if(cur.i.find(x=>x.n === jumpR[0].n)){
+            alert("Zaten zıplama eklenmiş!");
+            return;
         }
+        data[k].custom = {
+            t: cur.t + " + Jump",
+            s: cur.s,
+            j: true,
+            pre: cur.pre,
+            i: [...cur.i, ...jumpR]
+        };
+        save();
+        render();
+        alert("Zıplama eklendi!");
+    }
 
-        function saveW(n,i,v,s){
-            const k = getK(today);
-            data[k].w[i] = v;
-            if(v > (stats.max[n] || 0)){
-                stats.max[n] = v;
-                alert("REKOR! 🏆");
-            }
-            stats.history[n] = {w:v, s:s, d:k};
-            save();
-            saveStats();
-            render();
+    function saveW(n,i,v,s){
+        const k = getK(today);
+        if(!data[k].w) data[k].w = {};
+        data[k].w[i] = v;
+        const val = parseFloat(v || 0);
+        if(val > (stats.max[n] || 0)){
+            stats.max[n] = val;
+            alert("REKOR! 🏆");
         }
+        stats.history[n] = {w:val,s:s,d:k};
+        save();
+        saveStats();
+        render();
+    }
 
-        function saveS(i,v){
-            data[getK(today)].s[i] = v;
-            save();
-        }
+    function saveS(i,v){
+        const k = getK(today);
+        if(!data[k].s) data[k].s = {};
+        data[k].s[i] = v;
+        save();
+    }
 
-        function addXP(x){
-            stats.xp += x;
-            if(stats.xp < 0) stats.xp = 0;
-            saveStats();
-            renderXP();
-        }
+    function addXP(x){
+        stats.xp = Math.max(0, (stats.xp || 0) + x);
+        saveStats();
+        renderXP();
+    }
 
-        function renderXP(){
-            const lvl = Math.floor(stats.xp / 1000) + 1;
-            const within = (stats.xp % 1000) / 10;
-            document.getElementById('xpBar').style.width = within + "%";
-            document.getElementById('xpText').innerText = stats.xp + " XP";
-            document.getElementById('currentLvl').innerText = "Lvl " + lvl;
-            document.getElementById('userRank').innerText =
-                lvl < 3 ? "Rookie" :
-                lvl < 5 ? "Starter" :
-                lvl < 8 ? "All-Star" : "Franchise Player";
-        }
+    function renderXP(){
+        document.getElementById('xpBar').style.width = ((stats.xp % 1000) / 10) + "%";
+        document.getElementById('xpText').innerText = stats.xp + " XP";
+        document.getElementById('currentLvl').innerText = "Lvl " + Math.floor(stats.xp / 1000 + 1);
+    }
 
-        function updateTrackers(dd){
-            const bw = parseFloat(dd.bw || 0);
-            const targetWater = bw ? (bw * 0.04).toFixed(1) : null;
+    function updateTrackers(dd){
+        document.getElementById('waterCount').innerText = (dd.wt || 0) + " lt";
+        document.getElementById('journal').value = dd.n || "";
+        document.getElementById('journalPride').value = dd.pride || "";
+        document.getElementById('dailyWeight').value = dd.bw || "";
+        document.getElementById('steps').value = dd.steps || "";
+        document.getElementById('sleepHours').value = dd.sleepHours || "";
+        document.getElementById('sleepQuality').value = dd.sleepQuality || "";
 
-            document.getElementById('waterCount').innerText =
-                dd.wt + " lt" + (targetWater ? (" / " + targetWater + " lt") : "");
+        const cal = dd.nutri?.cal || 0;
+        const pro = dd.nutri?.pro || 0;
+        document.getElementById('calStatus').innerText = cal + " kcal";
+        document.getElementById('proStatus').innerText = pro + "g";
 
-            document.getElementById('journal').value = dd.n || "";
-            document.getElementById('dailyWeight').value = dd.bw || "";
+        const tCal = 2500;
+        const tPro = 160;
+        document.getElementById('targetCalDisplay').innerText = tCal;
+        document.getElementById('calText').innerText = `${cal} / ${tCal}`;
+        document.getElementById('proText').innerText = `${pro} / ${tPro}g`;
+        document.getElementById('calBar').style.width = Math.min((cal / tCal) * 100, 100) + "%";
+        document.getElementById('proBar').style.width = Math.min((pro / tPro) * 100, 100) + "%";
 
-            const cal = dd.nutri?.cal || 0;
-            const pro = dd.nutri?.pro || 0;
-            const tCal = 2500;
-            const tPro = 160;
-
-            document.getElementById('calStatus').innerText = cal + " kcal";
-            document.getElementById('proStatus').innerText = pro + "g";
-
-            document.getElementById('targetCalDisplay').innerText = tCal;
-            document.getElementById('targetProDisplay').innerText = tPro + "g";
-            document.getElementById('calText').innerText = `${cal} / ${tCal}`;
-            document.getElementById('proText').innerText = `${pro} / ${tPro}g`;
-            document.getElementById('calBar').style.width = Math.min((cal/tCal)*100,100) + "%";
-            document.getElementById('proBar').style.width = Math.min((pro/tPro)*100,100) + "%";
-
-            const l = document.getElementById('foodLog');
-            l.innerHTML = "";
-            if(dd.nutri?.log){
-                dd.nutri.log.forEach(f=>{
-                    l.innerHTML += `<div>• ${f.n} (${f.c}kcal, ${f.p}g)</div>`;
-                });
-            }
-
-            if((settings.inSeason ? seasonSchedule[today.getDay()] : offSeasonSchedule[today.getDay()]).j)
-                document.getElementById('nutrientTimingBox').style.display = 'block';
-            else
-                document.getElementById('nutrientTimingBox').style.display = 'none';
-
-            document.querySelectorAll('.supp-icon').forEach(el=>el.classList.remove('active'));
-            if(dd.nutri?.supps) dd.nutri.supps.forEach(s => {
-                const el = document.getElementById('supp-'+s);
-                if(el) el.classList.add('active');
-            });
-
-            document.querySelectorAll('.timing-item').forEach(el=>el.classList.remove('timing-active'));
-            if(dd.nutri?.timing) dd.nutri.timing.forEach(t => {
-                const el = document.getElementById('time-'+t);
-                if(el) el.classList.add('timing-active');
+        const l = document.getElementById('foodLog');
+        l.innerHTML = "";
+        if(dd.nutri?.log){
+            dd.nutri.log.forEach(f=>{
+                l.innerHTML += `<div>• ${f.n} (${f.c}kcal, ${f.p}g)</div>`;
             });
         }
 
-        function renderFoodList(){
-            const g = document.getElementById('foodGrid');
-            g.innerHTML = "";
-            foodDB.forEach((f,i)=>{
-                g.innerHTML += `
-                    <div class="food-item" onclick="addFood(${i})">
-                        <b>${f.n}</b>
-                        <small>${f.c} kcal / ${f.p}g</small>
-                    </div>`;
-            });
+        if((seasonSchedule[today.getDay()] || {}).j){
+            document.getElementById('nutrientTimingBox').style.display = 'block';
+        }else{
+            document.getElementById('nutrientTimingBox').style.display = 'none';
         }
 
-        function addFood(i){
-            const f = foodDB[i];
+        document.querySelectorAll('.supp-icon').forEach(el=>el.classList.remove('active'));
+        if(dd.nutri?.supps) dd.nutri.supps.forEach(s => document.getElementById('supp-'+s)?.classList.add('active'));
+
+        document.querySelectorAll('.timing-item').forEach(el=>el.classList.remove('timing-active'));
+        if(dd.nutri?.timing) dd.nutri.timing.forEach(t => document.getElementById('time-'+t)?.classList.add('timing-active'));
+    }
+
+    function renderFoodList(){
+        const g = document.getElementById('foodGrid');
+        g.innerHTML = "";
+        foodDB.forEach((f,i)=>{
+            g.innerHTML += `<div class="food-item" onclick="addFood(${i})"><b>${f.n}</b><small>${f.c}kcal / ${f.p}g</small></div>`;
+        });
+    }
+
+    function addFood(i){
+        const f = foodDB[i];
+        const k = getK(today);
+        if(!data[k].nutri) data[k].nutri = {cal:0,pro:0,log:[],supps:[],timing:[]};
+        data[k].nutri.cal += f.c;
+        data[k].nutri.pro += f.p;
+        if(!data[k].nutri.log) data[k].nutri.log = [];
+        data[k].nutri.log.push(f);
+        save();
+        render();
+    }
+
+    function addQuickMacros(){
+        const c = parseInt(document.getElementById('quickCal').value) || 0;
+        const p = parseInt(document.getElementById('quickPro').value) || 0;
+        if(c > 0 || p > 0){
             const k = getK(today);
             if(!data[k].nutri) data[k].nutri = {cal:0,pro:0,log:[],supps:[],timing:[]};
-            data[k].nutri.cal += f.c;
-            data[k].nutri.pro += f.p;
+            data[k].nutri.cal += c;
+            data[k].nutri.pro += p;
             if(!data[k].nutri.log) data[k].nutri.log = [];
-            data[k].nutri.log.push(f);
+            data[k].nutri.log.push({n:"Hızlı Ekleme",c:c,p:p});
+            document.getElementById('quickCal').value = "";
+            document.getElementById('quickPro').value = "";
             save();
             render();
         }
+    }
 
-        function addQuickMacros(){
-            const c = parseInt(document.getElementById('quickCal').value) || 0;
-            const p = parseInt(document.getElementById('quickPro').value) || 0;
-            if(c>0 || p>0){
-                const k = getK(today);
-                if(!data[k].nutri) data[k].nutri = {cal:0,pro:0,log:[],supps:[],timing:[]};
-                data[k].nutri.cal += c;
-                data[k].nutri.pro += p;
-                if(!data[k].nutri.log) data[k].nutri.log = [];
-                data[k].nutri.log.push({n:"Hızlı Ekleme", c:c, p:p});
-                document.getElementById('quickCal').value = "";
-                document.getElementById('quickPro').value = "";
-                save();
-                render();
-            }
-        }
-
-        function clearNutrition(){
-            if(confirm("Beslenme kaydı silinsin mi?")){
-                const k = getK(today);
-                const supps = data[k].nutri?.supps || [];
-                const timing = data[k].nutri?.timing || [];
-                data[k].nutri = {cal:0,pro:0,log:[],supps, timing};
-                save();
-                render();
-            }
-        }
-
-        function renderHeatmap(){
-            const c = {low:'#333', med:'#ffd60a', high:'#ff453a'};
-            const setFill = (id,val)=>{
-                const el = document.getElementById(id);
-                if(!el) return;
-                if(val>20) el.style.fill = c.high;
-                else if(val>5) el.style.fill = c.med;
-                else el.style.fill = c.low;
-            };
-            setFill('svg-chest',stats.heat.chest || 0);
-            setFill('svg-shoulders',stats.heat.shoulders || 0);
-            setFill('svg-arms',stats.heat.arms || 0);
-            setFill('svg-legs',stats.heat.legs || 0);
-            setFill('svg-core',stats.heat.core || 0);
-        }
-
-        function updateHeatmap(i){
+    function clearNutrition(){
+        if(confirm("Beslenme kaydı silinsin mi?")){
             const k = getK(today);
-            const dd = data[k];
-            const schedBase = dd.custom || (settings.inSeason ? seasonSchedule[today.getDay()] : offSeasonSchedule[today.getDay()]);
-            const it = schedBase.i[i];
-            const mKey = it.mb || (muscleDB[it.mb]?.mb) || it.v || "core";
+            const supp = data[k].nutri?.supps || [];
+            const timing = data[k].nutri?.timing || [];
+            data[k].nutri = {cal:0,pro:0,log:[],supps:supp,timing:timing};
+            save();
+            render();
+        }
+    }
 
-            if(!stats.heat[mKey]) stats.heat[mKey] = 0;
-            stats.heat[mKey] += 1;
-            saveStats();
-            renderHeatmap();
+    function renderHeatmap(){
+        const c = {low:'#333',med:'#ffd60a',high:'#ff453a'};
+        const setFill = (id,val)=>{
+            const el = document.getElementById(id);
+            if(!el) return;
+            if(val > 20) el.style.fill = c.high;
+            else if(val > 5) el.style.fill = c.med;
+            else el.style.fill = c.low;
+        };
+        setFill('svg-chest',stats.heat.chest || 0);
+        setFill('svg-shoulders',stats.heat.shoulders || 0);
+        setFill('svg-arms',stats.heat.arms || 0);
+        setFill('svg-legs',stats.heat.legs || 0);
+        setFill('svg-core',stats.heat.core || 0);
+    }
+
+    function updateHeatmap(i){
+        const k = getK(today);
+        const dd = data[k];
+        const p = dd.custom || (settings.inSeason ? seasonSchedule[today.getDay()] : offSeasonSchedule[today.getDay()]);
+        const mv = p.i[i];
+        let key = mv.mb || "core";
+        if(!stats.heat[key]) stats.heat[key] = 0;
+        stats.heat[key] += 1;
+        saveStats();
+        renderHeatmap();
+    }
+
+    function renderGameHistory(){
+        const d = document.getElementById('gameHistory');
+        const gi = document.getElementById('gameInsights');
+        d.innerHTML = "";
+        gi.innerHTML = "";
+
+        if(!stats.games || stats.games.length === 0){
+            d.innerHTML = `<div style="font-size:.8rem; color:#777;">Henüz kayıt yok.</div>`;
+            return;
         }
 
-        function renderGameHistory(){
-            const d = document.getElementById('gameHistory');
-            d.innerHTML = "";
-            if(!stats.games || stats.games.length === 0){
-                d.innerHTML = `<div style="font-size:0.8rem; color:#777;">Henüz maç kaydı yok.</div>`;
-                return;
-            }
-            stats.games.slice(-5).reverse().forEach(g=>{
-                const res = g.result === "W" ? "W" : (g.result === "L" ? "L" : "-");
-                d.innerHTML += `
-                    <div style="background:#111; padding:10px; border-radius:8px; margin-bottom:6px; border:1px solid #333; font-size:0.8rem;">
-                        ${g.date} - ${res} |
-                        ${g.pts||0}S / ${g.ast||0}A / ${g.reb||0}R / ${g.stl||0}TÇ
-                    </div>`;
-            });
-        }
+        const last = stats.games.slice(-5).reverse();
+        let sPts=0,sAst=0,sReb=0,sStl=0,w=0,l=0;
+        last.forEach(g=>{
+            sPts += g.pts || 0;
+            sAst += g.ast || 0;
+            sReb += g.reb || 0;
+            sStl += g.stl || 0;
+            if(g.res === 'W') w++; else if(g.res === 'L') l++;
+            d.innerHTML += `<div style="background:#111; padding:10px; border-radius:8px; margin-bottom:5px; border:1px solid #333; font-size:.8rem;">
+                ${g.date} - ${g.res || '-'} • ${g.pts || 0} Sayı / ${g.ast || 0} Ast / ${g.reb || 0} Rib / ${g.stl || 0} TÇ
+            </div>`;
+        });
 
-        function openModal(id){
-            document.getElementById(id).classList.add('open');
-        }
-        function closeModal(id){
-            document.getElementById(id).classList.remove('open');
-        }
+        const n = last.length;
+        const aPts = (sPts/n).toFixed(1);
+        const aAst = (sAst/n).toFixed(1);
+        const aReb = (sReb/n).toFixed(1);
+        const aStl = (sStl/n).toFixed(1);
 
-        function switchToolTab(t, ev){
-            document.querySelectorAll('.tool-content').forEach(e=>e.style.display='none');
-            document.getElementById('tool-'+t).style.display = 'block';
-            document.querySelectorAll('.n-tab').forEach(e=>e.classList.remove('active'));
-            if(ev && ev.target) ev.target.classList.add('active');
-        }
+        let role = "Dengeli oyuncu";
+        if(aPts >= 15 && aAst < 3) role = "Skorer Guard";
+        else if(aAst >= 5 && aPts < 20) role = "Oyun Kurucu (Playmaker)";
+        else if(aReb >= 8) role = "Ribaund Odaklı Forvet";
+        else if(aStl >= 2) role = "Savunma Canavarı (3&D)";
 
-        function toggleGuide(i){
-            document.getElementById(`task-${i}`).classList.toggle('show-guide');
-        }
+        gi.innerHTML = `Son ${n} maç ortalaman: ${aPts} sayı, ${aAst} asist, ${aReb} rib, ${aStl} top çalma. Skor: ${w}W / ${l}L. Profilin: <b>${role}</b>.`;
+    }
 
-        function startTimer(){
-            const el = document.getElementById('timerFloat');
-            el.classList.add('active');
-            if(timerInt) clearInterval(timerInt);
-            timerSec = 90;
+    function openModal(id){ document.getElementById(id).classList.add('open'); }
+    function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+    function switchToolTab(t, el){
+        document.querySelectorAll('.tool-content').forEach(e=>e.style.display='none');
+        document.getElementById('tool-'+t).style.display = 'block';
+        document.querySelectorAll('.n-tab').forEach(e=>e.classList.remove('active'));
+        if(el) el.classList.add('active');
+    }
+
+    function toggleGuide(i){
+        document.getElementById(`task-${i}`).classList.toggle('show-guide');
+    }
+
+    function startTimer(){
+        const el = document.getElementById('timerFloat');
+        el.classList.add('active');
+        if(timerInt) clearInterval(timerInt);
+        timerSec = 90;
+        updT();
+        timerInt = setInterval(()=>{
+            timerSec--;
             updT();
-            timerInt = setInterval(()=>{
-                timerSec--;
-                updT();
-                if(timerSec<=0){
-                    stopTimer();
-                    notify();
-                }
-            },1000);
-        }
-
-        function addTimer(sec){
-            timerSec += sec;
-            updT();
-        }
-
-        function stopTimer(){
-            clearInterval(timerInt);
-            timerInt = null;
-            document.getElementById('timerFloat').classList.remove('active');
-        }
-
-        function updT(){
-            let m = Math.floor(timerSec/60);
-            let s = timerSec%60;
-            if(m<0) m = 0;
-            if(s<0) s = 0;
-            document.getElementById('timerDisplay').innerText =
-                `0${m}:${s<10?'0'+s:s}`;
-        }
-
-        function notify(){
-            if(settings.sound && 'speechSynthesis' in window){
-                const u = new SpeechSynthesisUtterance("Süre doldu!");
-                u.lang = 'tr-TR';
-                window.speechSynthesis.speak(u);
-            } else if('vibrate' in navigator){
-                navigator.vibrate([200,100,200]);
+            if(timerSec <= 0){
+                stopTimer();
+                notify();
             }
-        }
+        },1000);
+    }
 
-        function addWater(){
-            const k = getK(today);
-            data[k].wt += 0.5;
-            save();
-            render();
-        }
+    function addTimer(sec){
+        timerSec += sec;
+        updT();
+    }
 
-        function setReadiness(v){
-            const k = getK(today);
-            data[k].readiness = v;
-            save();
-            closeModal('readinessModal');
-            render();
-        }
+    function stopTimer(){
+        if(timerInt) clearInterval(timerInt);
+        document.getElementById('timerFloat').classList.remove('active');
+    }
 
-        function togglePanic(){
-            const k = getK(today);
-            data[k].panic = !data[k].panic;
-            save();
-            render();
-        }
+    function updT(){
+        const m = Math.floor(timerSec/60);
+        const s = timerSec % 60;
+        document.getElementById('timerDisplay').innerText = `0${m}:${s<10?'0'+s:s}`;
+    }
 
-        function changeDate(d){
-            today.setDate(today.getDate()+d);
-            init();
+    function notify(){
+        if(settings.sound && 'speechSynthesis' in window){
+            const u = new SpeechSynthesisUtterance("Süre doldu!");
+            u.lang = 'tr-TR';
+            window.speechSynthesis.speak(u);
+        }else if('vibrate' in navigator){
+            navigator.vibrate([200,100,200]);
         }
+    }
 
-        function toggleSupp(s){
-            const k = getK(today);
-            if(!data[k].nutri) data[k].nutri = {cal:0,pro:0,log:[],supps:[],timing:[]};
-            if(!data[k].nutri.supps) data[k].nutri.supps = [];
-            if(data[k].nutri.supps.includes(s))
-                data[k].nutri.supps = data[k].nutri.supps.filter(x=>x!==s);
-            else
-                data[k].nutri.supps.push(s);
-            save();
-            render();
-        }
+    function addWater(){
+        const k = getK(today);
+        if(!data[k].wt) data[k].wt = 0;
+        data[k].wt += 0.5;
+        save();
+        render();
+    }
 
-        function toggleTiming(t){
-            const k = getK(today);
-            if(!data[k].nutri) data[k].nutri = {cal:0,pro:0,log:[],supps:[],timing:[]};
-            if(!data[k].nutri.timing) data[k].nutri.timing = [];
-            if(data[k].nutri.timing.includes(t))
-                data[k].nutri.timing = data[k].nutri.timing.filter(x=>x!==t);
-            else
-                data[k].nutri.timing.push(t);
-            save();
-            render();
-        }
+    function setReadiness(v){
+        const k = getK(today);
+        const dd = data[k];
+        dd.readiness = v;
+        const f = parseInt(document.getElementById('focusInput').value) || 3;
+        const c = parseInt(document.getElementById('confInput').value) || 3;
+        dd.mental = {focus:f,confidence:c};
+        save();
+        closeModal('readinessModal');
+        render();
+    }
 
-        function calc1RM(){
-            const w = parseFloat(document.getElementById('rmWeight').value);
-            const r = parseFloat(document.getElementById('rmReps').value);
-            if(w && r) document.getElementById('rmResult').innerText =
-                Math.round(w*(1 + r/30)) + " kg";
-        }
+    function updateFocusLabel(v){
+        document.getElementById('focusLabel').innerText = v;
+    }
 
-        function openCalc(kg){
-            document.getElementById('plateTarget').value = kg || "";
-            calcPlates();
-            openModal('plateModal');
-        }
+    function updateConfLabel(v){
+        document.getElementById('confLabel').innerText = v;
+    }
 
-        function calcPlates(){
-            const t = parseFloat(document.getElementById('plateTarget').value);
-            const vis = document.getElementById('plateVisual');
-            const res = document.getElementById('plateResult');
-            vis.innerHTML = '';
-            res.innerText = '';
-            if(!t || t <= 20) return;
-            let w = (t-20)/2;
-            res.innerText = "Her tarafa " + w.toFixed(1) + " kg plaka";
-            [25,20,15,10,5,2.5,1.25].forEach(p=>{
-                while(w >= p - 0.001){
-                    w -= p;
-                    const color = p>=25?'#ff3b30':(p>=20?'#0a84ff':(p>=10?'#32d74b':'#ffd60a'));
-                    vis.innerHTML += `<div class="plate" style="width:${26+p}px; background:${color}">${p}</div>`;
-                }
-            });
-        }
+    function togglePanic(){
+        const k = getK(today);
+        data[k].panic = !data[k].panic;
+        save();
+        render();
+    }
 
-        function openHist(n){
-            const h = stats.history[n];
-            const max = stats.max[n] || 0;
-            document.getElementById('histTitle').innerText = n + " Geçmişi";
-            document.getElementById('histList').innerHTML =
-                (max>0 ? `<div style="color:var(--gold); font-weight:bold; margin-bottom:8px;">🏆 PR: ${max} kg</div>` : "") +
-                (h ? `<div>Son: ${h.w}kg x ${h.s} (${h.d})</div>` : "Henüz veri yok.");
-            openModal('historyModal');
-        }
+    function changeDate(d){
+        today.setDate(today.getDate() + d);
+        init();
+    }
 
-        const menuProfiles = [
-            {
-                name:"Bakım (Maintenance)",
-                desc:"Dengeli bir gün, ne çok aç ne çok şiş.",
-                meals:[
-                    {label:"Kahvaltı", items:["Yulaf (50g)","Yumurta (1 Adet)","Muz (Orta)"]},
-                    {label:"Öğle", items:["Tavuk Göğsü (150g)","Pilav (1 Kase)","Yoğurt (1 Kase)"]},
-                    {label:"Akşam", items:["Mercimek (1 Tabak)","Tam Buğday Ekmek (1 Dilim)"]},
-                    {label:"Ara Öğün", items:["Badem/Ceviz (1 Avuç)","Elma"]}
-                ]
-            },
-            {
-                name:"Hacim (Lean Bulk)",
-                desc:"Antrenman yoğun günler için hafif artı kalori.",
-                meals:[
-                    {label:"Kahvaltı", items:["Yulaf (50g)","Lor Peyniri (100g)","Muz (Orta)"]},
-                    {label:"Öğle", items:["Izgara Köfte (150g)","Makarna (1 Tabak)"]},
-                    {label:"Akşam", items:["Tavuk Göğsü (150g)","Pilav (1 Kase)","Salata"]},
-                    {label:"Ara Öğün", items:["Protein Bar","Fıstık Ezmesi (1 tk) + Pirinç Patlağı"]}
-                ]
-            },
-            {
-                name:"Yağ Yakım (Cut)",
-                desc:"Protein yüksek, karbonhidrat kontrollü.",
-                meals:[
-                    {label:"Kahvaltı", items:["Yumurta (2 Adet)","Lor Peyniri (100g)","Elma"]},
-                    {label:"Öğle", items:["Ton Balığı (100g)","Salata","Pirinç Patlağı (1 ad)"]},
-                    {label:"Akşam", items:["Hindi Füme (2 Dilim)","Mercimek (1 Tabak)"]},
-                    {label:"Ara Öğün", items:["Yoğurt (1 Kase)","Badem/Ceviz (Yarım Avuç)"]}
-                ]
+    function toggleSupp(s){
+        const k = getK(today);
+        if(!data[k].nutri) data[k].nutri = {cal:0,pro:0,log:[],supps:[],timing:[]};
+        if(!data[k].nutri.supps) data[k].nutri.supps = [];
+        if(data[k].nutri.supps.includes(s)) data[k].nutri.supps = data[k].nutri.supps.filter(x=>x!==s);
+        else data[k].nutri.supps.push(s);
+        save();
+        render();
+    }
+
+    function toggleTiming(t){
+        const k = getK(today);
+        if(!data[k].nutri) data[k].nutri = {cal:0,pro:0,log:[],supps:[],timing:[]};
+        if(!data[k].nutri.timing) data[k].nutri.timing = [];
+        if(data[k].nutri.timing.includes(t)) data[k].nutri.timing = data[k].nutri.timing.filter(x=>x!==t);
+        else data[k].nutri.timing.push(t);
+        save();
+        render();
+    }
+
+    function calc1RM(){
+        const w = parseFloat(document.getElementById('rmWeight').value);
+        const r = parseFloat(document.getElementById('rmReps').value);
+        if(w && r) document.getElementById('rmResult').innerText = Math.round(w * (1 + r/30)) + " kg";
+    }
+
+    function openCalc(kg){
+        document.getElementById('plateTarget').value = kg || "";
+        calcPlates();
+        openModal('plateModal');
+    }
+
+    function calcPlates(){
+        const t = parseFloat(document.getElementById('plateTarget').value);
+        const vis = document.getElementById('plateVisual');
+        vis.innerHTML = '';
+        if(!t || t <= 20) return;
+        let w = (t - 20) / 2;
+        [25,20,15,10,5,2.5,1.25].forEach(p=>{
+            while(w >= p){
+                w -= p;
+                const color = p>=25 ? '#ff3b30' : (p>=20 ? '#0a84ff' : (p>=10 ? '#32d74b' : '#ffd60a'));
+                vis.innerHTML += `<div class="plate" style="width:${28+p}px; background:${color}">${p}</div>`;
             }
-        ];
+        });
+    }
 
-        function generateMenu(){
-            const m = menuProfiles[Math.floor(Math.random()*menuProfiles.length)];
-            let html = `<div style="background:#111; padding:15px; margin-top:10px; border-radius:12px; border:1px solid #333;">`;
-            html += `<div style="font-weight:bold; margin-bottom:4px;">${m.name}</div>`;
-            html += `<div style="font-size:0.8rem; color:#aaa; margin-bottom:8px;">${m.desc}</div>`;
-            m.meals.forEach(meal=>{
-                html += `<div style="margin-bottom:6px;"><b>${meal.label}:</b> ${meal.items.join(", ")}</div>`;
-            });
-            html += `</div>`;
-            document.getElementById('menuResult').innerHTML = html;
+    function openHist(n){
+        const h = stats.history[n];
+        const max = stats.max[n] || 0;
+        document.getElementById('histTitle').innerText = n + " Geçmişi";
+        document.getElementById('histList').innerHTML =
+            (max>0 ? `<div style="color:var(--gold); font-weight:bold; margin-bottom:10px;">🏆 PR: ${max} kg</div>` : "") +
+            (h ? `<div>Son: ${h.w}kg x ${h.s} (${h.d})</div>` : "Henüz veri yok.");
+        openModal('historyModal');
+    }
+
+    function generateMenu(){
+        const r = a => a[Math.floor(Math.random()*a.length)];
+        const kah = r(foodDB.filter(f=>f.n.includes('Yumurta') || f.n.includes('Yulaf')));
+        const oglen = r(foodDB.filter(f=>f.n.includes('Tavuk') || f.n.includes('Ton') || f.n.includes('Hindi')));
+        const aksam = r(foodDB.filter(f=>f.n.includes('Pilav') || f.n.includes('Makarna') || f.n.includes('Köfte') || f.n.includes('Mercimek')));
+        const ara = r(foodDB.filter(f=>f.n.includes('Badem') || f.n.includes('Protein Bar') || f.n.includes('Yoğurt')));
+        document.getElementById('menuResult').innerHTML = `
+            <div style="background:#222; padding:15px; margin-top:15px; border-radius:12px;">
+                <b>Kahvaltı:</b> ${kah.n}<br>
+                <b>Ara Öğün:</b> ${ara.n}<br>
+                <b>Öğle:</b> ${oglen.n}<br>
+                <b>Akşam:</b> ${aksam.n}
+            </div>`;
+    }
+
+    function togglePain(p){
+        if(!stats.pain) stats.pain = [];
+        if(stats.pain.includes(p)) stats.pain = stats.pain.filter(x=>x!==p);
+        else stats.pain.push(p);
+        saveStats();
+        renderPainMap();
+        render();
+    }
+
+    function renderPainMap(){
+        document.querySelectorAll('.pain-part').forEach(el=>el.classList.remove('active'));
+        if(stats.pain) stats.pain.forEach(p=>{
+            const el = document.querySelector(`.pain-part[onclick="togglePain('${p}')"]`);
+            if(el) el.classList.add('active');
+        });
+
+        const pa = document.getElementById('painAdvice');
+        if(!stats.pain || stats.pain.length === 0){
+            pa.innerHTML = "";
+            return;
         }
 
-        function togglePain(p){
-            if(!stats.pain) stats.pain = [];
-            if(stats.pain.includes(p))
-                stats.pain = stats.pain.filter(x=>x!==p);
-            else
-                stats.pain.push(p);
+        let txt = "Seçili bölgelerde hassasiyet var. Bugün bu bölgeler için yükü akıllıca yönet.";
+        if(stats.pain.includes('diz')) txt += "<br>- Diz için zıplama ve derin squat hacmini azalt, prehab setlerini aksatma.";
+        if(stats.pain.includes('bel')) txt += "<br>- Bel için çekiş ve squatlarda formu mükemmel tut, core stabilitesine öncelik ver.";
+        if(stats.pain.includes('omuz')) txt += "<br>- Omuz için overhead yükleri hafiflet, rotator cuff ısınmalarını artır.";
+        txt += "<br><br><i>Ağrı birkaç günden uzun sürerse veya şiddetlenirse mutlaka doktora / fizyoterapiste görün.</i>";
+
+        pa.innerHTML = txt;
+    }
+
+    function toggleSeason(){
+        settings.inSeason = document.getElementById('seasonToggle').checked;
+        localStorage.setItem('primeSettingsV21', JSON.stringify(settings));
+        render();
+    }
+
+    function toggleSound(){
+        settings.sound = document.getElementById('soundToggle').checked;
+        localStorage.setItem('primeSettingsV21', JSON.stringify(settings));
+    }
+
+    function resetApp(){
+        if(confirm("Tüm veriler silinsin mi?")){
+            localStorage.clear();
+            location.reload();
+        }
+    }
+
+    function startBreathing(){
+        const el = document.getElementById('breathCircle');
+        const txt = document.getElementById('breathText');
+        let phase = 0;
+        if(breathInt) clearInterval(breathInt);
+
+        const cycle = ()=>{
+            if(phase === 0){
+                el.innerText = "AL";
+                txt.innerText = "4 sn boyunca nefes al";
+                el.style.transform = "scale(1.5)";
+            }else if(phase === 1){
+                el.innerText = "TUT";
+                txt.innerText = "4 sn tut";
+            }else if(phase === 2){
+                el.innerText = "VER";
+                txt.innerText = "4 sn boyunca nefes ver";
+                el.style.transform = "scale(1)";
+            }else if(phase === 3){
+                el.innerText = "TUT";
+                txt.innerText = "4 sn tut";
+            }
+            phase = (phase+1) % 4;
+        };
+        cycle();
+        breathInt = setInterval(cycle,4000);
+    }
+
+    function closeZone(){
+        if(breathInt) clearInterval(breathInt);
+        closeModal('zoneModal');
+    }
+
+    function saveGameLog(){
+        const p = parseInt(document.getElementById('gamePoints').value) || 0;
+        const a = parseInt(document.getElementById('gameAssists').value) || 0;
+        const r = parseInt(document.getElementById('gameRebounds').value) || 0;
+        const s = parseInt(document.getElementById('gameSteals').value) || 0;
+        const res = document.getElementById('gameResult').value || "W";
+        const notes = document.getElementById('gameNotes').value || "";
+        if(p || a || r || s || notes){
+            stats.games.push({date:getK(today), pts:p, ast:a, reb:r, stl:s, res:res, notes:notes});
             saveStats();
-            renderPainMap();
+            closeModal('gameLogModal');
+            renderGameHistory();
         }
+    }
 
-        function renderPainMap(){
-            document.querySelectorAll('.pain-part').forEach(el=>el.classList.remove('active'));
-            if(stats.pain) stats.pain.forEach(p=>{
-                const el = document.querySelector(`.pain-part[onclick="togglePain('${p}')"]`);
-                if(el) el.classList.add('active');
+    function fireConfetti(){
+        const c = document.getElementById('confetti');
+        const x = c.getContext('2d');
+        c.width = window.innerWidth;
+        c.height = window.innerHeight;
+        let p = [];
+        for(let i=0;i<60;i++) p.push({x:Math.random()*c.width,y:-10,v:Math.random()*5+2,c:'hsl('+Math.random()*360+',100%,50%)'});
+        function l(){
+            x.clearRect(0,0,c.width,c.height);
+            let alive = false;
+            p.forEach(o=>{
+                o.y += o.v;
+                if(o.y < c.height){
+                    alive = true;
+                    x.fillStyle = o.c;
+                    x.fillRect(o.x,o.y,5,5);
+                }
             });
+            if(alive) requestAnimationFrame(l);
         }
+        l();
+    }
 
-        function toggleSeason(){
-            settings.inSeason = document.getElementById('seasonToggle').checked;
-            localStorage.setItem('primeSettingsV21', JSON.stringify(settings));
-            render();
+    function exportData(){
+        const d = {data:data, stats:stats, settings:settings};
+        const b = new Blob([JSON.stringify(d)], {type:'application/json'});
+        const u = URL.createObjectURL(b);
+        const a = document.createElement('a');
+        a.href = u;
+        a.download = 'prime_backup.json';
+        a.click();
+    }
+
+    function importData(input){
+        const f = input.files[0];
+        const r = new FileReader();
+        r.onload = (e)=>{
+            const d = JSON.parse(e.target.result);
+            localStorage.setItem('primeDataV21', JSON.stringify(d.data || {}));
+            localStorage.setItem('primeStatsV21', JSON.stringify(d.stats || {}));
+            localStorage.setItem('primeSettingsV21', JSON.stringify(d.settings || {}));
+            location.reload();
+        };
+        r.readAsText(f);
+    }
+
+    function updateChallengeUI(){
+        if(!stats.challenge) stats.challenge = {target:1000,current:0,title:"1000 Şınav"};
+        const ch = stats.challenge;
+        const short = document.getElementById('challengeShort');
+        const title = document.getElementById('challengeTitle');
+        const disp = document.getElementById('challengeDisplay');
+        const bar = document.getElementById('challengeBarFill');
+        if(short) short.innerText = `${ch.current}/${ch.target}`;
+        if(title) title.innerText = ch.title;
+        if(disp) disp.innerText = `${ch.current} / ${ch.target}`;
+        if(bar) bar.style.width = Math.min(ch.current/ch.target*100,100) + "%";
+    }
+
+    function addChallenge(amount){
+        if(!stats.challenge) stats.challenge = {target:1000,current:0,title:"1000 Şınav"};
+        stats.challenge.current = (stats.challenge.current || 0) + amount;
+        saveStats();
+        updateChallengeUI();
+    }
+
+    function setChallenge(){
+        const current = stats.challenge || {target:1000,title:"Özel Hedef"};
+        const newTarget = prompt("Yeni hedef (adet):", current.target);
+        if(!newTarget) return;
+        const newTitle = prompt("Başlık:", current.title);
+        stats.challenge = {target:parseInt(newTarget)||current.target||1000, current:0, title:newTitle || current.title || "Özel Hedef"};
+        saveStats();
+        updateChallengeUI();
+    }
+
+    function completeMentalRoutine(){
+        const k = getK(today);
+        const dd = data[k];
+        if(dd.mentalDone){
+            alert("Bugünün mental rutini zaten işaretli.");
+            return;
         }
+        dd.mentalDone = true;
+        addXP(20);
+        save();
+        alert("Mental rutin tamamlandı. +20 XP");
+    }
 
-        function toggleSound(){
-            settings.sound = document.getElementById('soundToggle').checked;
-            localStorage.setItem('primeSettingsV21', JSON.stringify(settings));
+    function spinFinisher(){
+        const type = document.querySelector('input[name="fType"]:checked')?.value || 'gym';
+        const list = finishers[type] || finishers.gym;
+        const item = list[Math.floor(Math.random()*list.length)];
+        const res = document.getElementById('finisherResult');
+        res.style.display = 'block';
+        res.innerHTML = `
+            <div style="font-size:1rem; font-weight:700; margin-bottom:6px;">${item.n}</div>
+            <div style="font-size:.8rem; color:#ccc; margin-bottom:8px;">${item.d}</div>
+            <a class="yt-btn" target="_blank" href="https://www.youtube.com/results?search_query=${encodeURIComponent(item.y)}">▶ YouTube</a>
+        `;
+    }
+
+    function updateSec(){
+        const main = document.getElementById('mainMuscle').value;
+        const sub = document.getElementById('subMuscle');
+        sub.innerHTML = "<option>2. Bölge</option>";
+        sub.disabled = true;
+        if(!main || !compat[main]) return;
+        compat[main].forEach(k=>{
+            sub.innerHTML += `<option value="${k}">${muscleDB[k].t}</option>`;
+        });
+        sub.disabled = false;
+    }
+
+    function buildProg(){
+        const main = document.getElementById('mainMuscle').value;
+        const sub = document.getElementById('subMuscle').value;
+        const addJ = document.getElementById('addJump').checked;
+        const k = getK(today);
+        if(!main){
+            alert("Önce 1. bölgeyi seç.");
+            return;
         }
+        let i = [...(muscleDB[main]?.i || [])];
+        let pre = ["Dinamik Isınma"];
+        if(sub && muscleDB[sub]) i = i.concat(muscleDB[sub].i);
+        if(addJ) i = i.concat(jumpR);
+        data[k].custom = {t:muscleDB[main].t + (sub ? " + " + muscleDB[sub].t : ""), s:"Kişisel", j:addJ, pre:pre, i:i};
+        save();
+        closeModal('builderModal');
+        render();
+    }
 
-        function toggleCompact(){
-            settings.compact = document.getElementById('compactToggle').checked;
-            localStorage.setItem('primeSettingsV21', JSON.stringify(settings));
-            document.body.classList.toggle('compact', settings.compact);
-        }
-
-        function changeTheme(val){
-            settings.theme = val;
-            localStorage.setItem('primeSettingsV21', JSON.stringify(settings));
-            applyTheme(val);
-        }
-
-        function resetApp(){
-            if(confirm("Tüm veriler silinsin ve uygulama sıfırlansın mı?")){
-                localStorage.clear();
-                location.reload();
-            }
-        }
-
-        function startBreathing(){
-            const el = document.getElementById('breathCircle');
-            const txt = document.getElementById('breathText');
-            let phase = 0;
-
-            if(breathInterval) clearInterval(breathInterval);
-
-            const cycle = () => {
-                if(phase===0){ el.innerText="AL"; el.style.transform="scale(1.4)"; txt.innerText="Burnundan derin nefes al"; }
-                else if(phase===1){ el.innerText="TUT"; txt.innerText="Nefesi tut, göğüs kafesini hissset"; }
-                else if(phase===2){ el.innerText="VER"; el.style.transform="scale(1.0)"; txt.innerText="Yavaşça nefes ver"; }
-                else if(phase===3){ el.innerText="TUT"; txt.innerText="Boşta bekle, sakin kal"; }
-                phase = (phase+1)%4;
-            };
-
-            cycle();
-            breathInterval = setInterval(cycle, 4000);
-        }
-
-        function closeZone(){
-            if(breathInterval) clearInterval(breathInterval);
-            closeModal('zoneModal');
-        }
-
-        function saveGameLog(){
-            const p = parseInt(document.getElementById('gamePoints').value) || 0;
-            const a = parseInt(document.getElementById('gameAssists').value) || 0;
-            const r = parseInt(document.getElementById('gameRebounds').value) || 0;
-            const s = parseInt(document.getElementById('gameSteals').value) || 0;
-            const res = document.getElementById('gameResult').value || "";
-            const notes = document.getElementById('gameNotes').value || "";
-            if(p || a || r || s || notes){
-                stats.games.push({
-                    date:getK(today),
-                    pts:p, ast:a, reb:r, stl:s, result:res, note:notes
-                });
-                saveStats();
-                closeModal('gameLogModal');
-                renderGameHistory();
-            }
-        }
-
-        function fireConfetti(){
-            const c = document.getElementById('confetti');
-            const x = c.getContext('2d');
-            c.width = window.innerWidth;
-            c.height = window.innerHeight;
-            let p = [];
-            for(let i=0;i<70;i++){
-                p.push({
-                    x:Math.random()*c.width,
-                    y:-10,
-                    v:Math.random()*5+2,
-                    c:'hsl('+Math.random()*360+',100%,50%)'
-                });
-            }
-            function l(){
-                x.clearRect(0,0,c.width,c.height);
-                let alive = false;
-                p.forEach(o=>{
-                    o.y += o.v;
-                    if(o.y < c.height){
-                        alive = true;
-                        x.fillStyle = o.c;
-                        x.fillRect(o.x,o.y,5,5);
-                    }
-                });
-                if(alive) requestAnimationFrame(l);
-            }
-            l();
-        }
-
-        function exportData(){
-            const d = {data, stats, settings};
-            const b = new Blob([JSON.stringify(d)], {type:'application/json'});
-            const u = URL.createObjectURL(b);
-            const a = document.createElement('a');
-            a.href = u;
-            a.download = 'prime_backup.json';
-            a.click();
-        }
-
-        function importData(input){
-            const f = input.files[0];
-            if(!f) return;
-            const r = new FileReader();
-            r.onload = (e)=>{
-                const d = JSON.parse(e.target.result);
-                localStorage.setItem('primeDataV21', JSON.stringify(d.data || {}));
-                localStorage.setItem('primeStatsV21', JSON.stringify(d.stats || {}));
-                localStorage.setItem('primeSettingsV21', JSON.stringify(d.settings || {}));
-                location.reload();
-            };
-            r.readAsText(f);
-        }
-
-        function updateChallengeUI(){
-            const ch = stats.challenge || {target:1000,current:0,title:"1000 Şınav"};
-            const pct = ch.target ? Math.min((ch.current/ch.target)*100,100) : 0;
-            document.getElementById('challengeShort').innerText = `${ch.current}/${ch.target}`;
-            document.getElementById('challengeTitle').innerText = ch.title;
-            document.getElementById('challengeDisplay').innerText = `${ch.current} / ${ch.target}`;
-            document.getElementById('challengeBarFill').style.width = pct + "%";
-        }
-
-        function addChallenge(x){
-            if(!stats.challenge) stats.challenge = {target:1000,current:0,title:"1000 Şınav"};
-            stats.challenge.current += x;
-            saveStats();
-            updateChallengeUI();
-        }
-
-        function setChallenge(){
-            const t = prompt("Yeni hedef (ör: 1000):", stats.challenge?.target || 1000);
-            const title = prompt("Başlık (ör: 1000 Şınav):", stats.challenge?.title || "1000 Şınav");
-            if(t){
-                stats.challenge = {target:parseInt(t)||1000, current:0, title:title || "Meydan Okuma"};
-                saveStats();
-                updateChallengeUI();
-            }
-        }
-
-        function updateFatigue(){
-            const todayKey = getK(today);
-            const dd = data[todayKey];
-            // Energy alerts
-            document.getElementById('lowEnergyAlert').style.display =
-                dd.readiness && dd.readiness<=2 ? 'flex':'none';
-            document.getElementById('highEnergyAlert').style.display =
-                dd.readiness===5 ? 'flex':'none';
-
-            // Weekly load
-            let weeklyLoad = 0;
-            for(let i=0;i<7;i++){
-                const d = new Date(today);
-                d.setDate(today.getDate()-i);
-                const k = getK(d);
-                const day = data[k];
-                if(!day) continue;
-                const schedBase = day.custom || (settings.inSeason ? seasonSchedule[d.getDay()] : offSeasonSchedule[d.getDay()]);
-                schedBase.i.forEach((it,idx)=>{
-                    const kg = parseInt(day.w[idx] || 0);
-                    const sets = parseInt(day.s[idx] || 3);
-                    if(day.c.includes(idx) && kg>0) weeklyLoad += kg*sets;
-                });
-            }
-            document.getElementById('weeklyLoadText').innerText = `7g: ${weeklyLoad} kg`;
-            document.getElementById('deloadAlert').style.display = weeklyLoad > 40000 ? 'flex':'none';
-
-            // Chicken leg alert: çok göğüs-sırt, az bacak
-            const legWork = stats.heat.legs || 0;
-            const upper = (stats.heat.chest||0) + (stats.heat.back||0) + (stats.heat.shoulders||0);
-            document.getElementById('legAlert').style.display =
-                (upper > legWork*2 && upper>10) ? 'flex':'none';
-        }
-
-        function spinFinisher(){
-            const type = document.querySelector('input[name="fType"]:checked').value;
-            const list = finisherDB[type] || finisherDB.gym;
-            const f = list[Math.floor(Math.random()*list.length)];
-            const res = document.getElementById('finisherResult');
-            res.innerHTML = `
-                <div>${f.t}</div>
-                <div style="font-size:0.85rem; color:#aaa; margin-top:6px;">${f.d}</div>
-                <a class="yt-btn" style="margin:10px auto 0; justify-content:center; max-width:220px; display:flex;" href="https://www.youtube.com/results?search_query=${encodeURIComponent(f.q)}" target="_blank">▶ YouTube</a>
-            `;
-            res.style.display = 'block';
-        }
-
-        function updateSec(){
-            const main = document.getElementById('mainMuscle').value;
-            const sub = document.getElementById('subMuscle');
-            sub.innerHTML = "<option>2. Bölge</option>";
-            if(!main){
-                sub.disabled = true;
-                return;
-            }
-            const opts = compat[main] || [];
-            opts.forEach(m=>{
-                const o = document.createElement('option');
-                o.value = m;
-                o.innerText =
-                    m==="back"?"Sırt":
-                    m==="chest"?"Göğüs":
-                    m==="legs"?"Bacak":
-                    m==="shoulders"?"Omuz":
-                    m==="arms"?"Kol":"Karın";
-                sub.appendChild(o);
-            });
-            sub.disabled = false;
-        }
-
-        function buildProg(){
-            const main = document.getElementById('mainMuscle').value;
-            const sub = document.getElementById('subMuscle').value;
-            const addJump = document.getElementById('addJump').checked;
-            if(!main){
-                alert("Önce 1. bölgeyi seç.");
-                return;
-            }
-            const k = getK(today);
-            const base = muscleDB[main];
-            let items = [...base.i];
-            if(sub && muscleDB[sub]) items = [...items, ...muscleDB[sub].i];
-            if(addJump) items = [...items, ...jumpR];
-            data[k].custom = {
-                t: base.t + (sub && muscleDB[sub] ? " + " + muscleDB[sub].t : ""),
-                s: base.t,
-                j: addJump,
-                pre: ["Dinamik Isınma","Kalça Akt."],
-                i: items
-            };
-            save();
-            closeModal('builderModal');
-            render();
-        }
-
-        function saveData(){
-            const k = getK(today);
-            if(!data[k]) data[k] = {c:[],s:{},w:{},rpe:{},n:"",wt:0,bw:"",nutri:{cal:0,pro:0,log:[],supps:[],timing:[]}, panic:false, readiness:0};
-            data[k].n = document.getElementById('journal').value;
-            data[k].bw = document.getElementById('dailyWeight').value;
-            save();
-            render();
-        }
-
-        window.onload = init;
-    </script>
+    window.onload = init;
+</script>
 </body>
 </html>
