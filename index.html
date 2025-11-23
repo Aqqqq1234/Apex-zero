@@ -6,45 +6,53 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#000000">
-    <title>PRIME v22 Fixed</title>
+    <title>PRIME v22.1 Stable</title>
 
     <style>
         /* --- CORE DESIGN --- */
         :root {
-            --bg: #000000; --card: #161618; --text: #ffffff; --muted: #8e8e93;
+            --bg: #000000; 
+            --card: #161618; 
+            --text: #ffffff; 
+            --muted: #8e8e93;
             --accent: #32d74b; /* Green */
-            --blue: #0a84ff; --danger: #ff453a; --warn: #ff9f0a; --purple: #bf5af2; --gold: #ffd60a;
-            --glass: rgba(22, 22, 24, 0.95); --radius: 18px;
+            --blue: #0a84ff; 
+            --danger: #ff453a; 
+            --warn: #ff9f0a; 
+            --purple: #bf5af2; 
+            --gold: #ffd60a;
+            --glass: rgba(22, 22, 24, 0.95); 
+            --radius: 18px;
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; }
-        body { margin: 0; background: var(--bg); color: var(--text); padding-top: env(safe-area-inset-top); padding-bottom: 120px; }
+        body { margin: 0; background: var(--bg); color: var(--text); padding-top: env(safe-area-inset-top); padding-bottom: 120px; user-select: none; }
 
-        /* FIXED LAYERING (Z-INDEX) */
-        #confetti { position: fixed; top:0; left:0; pointer-events:none; z-index: 0; }
+        /* --- LAYERING (Z-INDEX FIX) --- */
+        #confetti { position: fixed; top:0; left:0; pointer-events:none; z-index: 0; } 
         header { position: sticky; top: 0; z-index: 100; background: var(--glass); backdrop-filter: blur(20px); border-bottom: 1px solid #333; padding: 10px 20px; }
         .container { position: relative; z-index: 10; padding: 0 16px; max-width: 600px; margin: 0 auto; }
-        .card { background: var(--card); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; position: relative; border: 1px solid #2c2c2e; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 10; }
         .bottom-bar { position: fixed; bottom: 0; width: 100%; background: var(--glass); backdrop-filter: blur(20px); border-top: 0.5px solid #333; display: flex; justify-content: space-around; padding: 12px; padding-bottom: calc(15px + env(safe-area-inset-bottom)); z-index: 200; }
-
-        /* HEADER CONTENT */
+        
+        /* HEADER */
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .app-title { font-size: 1.4rem; font-weight: 900; font-style: italic; letter-spacing: -1px; }
         .xp-container { width: 100%; height: 6px; background: #333; border-radius: 3px; overflow: hidden; }
         .xp-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--blue)); width: 0%; transition: width 0.5s ease; }
         .level-badge { font-size: 0.7rem; color: var(--blue); font-weight: bold; display: flex; justify-content: space-between; margin-top: 4px; }
-        .icon-btn { background: none; border: none; color: var(--text); font-size: 1.2rem; cursor: pointer; opacity: 0.8; user-select:none; }
+        .icon-btn { background: none; border: none; color: var(--text); font-size: 1.2rem; cursor: pointer; opacity: 0.8; position: relative; z-index: 101;}
         .challenge-badge { background: linear-gradient(90deg, #ff9f0a, #ff3b30); color: #fff; padding: 4px 10px; border-radius: 12px; font-size: 0.7rem; font-weight:bold; display: flex; align-items: center; gap: 5px; box-shadow: 0 0 10px rgba(255, 159, 10, 0.3); cursor: pointer; }
 
         /* ALERTS */
         .alert-box { padding: 15px; border-radius: 12px; margin: 15px 16px; font-size: 0.9rem; display: flex; align-items: center; gap: 15px; animation: fadeIn 0.5s; border: 1px solid transparent; position: relative; z-index: 15; }
-        .alert-low { background: rgba(10, 132, 255, 0.15); border-color: var(--blue); color: var(--blue); display:none; }
-        .alert-high { background: rgba(255, 214, 10, 0.15); border-color: var(--gold); color: var(--gold); display:none; }
-        .alert-deload { background: rgba(255, 69, 58, 0.15); border-color: var(--danger); color: var(--danger); display:none; }
+        .alert-low { background: rgba(10, 132, 255, 0.15); border-color: var(--blue); color: var(--blue); }
+        .alert-high { background: rgba(255, 214, 10, 0.15); border-color: var(--gold); color: var(--gold); }
+        .alert-deload { background: rgba(255, 69, 58, 0.15); border-color: var(--danger); color: var(--danger); }
         .alert-imbalance { background: rgba(255, 159, 10, 0.15); border-color: var(--warn); color: var(--warn); display:none; }
 
-        /* BOXES */
+        /* CARDS & BOXES */
+        .card { background: var(--card); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; position: relative; border: 1px solid #2c2c2e; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .box-header { font-weight: bold; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 8px; display:flex; align-items:center; gap:8px; }
-        .prehab-box { background: rgba(10, 132, 255, 0.1); border: 1px solid rgba(10, 132, 255, 0.3); padding: 15px; margin-bottom: 15px; border-radius: 12px; position: relative; z-index: 10; }
+        .prehab-box { background: rgba(10, 132, 255, 0.1); border: 1px solid rgba(10, 132, 255, 0.3); padding: 15px; margin-bottom: 15px; border-radius: 12px; }
         .prehab-item { display:flex; justify-content:space-between; align-items:center; padding: 8px 0; border-bottom:1px solid rgba(10,132,255,0.2); font-size:0.9rem; }
         .prehab-item:last-child { border-bottom:none; }
         .prehab-desc { font-size:0.75rem; color: #aaa; display:block; margin-top:2px; }
@@ -52,23 +60,22 @@
         /* TASK ITEMS */
         .task-item { padding: 16px 0; border-bottom: 1px solid #2a2a2a; position: relative; }
         .task-top { display: flex; align-items: center; gap: 12px; }
-        .task-visual { width: 50px; height: 50px; background: #252527; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid #333; cursor: pointer; user-select:none; }
+        .task-visual { width: 50px; height: 50px; background: #252527; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid #333; cursor: pointer; }
         .task-visual svg { width: 30px; height: 30px; fill: #fff; }
         .checked .task-visual svg { fill: var(--accent); }
-        .check-group { display: flex; align-items: center; gap: 12px; flex: 1; cursor: pointer; user-select:none; }
+        .check-group { display: flex; align-items: center; gap: 12px; flex: 1; cursor: pointer; }
         .circle-check { width: 24px; height: 24px; border: 2px solid #444; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: 0.2s; }
         .checked .circle-check { background: var(--accent); border-color: var(--accent); }
         .task-name { font-size: 1rem; font-weight: 600; transition: 0.2s; line-height: 1.3; }
         .checked .task-name { color: var(--muted); text-decoration: line-through; }
-        .ghost-text { position: absolute; top: 10px; right: 10px; font-size: 0.7rem; color: #555; font-style: italic; pointer-events: none; }
         .guide-text { font-size: 0.8rem; color: var(--blue); margin-top: 5px; display: none; background: rgba(10, 132, 255, 0.1); padding: 8px; border-radius: 6px;}
         .task-item.show-guide .guide-text { display: block; animation: fadeIn 0.3s; }
-        .yt-btn { background: #222; color: var(--text); padding: 8px 12px; border-radius: 6px; text-decoration: none; font-size: 0.7rem; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; gap: 5px; flex-shrink: 0; cursor: pointer; position: relative; z-index: 20; user-select:none; }
-
-        /* INPUTS & RPE */
+        .yt-btn { background: #222; color: var(--text); padding: 8px 12px; border-radius: 6px; text-decoration: none; font-size: 0.7rem; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; gap: 5px; flex-shrink: 0; cursor: pointer; position: relative; z-index: 20; }
+        
+        /* INPUTS */
         .input-row { display: flex; gap: 8px; margin-top: 12px; padding-left: 66px; align-items: center; flex-wrap: wrap; position: relative; z-index: 20; }
         .mini-input { background: #000; border: 1px solid #333; color: #fff; width: 65px; padding: 10px; border-radius: 8px; text-align: center; font-size: 0.9rem; font-weight: 600; -webkit-appearance: none; }
-        .tool-btn { background: #222; border: 1px solid #333; color: var(--muted); width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select:none; }
+        .tool-btn { background: #222; border: 1px solid #333; color: var(--muted); width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .pr-active { border-color: var(--gold) !important; color: var(--gold) !important; box-shadow: 0 0 10px rgba(255, 214, 10, 0.3); }
         .rpe-container { width: 100%; display: flex; align-items: center; gap: 10px; margin-top: 8px; padding-left: 66px; opacity: 0.6; transition: 0.3s; position: relative; z-index: 20; }
         .rpe-container:hover, .rpe-container.active { opacity: 1; }
@@ -92,29 +99,17 @@
         .full-modal .sheet { border-radius: 0; width: 100%; height: 100%; max-height: 100%; max-width: 100%; padding-top: env(safe-area-inset-top); }
         .close-sticky { position: fixed; top: 20px; right: 20px; z-index: 999; background: rgba(0,0,0,0.5); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #fff; backdrop-filter: blur(10px); border: 1px solid #444; cursor: pointer; }
 
-        /* ANATOMY & STATS */
-        .anatomy-container { position: relative; width: 150px; height: 260px; margin: 20px auto; }
-        .anatomy-svg { width: 100%; height: 100%; overflow: visible; }
-        .muscle-path { fill: #333; stroke: #222; stroke-width: 1; transition: fill 0.5s; }
-        .pain-grid { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
-        .pain-part { padding: 8px 16px; background: #222; border: 1px solid #333; border-radius: 20px; font-size: 0.8rem; cursor: pointer; }
-        .pain-part.active { background: var(--danger); color: #fff; border-color: var(--danger); }
-
-        /* BOTTOM & UTILS */
-        .tab-btn { font-size: 1.7rem; opacity: 0.5; transition: 0.2s; cursor: pointer; user-select:none; }
+        /* UTILS & NUTRITION */
+        .tab-btn { font-size: 1.7rem; opacity: 0.5; transition: 0.2s; cursor: pointer; } 
         .tab-btn.active { opacity: 1; transform: scale(1.1); color: var(--accent); }
-        .timer-float { position: fixed; bottom: calc(90px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%) translateY(150px); background: #1c1c1e; border: 1px solid var(--accent); padding: 12px 24px; border-radius: 40px; display: flex; align-items: center; gap: 15px; z-index: 250; box-shadow: 0 10px 40px rgba(0,0,0,0.8); transition: 0.4s; }
+        .timer-float { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(150px); background: #1c1c1e; border: 1px solid var(--accent); padding: 12px 24px; border-radius: 40px; display: flex; align-items: center; gap: 15px; z-index: 250; box-shadow: 0 10px 40px rgba(0,0,0,0.8); transition: 0.4s; }
         .timer-float.active { transform: translateX(-50%) translateY(0); }
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .track-box { background: #111; padding: 15px; border-radius: 14px; text-align: center; cursor: pointer; border: 1px solid #333; user-select:none; }
+        .track-box { background: #111; padding: 15px; border-radius: 14px; text-align: center; cursor: pointer; border: 1px solid #333; }
         .track-val { font-size: 1.2rem; font-weight: 800; color: #fff; }
-        .plate-visual { display: flex; gap: 2px; justify-content: center; align-items: flex-end; height: 60px; margin-top: 15px; }
-        .plate { height: 100%; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #000; font-weight: bold; }
-
-        /* NUTRITION EXPANDED */
         .nutri-container { padding-top: 20px; padding-bottom: 80px; }
         .nutri-tabs { display: flex; background: #111; padding: 4px; border-radius: 12px; margin: 15px 0; border: 1px solid #333; }
-        .n-tab { flex: 1; text-align: center; padding: 12px; border-radius: 10px; font-size: 0.9rem; color: #777; transition: 0.2s; font-weight: bold; cursor: pointer; user-select:none; }
+        .n-tab { flex: 1; text-align: center; padding: 12px; border-radius: 10px; font-size: 0.9rem; color: #777; transition: 0.2s; font-weight: bold; cursor: pointer; }
         .n-tab.active { background: #222; color: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
         .macro-bar-container { margin-bottom: 20px; background: #111; padding: 15px; border-radius: 12px; border: 1px solid #333; }
         .macro-label { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 8px; color: #ccc; font-weight: bold; }
@@ -123,17 +118,23 @@
         .food-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-bottom: 20px; }
         .food-item { background: #1a1a1a; padding: 15px; border-radius: 12px; border: 1px solid #333; display: flex; flex-direction: column; gap: 5px; font-size: 0.9rem; cursor: pointer; transition: 0.2s; position: relative; overflow: hidden; }
         .food-item:active { transform: scale(0.98); background: #222; }
-        .food-item b { color: #fff; }
-        .food-item small { color: #888; }
         .supp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap:10px; margin-bottom: 15px; }
         .supp-icon { background: #222; border: 1px solid #333; aspect-ratio: 1; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-direction: column; font-size: 0.7rem; cursor: pointer; opacity: 0.5; transition: 0.3s; }
         .supp-icon.active { opacity: 1; border-color: var(--blue); background: rgba(10, 132, 255, 0.1); box-shadow: 0 0 10px rgba(10, 132, 255, 0.3); }
+        .plate-visual { display: flex; gap: 2px; justify-content: center; align-items: flex-end; height: 60px; margin-top: 15px; }
+        .plate { height: 100%; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #000; font-weight: bold; }
 
-        /* JUMP & EXTRA BUTTONS */
-        .action-btn { width: 100%; margin-top: 10px; padding: 14px; background: #222; border: 1px solid #333; color: var(--text); border-radius: 12px; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; position: relative; z-index: 10; user-select:none; }
+        /* ANATOMY & BUTTONS */
+        .anatomy-container { position: relative; width: 150px; height: 260px; margin: 20px auto; }
+        .anatomy-svg { width: 100%; height: 100%; overflow: visible; }
+        .muscle-path { fill: #333; stroke: #222; stroke-width: 1; transition: fill 0.5s; }
+        .pain-grid { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+        .pain-part { padding: 8px 16px; background: #222; border: 1px solid #333; border-radius: 20px; font-size: 0.8rem; cursor: pointer; }
+        .pain-part.active { background: var(--danger); color: #fff; border-color: var(--danger); }
+        .action-btn { width: 100%; margin-top: 10px; padding: 14px; background: #222; border: 1px solid #333; color: var(--text); border-radius: 12px; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; position: relative; z-index: 10; }
         .action-btn:active { background: #333; }
         .btn-jump { border-color: var(--purple); color: var(--purple); background: rgba(191, 90, 242, 0.1); }
-        .spin-btn { width: 100%; padding: 14px; background: #222; border: 1px solid #333; color: #fff; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 5px; user-select:none; }
+        .spin-btn { width: 100%; padding: 14px; background: #222; border: 1px solid #333; color: #fff; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 5px; }
 
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         @keyframes fadeIn { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
@@ -145,7 +146,7 @@
     <header>
         <div class="header-top">
             <div style="display:flex; flex-direction:column">
-                <div class="app-title">PRIME v22 <span style="font-size:0.8rem; color:var(--purple)">Unleashed</span></div>
+                <div class="app-title">PRIME v22.1 <span style="font-size:0.8rem; color:var(--accent)">Stable</span></div>
                 <div style="font-size:0.6rem; letter-spacing:2px; color:var(--blue); font-weight:bold" id="seasonBadge">SEZON İÇİ</div>
             </div>
             <div style="display:flex; gap:15px; align-items: center;">
@@ -155,11 +156,7 @@
             </div>
         </div>
         <div class="xp-container"><div class="xp-fill" id="xpBar"></div></div>
-        <div class="level-badge">
-            <span id="currentLvl">Lvl 1</span>
-            <span id="userRank">Rookie</span>
-            <span id="xpText">0 XP</span>
-        </div>
+        <div class="level-badge"><span id="currentLvl">Lvl 1</span><span id="userRank">Rookie</span><span id="xpText">0 XP</span></div>
     </header>
 
     <div class="quote-box" id="dailyQuote" style="text-align:center; padding:15px; font-style:italic; color:#888; font-size:0.9rem;">...</div>
@@ -171,9 +168,9 @@
     </div>
 
     <div class="container">
-        <div class="alert-box alert-deload" id="deloadAlert"><span>⚠️</span> <div><b>Yorgunluk Tespit Edildi!</b><br>Son 7 gün hacmin çok yüksek. Yükü biraz azalt.</div></div>
-        <div class="alert-box alert-low" id="lowEnergyAlert"><span>🐢</span> <div><b>HAFİF ANTRENMAN</b><br>Enerjin düşük. Bugün kendini zorlama.</div></div>
-        <div class="alert-box alert-high" id="highEnergyAlert"><span>🚀</span> <div><b>REKOR GÜNÜ!</b><br>Enerjin tavan! Bugün PR denemek için harika.</div></div>
+        <div class="alert-box alert-deload" id="deloadAlert" style="display:none;"><span>⚠️</span> <div><b>Yorgunluk Tespit Edildi!</b><br>Son 7 gün hacmin çok yüksek. Yükü %50 azalt.</div></div>
+        <div class="alert-box alert-low" id="lowEnergyAlert" style="display:none;"><span>🐢</span> <div><b>HAFİF ANTRENMAN</b><br>Enerjin düşük. Bugün kendini zorlama.</div></div>
+        <div class="alert-box alert-high" id="highEnergyAlert" style="display:none;"><span>🚀</span> <div><b>REKOR GÜNÜ!</b><br>Enerjin tavan! Bugün PR denemek için harika.</div></div>
 
         <div class="prehab-box" id="prehabSection">
             <div class="box-header" style="color:var(--blue)">🛡️ Sakatlık Önleme & Isınma</div>
@@ -224,9 +221,6 @@
                     <div style="font-size:0.7rem; color:#777; margin-top:5px">PROTEİN</div>
                 </div>
             </div>
-            <div id="dailyQuestBox" style="margin-top:10px; background:#111; padding:10px; border-radius:10px; border:1px solid #333;">
-                <div style="font-size:0.8rem; color:#aaa; margin-bottom:6px;">🎯 Günlük Görevler</div>
-            </div>
             <textarea id="journal" style="width:100%; background:#111; color:#fff; border:1px solid #333; border-radius:12px; padding:15px; min-height:80px;" placeholder="Notlar..." oninput="saveData()"></textarea>
         </div>
     </div>
@@ -245,9 +239,48 @@
         <div class="tab-btn" onclick="openModal('statsModal')">📊</div>
     </div>
 
-    <div class="modal full-modal" id="clutchModal"><div class="sheet clutch-modal" style="text-align:center;"><div style="font-size:3rem; margin-bottom:10px">🔥</div><h2 class="clutch-title">CLUTCH TIME!</h2><p style="color:#ccc; margin-top:10px">Maçın son topu elinde.</p><div class="clutch-task" id="clutchTaskDisplay">...</div><div style="color:var(--gold); font-size:0.9rem; margin-bottom:20px">Ödül: 2x XP</div><button onclick="completeClutch()" class="spin-btn" style="width:100%; justify-content:center; background:var(--danger); margin-bottom:10px">YAPTIM (+XP)</button><button onclick="closeModal('clutchModal'); showWrapUp()" style="background:none; border:none; color:#777; text-decoration:underline">Pas Geç</button></div></div>
-    <div class="modal full-modal" id="zoneModal"><div class="sheet" style="text-align:center"><div style="display:flex; justify-content:space-between;"><h2>Zone Modu</h2><span onclick="closeZone()">✕</span></div><p style="color:#777; font-size:0.9rem">Kutu Nefes: 4 Al - 4 Tut - 4 Ver - 4 Tut</p><div class="breathing-circle" id="breathCircle" style="width:150px; height:150px; border:4px solid #333; border-radius:50%; margin:30px auto; display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:bold; color:var(--blue); transition:all 4s ease-in-out;">BAŞLA</div><div class="breathing-text" id="breathText">Odaklan...</div><button onclick="startBreathing()" class="spin-btn" style="margin-top:30px; width:100%; justify-content:center">Başlat</button></div></div>
-    <div class="modal full-modal" id="wrapUpModal"><div class="sheet" style="text-align:center; border-color:var(--gold)"><div style="font-size:3rem; margin-bottom:10px">🎉</div><h2 style="color:var(--gold); font-size:1.8rem; margin:0">ANTRENMAN TAMAMLANDI!</h2><div class="wrap-stats" style="display:flex; justify-content:space-around; margin:20px 0;"><div class="wrap-box"><div class="wrap-val" id="wrapVol">0</div><div style="font-size:0.8rem; color:#777">Toplam Yük (Kg)</div></div><div class="wrap-box"><div class="wrap-val" id="wrapXP">0</div><div style="font-size:0.8rem; color:#777">Kazanılan XP</div></div></div><div id="wrapExtras" style="font-size:0.8rem; color:#aaa; margin-bottom:15px;"></div><button onclick="closeModal('wrapUpModal')" class="spin-btn" style="width:100%; justify-content:center; background:#333; border:1px solid #555">Kapat</button></div></div>
+    <div class="modal full-modal" id="clutchModal">
+        <div class="sheet clutch-modal" style="text-align:center;">
+            <div style="font-size:3rem; margin-bottom:10px">🔥</div>
+            <h2 class="clutch-title">CLUTCH TIME!</h2>
+            <p style="color:#ccc; margin-top:10px">Maçın son topu elinde.</p>
+            <div class="clutch-task" id="clutchTaskDisplay">...</div>
+            <div style="color:var(--gold); font-size:0.9rem; margin-bottom:20px">Ödül: 2x XP</div>
+            <button onclick="completeClutch()" class="spin-btn" style="width:100%; justify-content:center; background:var(--danger); margin-bottom:10px">YAPTIM (+XP)</button>
+            <button onclick="closeModal('clutchModal'); showWrapUp()" style="background:none; border:none; color:#777; text-decoration:underline">Pas Geç</button>
+        </div>
+    </div>
+    
+    <div class="modal full-modal" id="zoneModal">
+        <div class="sheet" style="text-align:center">
+            <div style="display:flex; justify-content:space-between;">
+                <h2>Zone Modu</h2>
+                <span onclick="closeZone()">✕</span>
+            </div>
+            <p style="color:#777; font-size:0.9rem">Kutu Nefes: 4 Al - 4 Tut - 4 Ver - 4 Tut</p>
+            <div class="breathing-circle" id="breathCircle" style="width:150px; height:150px; border:4px solid #333; border-radius:50%; margin:30px auto; display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:bold; color:var(--blue); transition:all 4s ease-in-out;">BAŞLA</div>
+            <div class="breathing-text" id="breathText">Odaklan...</div>
+            <button onclick="startBreathing()" class="spin-btn" style="margin-top:30px; width:100%; justify-content:center">Başlat</button>
+        </div>
+    </div>
+    
+    <div class="modal full-modal" id="wrapUpModal">
+        <div class="sheet" style="text-align:center; border-color:var(--gold)">
+            <div style="font-size:3rem; margin-bottom:10px">🎉</div>
+            <h2 style="color:var(--gold); font-size:1.8rem; margin:0">ANTRENMAN TAMAMLANDI!</h2>
+            <div class="wrap-stats" style="display:flex; justify-content:space-around; margin:20px 0;">
+                <div class="wrap-box">
+                    <div class="wrap-val" id="wrapVol">0</div>
+                    <div style="font-size:0.8rem; color:#777">Toplam Yük (Kg)</div>
+                </div>
+                <div class="wrap-box">
+                    <div class="wrap-val" id="wrapXP">0</div>
+                    <div style="font-size:0.8rem; color:#777">Kazanılan XP</div>
+                </div>
+            </div>
+            <button onclick="closeModal('wrapUpModal')" class="spin-btn" style="width:100%; justify-content:center; background:#333; border:1px solid #555">Kapat</button>
+        </div>
+    </div>
     
     <div class="modal full-modal" id="nutriModal">
         <div class="sheet nutri-container">
@@ -261,7 +294,9 @@
                 </div>
 
                 <div id="tool-track" class="tool-content active">
-                    <div style="text-align:center;margin-bottom:15px">HEDEF: <span id="targetCalDisplay" style="color:var(--gold);font-weight:bold">--</span> kcal / <span id="targetProDisplay" style="color:var(--accent);font-weight:bold">160g</span> Prot</div>
+                    <div style="text-align:center;margin-bottom:15px">
+                        HEDEF: <span id="targetCalDisplay" style="color:var(--gold);font-weight:bold">--</span> kcal / <span style="color:var(--accent);font-weight:bold">160g</span> Prot
+                    </div>
                     <div class="macro-bar-container">
                         <div class="macro-label"><span>Kalori</span><span id="calText">0</span></div>
                         <div class="progress-track"><div class="progress-fill" id="calBar" style="width:0%;background:var(--gold)"></div></div>
@@ -271,14 +306,16 @@
                         <div class="progress-track"><div class="progress-fill" id="proBar" style="width:0%;background:var(--accent)"></div></div>
                     </div>
                     <div style="display:flex; gap:10px; margin-bottom:15px; background:#1a1a1a; padding:10px; border-radius:12px; border:1px solid #333;">
-                        <input type="number" id="quickCal" class="mini-input" style="flex:1; width:auto;" placeholder="Kcal">
-                        <input type="number" id="quickPro" class="mini-input" style="flex:1; width:auto;" placeholder="Prot (g)">
+                        <input type="number" min="0" id="quickCal" class="mini-input" style="flex:1; width:auto;" placeholder="Kcal">
+                        <input type="number" min="0" id="quickPro" class="mini-input" style="flex:1; width:auto;" placeholder="Prot (g)">
                         <button class="tool-btn" style="width:50px" onclick="addQuickMacros()">+</button>
                     </div>
                     <h4 style="margin-bottom:10px; color:#888;">Supplementler</h4>
                     <div class="supp-grid">
-                        <div class="supp-icon" id="supp-creatine" onclick="toggleSupp('creatine')">🧪<br>Kreatin</div><div class="supp-icon" id="supp-omega" onclick="toggleSupp('omega')">🐟<br>Omega3</div>
-                        <div class="supp-icon" id="supp-multi" onclick="toggleSupp('multi')">💊<br>Vitamin</div><div class="supp-icon" id="supp-caffeine" onclick="toggleSupp('caffeine')">☕<br>Kafein</div>
+                        <div class="supp-icon" id="supp-creatine" onclick="toggleSupp('creatine')">🧪<br>Kreatin</div>
+                        <div class="supp-icon" id="supp-omega" onclick="toggleSupp('omega')">🐟<br>Omega3</div>
+                        <div class="supp-icon" id="supp-multi" onclick="toggleSupp('multi')">💊<br>Vitamin</div>
+                        <div class="supp-icon" id="supp-caffeine" onclick="toggleSupp('caffeine')">☕<br>Kafein</div>
                     </div>
                     <div class="timing-box" id="nutrientTimingBox" style="display:none; background:rgba(255,214,10,0.1); padding:10px; border-radius:10px; margin-bottom:15px;">
                         <div style="font-weight:bold; color:var(--gold); margin-bottom:5px">⚡ MAÇ GÜNÜ ZAMANLAMASI</div>
@@ -298,7 +335,10 @@
                 </div>
                 
                 <div id="tool-1rm" class="tool-content" style="display:none;">
-                    <div style="display:flex;gap:10px"><input type="number" id="rmWeight" class="mini-input" style="width:50%" placeholder="Kilo"><input type="number" id="rmReps" class="mini-input" style="width:50%" placeholder="Tekrar"></div>
+                    <div style="display:flex;gap:10px">
+                        <input type="number" min="0" id="rmWeight" class="mini-input" style="width:50%" placeholder="Kilo">
+                        <input type="number" min="0" id="rmReps" class="mini-input" style="width:50%" placeholder="Tekrar">
+                    </div>
                     <button onclick="calc1RM()" class="spin-btn" style="width:100%;margin-top:15px">1RM Hesapla</button>
                     <div id="rmResult" style="font-size:2rem;text-align:center;margin-top:20px;color:var(--blue)"></div>
                 </div>
@@ -311,10 +351,13 @@
             <div class="close-sticky" onclick="closeModal('statsModal')">✕</div>
             <h2>İstatistikler</h2>
             <div style="display:flex; gap:10px; margin-bottom:15px">
-                <input type="number" id="userHeight" class="mini-input" style="width:50%; padding:15px" placeholder="Boy (cm)" onchange="saveStats()">
-                <input type="number" id="dailyWeight" class="mini-input" style="width:50%; padding:15px" placeholder="Kilo (kg)" onchange="saveData()">
+                <input type="number" min="0" id="userHeight" class="mini-input" style="width:50%; padding:15px" placeholder="Boy (cm)" onchange="saveStats()">
+                <input type="number" min="0" id="dailyWeight" class="mini-input" style="width:50%; padding:15px" placeholder="Kilo (kg)" onchange="saveData()">
             </div>
-            <div class="alert-box alert-imbalance" id="legAlert"><span>🐔</span> <div><b>Chicken Leg Uyarısı!</b><br>Üst vücudun gelişti ama bacakları ihmal ediyorsun.</div></div>
+            <div class="alert-box alert-imbalance" id="legAlert">
+                <span>🐔</span> 
+                <div><b>Chicken Leg Uyarısı!</b><br>Üst vücudun gelişti ama bacakları ihmal ediyorsun.</div>
+            </div>
             <h4 style="margin-top:20px; border-top:1px solid #333; padding-top:10px; text-align:center">Kas Yoğunluk Haritası</h4>
             <div class="anatomy-container">
                 <svg class="anatomy-svg" viewBox="0 0 100 200">
@@ -336,406 +379,395 @@
             </div>
             <h4 style="margin-top:20px; border-top:1px solid #333; padding-top:10px">Son Maçlar</h4>
             <div id="gameHistory"></div>
-            <h4 style="margin-top:20px; border-top:1px solid #333; padding-top:10px">Başarımlar</h4>
-            <div id="achievementsBox"></div>
         </div>
     </div>
 
-    <div class="modal" id="plateModal"><div class="sheet"><h2>Plaka Hesaplayıcı</h2><input type="number" id="plateTarget" class="mini-input" style="width:100%; font-size:1.5rem; padding:15px; margin-bottom:10px;" placeholder="Hedef (kg)" oninput="calcPlates()"><div id="plateResult" style="color:var(--accent);font-weight:bold;margin-bottom:10px"></div><div id="plateVisual" class="plate-visual"></div><span onclick="closeModal('plateModal')" style="position:absolute;top:20px;right:20px;font-size:1.5rem; cursor:pointer;">✕</span></div></div>
-    <div class="modal" id="historyModal"><div class="sheet"><h2 id="histTitle">Geçmiş</h2><div id="histList" style="margin-top:15px;"></div><span onclick="closeModal('historyModal')" style="position:absolute;top:20px;right:20px;font-size:1.5rem; cursor:pointer;">✕</span></div></div>
-    <div class="modal" id="builderModal"><div class="sheet"><div style="display:flex; justify-content:space-between;"><h2>Program Yap</h2><span onclick="closeModal('builderModal')">✕</span></div><select id="mainMuscle" style="width:100%;padding:12px;background:#000;color:#fff;border:1px solid #333;border-radius:8px;margin-bottom:10px" onchange="updateSec()"><option value="">1. Bölge</option><option value="chest">Göğüs</option><option value="back">Sırt</option><option value="legs">Bacak</option><option value="shoulders">Omuz</option><option value="arms">Kol</option></select><select id="subMuscle" style="width:100%;padding:12px;background:#000;color:#fff;border:1px solid #333;border-radius:8px;margin-bottom:10px" disabled><option>2. Bölge</option></select><div class="toggle-row"><span>🏀 Sıçrama Ekle (Booster)</span><label class="switch"><input type="checkbox" id="addJump"><span class="slider"></span></label></div><button onclick="buildProg()" style="width:100%;padding:15px;background:var(--blue);border:none;border-radius:8px;color:#fff;font-weight:bold">Uygula</button></div></div>
-    <div class="modal" id="readinessModal"><div class="sheet"><div style="display:flex; justify-content:space-between;"><h2>Günlük Hazırlık</h2><span onclick="closeModal('readinessModal')">✕</span></div><p style="color:#aaa; margin-bottom:20px">Bugün kendini nasıl hissediyorsun?</p><div class="readiness-scale" style="display:flex; justify-content:space-between; font-size:2rem;"><div class="r-btn" onclick="setReadiness(1)">😫</div><div class="r-btn" onclick="setReadiness(2)">🥱</div><div class="r-btn" onclick="setReadiness(3)">😐</div><div class="r-btn" onclick="setReadiness(4)">🙂</div><div class="r-btn" onclick="setReadiness(5)">🔥</div></div></div></div>
-    <div class="modal" id="gameLogModal"><div class="sheet"><div style="display:flex; justify-content:space-between;"><h2>🏀 Maç Karnesi</h2><span onclick="closeModal('gameLogModal')">✕</span></div><div style="display:flex; gap:10px; margin:20px 0;"><input type="number" id="gamePoints" class="mini-input" style="width:50%; padding:15px" placeholder="Sayı"><input type="number" id="gameAssists" class="mini-input" style="width:50%; padding:15px" placeholder="Asist"></div><textarea id="gameNotes" style="width:100%; background:#000; border:1px solid #333; color:#fff; padding:10px; border-radius:8px" placeholder="Maç yorumu..."></textarea><button onclick="saveGameLog()" style="width:100%; padding:15px; background:var(--accent); border:none; border-radius:10px; margin-top:15px; font-weight:bold">Kaydet</button></div></div>
-    <div class="modal" id="settingsModal"><div class="sheet"><h2>Ayarlar</h2><div class="toggle-row"><span>🏀 Sezon İçi</span><label class="switch"><input type="checkbox" id="seasonToggle" onchange="toggleSeason()"><span class="slider"></span></label></div><div class="toggle-row"><span>🔊 Ses Efektleri</span><label class="switch"><input type="checkbox" id="soundToggle" onchange="toggleSound()"><span class="slider"></span></label></div><div style="display:flex; gap:10px; margin:20px 0"><button onclick="exportData()" class="backup-btn" style="width:100%; padding:10px; background:#222; color:var(--blue); border:1px solid var(--blue); border-radius:8px;">📥 İndir</button><button onclick="document.getElementById('importFile').click()" class="backup-btn" style="width:100%; padding:10px; background:#222; color:var(--warn); border:1px solid var(--warn); border-radius:8px;">📤 Yükle</button><input type="file" id="importFile" style="display:none" onchange="importData(this)"></div><button onclick="resetApp()" style="width:100%; padding:15px; background:var(--danger); border:none; border-radius:10px; color:#fff; font-weight:bold">Sıfırla</button></div></div>
-    <div class="modal" id="challengeModal"><div class="sheet"><div style="display:flex; justify-content:space-between;"><h2>Meydan Okuma</h2><span onclick="closeModal('challengeModal')">✕</span></div><div style="background:#111; padding:20px; border-radius:12px; text-align:center; margin-top:20px"><h3 style="margin:0; color:var(--warn)" id="challengeTitle">1000 Şınav</h3><div style="font-size:2rem; font-weight:bold; margin:10px 0" id="challengeDisplay">0 / 1000</div><div class="progress-track"><div class="progress-fill" id="challengeBarFill" style="width:0%; background:var(--warn)"></div></div><div style="margin-top:20px; display:flex; gap:10px; justify-content:center"><button class="mini-input" onclick="addChallenge(10)">+10</button><button class="mini-input" onclick="addChallenge(25)">+25</button><button class="mini-input" onclick="addChallenge(50)">+50</button></div><button onclick="setChallenge()" style="margin-top:15px; background:none; border:none; color:#555; font-size:0.8rem; text-decoration:underline">Hedefi Değiştir</button></div></div></div>
+    <div class="modal" id="plateModal">
+        <div class="sheet">
+            <h2>Plaka Hesaplayıcı</h2>
+            <input type="number" min="0" id="plateTarget" class="mini-input" style="width:100%; font-size:1.5rem; padding:15px; margin-bottom:10px;" placeholder="Hedef (kg)" oninput="calcPlates()">
+            <div id="plateResult" style="color:var(--accent);font-weight:bold;margin-bottom:10px"></div>
+            <div id="plateVisual" class="plate-visual"></div>
+            <span onclick="closeModal('plateModal')" style="position:absolute;top:20px;right:20px;font-size:1.5rem; cursor:pointer;">✕</span>
+        </div>
+    </div>
 
-    <!-- Panic / Home Mode Modal -->
-    <div class="modal" id="panicModal">
+    <div class="modal" id="historyModal">
+        <div class="sheet">
+            <h2 id="histTitle">Geçmiş</h2>
+            <div id="histList" style="margin-top:15px;"></div>
+            <span onclick="closeModal('historyModal')" style="position:absolute;top:20px;right:20px;font-size:1.5rem; cursor:pointer;">✕</span>
+        </div>
+    </div>
+
+    <div class="modal" id="builderModal">
         <div class="sheet">
             <div style="display:flex; justify-content:space-between;">
-                <h2>Ev Modu</h2>
-                <span onclick="closeModal('panicModal')">✕</span>
+                <h2>Program Yap</h2>
+                <span onclick="closeModal('builderModal')">✕</span>
             </div>
-            <p style="color:#aaa; font-size:0.9rem; margin-bottom:15px;">Bugün hangi modu istiyorsun?</p>
-            <button class="action-btn" onclick="setPanicMode('micro')">⚡ 5 Dakika Mikro</button>
-            <button class="action-btn" onclick="setPanicMode('classic')">💪 Klasik Ev Antrenmanı</button>
-            <button class="action-btn" onclick="setPanicMode('recovery')">🧘 Recovery & Esneme</button>
-            <button class="action-btn" style="margin-top:20px; background:#111; border-color:#333" onclick="disablePanic()">Normal Programa Dön</button>
+            <select id="mainMuscle" style="width:100%;padding:12px;background:#000;color:#fff;border:1px solid #333;border-radius:8px;margin-bottom:10px" onchange="updateSec()">
+                <option value="">1. Bölge</option>
+                <option value="chest">Göğüs</option>
+                <option value="back">Sırt</option>
+                <option value="legs">Bacak</option>
+                <option value="shoulders">Omuz</option>
+                <option value="arms">Kol</option>
+            </select>
+            <select id="subMuscle" style="width:100%;padding:12px;background:#000;color:#fff;border:1px solid #333;border-radius:8px;margin-bottom:10px" disabled>
+                <option>2. Bölge</option>
+            </select>
+            <div class="toggle-row">
+                <span>🏀 Sıçrama Ekle (Booster)</span>
+                <label class="switch">
+                    <input type="checkbox" id="addJump">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <button onclick="buildProg()" style="width:100%;padding:15px;background:var(--blue);border:none;border-radius:8px;color:#fff;font-weight:bold">Uygula</button>
         </div>
     </div>
 
-    <!-- Onboarding Modal -->
-    <div class="modal full-modal" id="onboardingModal">
+    <div class="modal" id="readinessModal">
         <div class="sheet">
-            <h2>Hoş geldin</h2>
-            <p style="color:#aaa; font-size:0.9rem;">Hedefine göre PRIME'ı kişiselleştirelim.</p>
-            <label style="font-size:0.8rem; color:#ccc;">Hedefin</label>
-            <select id="obGoal" style="width:100%;padding:12px;background:#000;color:#fff;border:1px solid #333;border-radius:8px;margin-bottom:10px">
-                <option value="maintain">Formu koru / kondisyon</option>
-                <option value="cut">Kilo ver</option>
-                <option value="strength">Güç kazan</option>
-                <option value="jump">Sıçrama artır</option>
-            </select>
-            <label style="font-size:0.8rem; color:#ccc;">Ekipman</label>
-            <select id="obEquip" style="width:100%;padding:12px;background:#000;color:#fff;border:1px solid #333;border-radius:8px;margin-bottom:10px">
-                <option value="bodyweight">Sadece vücut ağırlığı</option>
-                <option value="dumbbells">Dumbbell / küçük set</option>
-                <option value="fullgym">Tam donanımlı salon</option>
-            </select>
-            <label style="font-size:0.8rem; color:#ccc;">Aktivite düzeyi</label>
-            <select id="obActivity" style="width:100%;padding:12px;background:#000;color:#fff;border:1px solid #333;border-radius:8px;margin-bottom:10px">
-                <option value="medium">Orta</option>
-                <option value="low">Düşük</option>
-                <option value="high">Yüksek</option>
-            </select>
-            <button onclick="saveProfile()" class="spin-btn" style="width:100%; justify-content:center; margin-top:20px;">Kaydet</button>
+            <div style="display:flex; justify-content:space-between;">
+                <h2>Günlük Hazırlık</h2>
+                <span onclick="closeModal('readinessModal')">✕</span>
+            </div>
+            <p style="color:#aaa; margin-bottom:20px">Bugün kendini nasıl hissediyorsun?</p>
+            <div class="readiness-scale" style="display:flex; justify-content:space-between; font-size:2rem;">
+                <div class="r-btn" onclick="setReadiness(1)">😫</div>
+                <div class="r-btn" onclick="setReadiness(2)">🥱</div>
+                <div class="r-btn" onclick="setReadiness(3)">😐</div>
+                <div class="r-btn" onclick="setReadiness(4)">🙂</div>
+                <div class="r-btn" onclick="setReadiness(5)">🔥</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="gameLogModal">
+        <div class="sheet">
+            <div style="display:flex; justify-content:space-between;">
+                <h2>🏀 Maç Karnesi</h2>
+                <span onclick="closeModal('gameLogModal')">✕</span>
+            </div>
+            <div style="display:flex; gap:10px; margin:20px 0;">
+                <input type="number" min="0" id="gamePoints" class="mini-input" style="width:50%; padding:15px" placeholder="Sayı">
+                <input type="number" min="0" id="gameAssists" class="mini-input" style="width:50%; padding:15px" placeholder="Asist">
+            </div>
+            <textarea id="gameNotes" style="width:100%; background:#000; border:1px solid #333; color:#fff; padding:10px; border-radius:8px" placeholder="Maç yorumu..."></textarea>
+            <button onclick="saveGameLog()" style="width:100%; padding:15px; background:var(--accent); border:none; border-radius:10px; margin-top:15px; font-weight:bold">Kaydet</button>
+        </div>
+    </div>
+
+    <div class="modal" id="settingsModal">
+        <div class="sheet">
+            <h2>Ayarlar</h2>
+            <div class="toggle-row">
+                <span>🏀 Sezon İçi</span>
+                <label class="switch">
+                    <input type="checkbox" id="seasonToggle" onchange="toggleSeason()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="toggle-row">
+                <span>🔊 Ses Efektleri</span>
+                <label class="switch">
+                    <input type="checkbox" id="soundToggle" onchange="toggleSound()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div style="display:flex; gap:10px; margin:20px 0">
+                <button onclick="exportData()" class="backup-btn" style="width:100%; padding:10px; background:#222; color:var(--blue); border:1px solid var(--blue); border-radius:8px;">📥 İndir</button>
+                <button onclick="document.getElementById('importFile').click()" class="backup-btn" style="width:100%; padding:10px; background:#222; color:var(--warn); border:1px solid var(--warn); border-radius:8px;">📤 Yükle</button>
+                <input type="file" id="importFile" style="display:none" onchange="importData(this)">
+            </div>
+            <button onclick="resetApp()" style="width:100%; padding:15px; background:var(--danger); border:none; border-radius:10px; color:#fff; font-weight:bold">Sıfırla</button>
+        </div>
+    </div>
+
+    <div class="modal" id="challengeModal">
+        <div class="sheet">
+            <div style="display:flex; justify-content:space-between;">
+                <h2>Meydan Okuma</h2>
+                <span onclick="closeModal('challengeModal')">✕</span>
+            </div>
+            <div style="background:#111; padding:20px; border-radius:12px; text-align:center; margin-top:20px">
+                <h3 style="margin:0; color:var(--warn)" id="challengeTitle">1000 Şınav</h3>
+                <div style="font-size:2rem; font-weight:bold; margin:10px 0" id="challengeDisplay">0 / 1000</div>
+                <div class="progress-track"><div class="progress-fill" id="challengeBarFill" style="width:0%; background:var(--warn)"></div></div>
+                <div style="margin-top:20px; display:flex; gap:10px; justify-content:center">
+                    <button class="mini-input" onclick="addChallenge(10)">+10</button>
+                    <button class="mini-input" onclick="addChallenge(25)">+25</button>
+                    <button class="mini-input" onclick="addChallenge(50)">+50</button>
+                </div>
+                <button onclick="setChallenge()" style="margin-top:15px; background:none; border:none; color:#555; font-size:0.8rem; text-decoration:underline">Hedefi Değiştir</button>
+            </div>
         </div>
     </div>
     
     <script>
-        const visuals = {
-            push: `<svg viewBox="0 0 24 24"><path d="M4 18h16v-2H4v2zM8 6h8v2H8V6zm4 4c-1.1 0-2 .9-2 2v4h4v-4c0-1.1-.9-2-2-2z" fill="#fff"/></svg>`,
-            pull: `<svg viewBox="0 0 24 24"><path d="M12 2C9.24 2 7 4.24 7 7v4h2V7h10v4h2V7c0-2.76-2.24-5-5-5h-4zm-2 12v8h4v-8h-4z" fill="#fff"/></svg>`,
-            legs: `<svg viewBox="0 0 24 24"><path d="M12 4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-2 16v-4h4v4h-4zm0-6h4v-2h-4v2zm-4 6h2v-6H6v6zm12 0h2v-6h-2v6z" fill="#fff"/></svg>`,
-            press: `<svg viewBox="0 0 24 24"><path d="M12 2L4 10h5v12h6V10h5L12 2z" fill="#fff"/></svg>`,
-            core: `<svg viewBox="0 0 24 24"><path d="M20 18h-2v-2h-2v2H8v-2H6v2H4v-6c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v6z" fill="#fff"/></svg>`,
-            arm: `<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 9h-2V7h-2v5H6v2h2v5h2v-5h2v-2z" fill="#fff"/></svg>`,
-            cardio: `<svg viewBox="0 0 24 24"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8.4L13 19v4h2v-5l-1.8-3.6 1.8-1.4c.6-.5 1.1-.7 1.7-.7.3 0 .5.1.8.2L20 13v-2l-2.1-.6c-1.1-.4-2.4-.1-3.2.7l-1.5 1.5-1.4-4.1z" fill="#fff"/></svg>`,
-            pilates: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#fff"/></svg>`
+        // --- VISUALS & DB ---
+        const visuals = { 
+            push: `<svg viewBox="0 0 24 24"><path d="M4 18h16v-2H4v2zM8 6h8v2H8V6zm4 4c-1.1 0-2 .9-2 2v4h4v-4c0-1.1-.9-2-2-2z" fill="#fff"/></svg>`, 
+            pull: `<svg viewBox="0 0 24 24"><path d="M12 2C9.24 2 7 4.24 7 7v4h2V7h10v4h2V7c0-2.76-2.24-5-5-5h-4zm-2 12v8h4v-8h-4z" fill="#fff"/></svg>`, 
+            legs: `<svg viewBox="0 0 24 24"><path d="M12 4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-2 16v-4h4v4h-4zm0-6h4v-2h-4v2zm-4 6h2v-6H6v6zm12 0h2v-6h-2v6z" fill="#fff"/></svg>`, 
+            press: `<svg viewBox="0 0 24 24"><path d="M12 2L4 10h5v12h6V10h5L12 2z" fill="#fff"/></svg>`, 
+            core: `<svg viewBox="0 0 24 24"><path d="M20 18h-2v-2h-2v2H8v-2H6v2H4v-6c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v6z" fill="#fff"/></svg>`, 
+            arm: `<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 9h-2V7h-2v5H6v2h2v5h2v-5h2v-2z" fill="#fff"/></svg>`, 
+            cardio: `<svg viewBox="0 0 24 24"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8.4L13 19v4h2v-5l-1.8-3.6 1.8-1.4c.6-.5 1.1-.7 1.7-.7.3 0 .5.1.8.2L20 13v-2l-2.1-.6c-1.1-.4-2.4-.1-3.2.7l-1.5 1.5-1.4-4.1z" fill="#fff"/></svg>`, 
+            pilates: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#fff"/></svg>` 
         };
-        const quotes = ["Yetenek seni zirveye taşır, karakter orada tutar.", "Antrenman bittiğinde asıl gelişim başlar.", "Bugün yaptığın her tekrar yarınki zaferin tuğlasıdır.", "Yorgunluk sadece zihnindedir."];
 
-        const muscleDB = {
-            chest:{t:"Göğüs", mb:"chest", i:[{n:"Bench Press (4x8)",v:"push",d:"Barı göğüs ucuna indir."},{n:"Inc. Press (3x10)",v:"push",d:"Üst göğsü hedefle."}]},
-            back:{t:"Sırt", mb:"back", i:[{n:"Pull Up",v:"pull",d:"Çeneni barın üzerine çıkar."},{n:"Row",v:"pull",d:"Kürek kemiklerini sıkıştır."}]},
-            legs:{t:"Bacak", mb:"legs", i:[{n:"Squat",v:"legs",d:"Topuklara bas."},{n:"RDL",v:"legs",d:"Kalçayı geriye it."}]},
-            shoulders:{t:"Omuz", mb:"shoulders", i:[{n:"OH Press",v:"press",d:"Karnını sık, barı dik it."}]},
-            arms:{t:"Kol", mb:"arms", i:[{n:"Curl",v:"arm",d:"Sallanmadan kaldır."},{n:"Pushdown",v:"arm",d:"Dirsekleri kilitle."}]},
-            core:{t:"Karın", mb:"core", i:[{n:"Plank",v:"core",d:"Kalçayı düşürme."}]}
+        const quotes = [
+            "Yetenek seni zirveye taşır, karakter orada tutar.",
+            "Antrenman bittiğinde asıl gelişim başlar.",
+            "Bugün yaptığın her tekrar yarınki zaferin tuğlasıdır.",
+            "Yorgunluk sadece zihnindedir."
+        ];
+
+        const muscleDB = { 
+            chest:{t:"Göğüs", mb:"chest", i:[{n:"Bench Press (4x8)",v:"push",d:"Barı göğüs ucuna indir."},{n:"Inc. Press (3x10)",v:"push",d:"Üst göğsü hedefle."}]}, 
+            back:{t:"Sırt", mb:"back", i:[{n:"Pull Up",v:"pull",d:"Çeneni barın üzerine çıkar."},{n:"Row",v:"pull",d:"Kürek kemiklerini sıkıştır."}]}, 
+            legs:{t:"Bacak", mb:"legs", i:[{n:"Squat",v:"legs",d:"Topuklara bas."},{n:"RDL",v:"legs",d:"Kalçayı geriye it."}]}, 
+            shoulders:{t:"Omuz", mb:"shoulders", i:[{n:"OH Press",v:"press",d:"Karnını sık, barı dik it."}]}, 
+            arms:{t:"Kol", mb:"arms", i:[{n:"Curl",v:"arm",d:"Sallanmadan kaldır."},{n:"Pushdown",v:"arm",d:"Dirsekleri kilitle."}]}, 
+            core:{t:"Karın", mb:"core", i:[{n:"Plank",v:"core",d:"Kalçayı düşürme."}]} 
         };
 
         const compat = { chest:['arms','shoulders'], back:['arms','shoulders'], legs:['core'], shoulders:['arms'], arms:['core'] };
+        
         const jumpR = [
-            {n:"Pogo Hops (3x20)", v:"legs", d:"Bilekleri kilitle, hızlı ve hafif sıçra."},
-            {n:"Box Jump (3x8)", v:"legs", d:"Alçak bir kutuya patlayıcı şekilde zıpla."},
+            {n:"Pogo Hops (3x20)", v:"legs", d:"Bilekleri kilitle, hızlı ve hafif sıçra."}, 
+            {n:"Box Jump (3x8)", v:"legs", d:"Alçak bir kutuya patlayıcı şekilde zıpla."}, 
             {n:"Depth Jump (3x5)", v:"legs", d:"Yüksekten in, yere değer değmez zıpla (Sistem şoku)."}
         ];
-        const finishers = { gym: ["🔥 1 Dakika Plank", "🔥 50 Mekik", "🔥 Tabata Burpee"], basket: ["🏀 5 Noktadan 10'ar Şut", "🏀 50 Serbest Atış"] };
-        const clutchTasks = ["1 Dakika Plank yapmadan eve gidemezsin!", "Üst üste 10 serbest atış sok!", "50 Şınav çek, hemen!"];
-        const foodDB = [
-            {n:"Yumurta (1 Adet)", c:70, p:6}, {n:"Tavuk Göğsü (150g)", c:165, p:31}, {n:"Pilav (1 Kase)", c:200, p:4},
-            {n:"Yulaf (50g)", c:190, p:6}, {n:"Muz (Orta)", c:105, p:1}, {n:"Protein Shake", c:120, p:24},
-            {n:"Ton Balığı (100g)", c:130, p:25}, {n:"Makarna (1 Tabak)", c:250, p:8}, {n:"Fıstık Ezmesi (1 tk)", c:90, p:3},
-            {n:"Yoğurt (1 Kase)", c:100, p:10}, {n:"Elma", c:52, p:0}, {n:"Badem (1 Avuç)", c:160, p:6},
-            {n:"Lor Peyniri (100g)", c:90, p:15}, {n:"Köfte (100g)", c:250, p:18}, {n:"Mercimek (1 Tabak)", c:230, p:18},
-            {n:"Pirinç Patlağı (1 ad)", c:30, p:1}
+
+        const finishers = { 
+            gym: ["🔥 1 Dakika Plank", "🔥 50 Mekik", "🔥 Tabata Burpee"], 
+            basket: ["🏀 5 Noktadan 10'ar Şut", "🏀 50 Serbest Atış"] 
+        };
+        
+        const clutchTasks = [
+            "1 Dakika Plank yapmadan eve gidemezsin!",
+            "Üst üste 10 serbest atış sok!",
+            "50 Şınav çek, hemen!"
         ];
-        const warmupDB = {
-            "Yürüyüş": {d:"Hafif tempo, kan dolaşımını artır."},
-            "Rotator Cuff": {d:"Omuz başlarını ısıt, sakatlığı önle."},
-            "Tibialis": {d:"Kaval kemiği kasını çalıştır, dizleri koru."},
-            "Patellar Tendon": {d:"Diz kapağı altı izometrik bekleme."},
-            "Kalça Flexor": {d:"Lunge pozisyonunda esnet."},
-            "Omuz Mob.": {d:"Lastikle omuz açma germe."},
-            "Kalça Akt.": {d:"Bantla yana yürüyüş veya glute bridge."},
-            "Dinamik Isınma": {d:"Kol çevirme, bacak savurma."},
-            "Jacks": {d:"Jumping Jacks, nabzı yükselt."}
+        
+        const foodDB = [
+            {n:"Yumurta (1 Adet)", c:70, p:6}, {n:"Tavuk Göğsü (150g)", c:165, p:31},
+            {n:"Pilav (1 Kase)", c:200, p:4}, {n:"Yulaf (50g)", c:190, p:6}, 
+            {n:"Muz (Orta)", c:105, p:1}, {n:"Protein Shake", c:120, p:24},
+            {n:"Ton Balığı (100g)", c:130, p:25}, {n:"Makarna (1 Tabak)", c:250, p:8}, 
+            {n:"Fıstık Ezmesi (1 tk)", c:90, p:3}, {n:"Yoğurt (1 Kase)", c:100, p:10},
+            {n:"Elma", c:52, p:0}, {n:"Badem (1 Avuç)", c:160, p:6}, 
+            {n:"Lor Peyniri (100g)", c:90, p:15}, {n:"Köfte (100g)", c:250, p:18},
+            {n:"Mercimek (1 Tabak)", c:230, p:18}, {n:"Pirinç Patlağı (1 ad)", c:30, p:1}
+        ];
+
+        const warmupDB = { 
+            "Yürüyüş": {d:"Hafif tempo, kan dolaşımını artır."}, 
+            "Rotator Cuff": {d:"Omuz başlarını ısıt, sakatlığı önle."}, 
+            "Tibialis": {d:"Kaval kemiği kasını çalıştır, dizleri koru."}, 
+            "Patellar Tendon": {d:"Diz kapağı altı izometrik bekleme."}, 
+            "Kalça Flexor": {d:"Lunge pozisyonunda esnet."}, 
+            "Omuz Mob.": {d:"Lastikle omuz açma germe."}, 
+            "Kalça Akt.": {d:"Bantla yana yürüyüş veya glute bridge."}, 
+            "Dinamik Isınma": {d:"Kol çevirme, bacak savurma."}, 
+            "Jacks": {d:"Jumping Jacks, nabzı yükselt."} 
         };
 
-        const seasonSchedule = {
-            0: {t:"Dinlenme", s:"Recovery", j:false, pre:["Yürüyüş"], i:[{n:"Meal Prep",v:"rest",d:"Planla."}]},
-            1: {t:"Chest & Triceps", s:"İtme", j:false, pre:["Rotator Cuff"], i:[...muscleDB.chest.i, {n:"Pushdown",v:"arm",d:"İzole et."}]},
-            2: {t:"Pilates & Basket", s:"Yoğun", j:false, pre:["Tibialis"], i:[{n:"Pilates (19:00)",v:"pilates",d:"Core."},{n:"Basketbol (20:45)",v:"cardio",d:"Şut."}]},
-            3: {t:"Maç Günü", s:"Game Night", j:true, pre:["Patellar Tendon"], i:[{n:"Maç (21:45)",v:"cardio", isGame:true, d:"Odaklan."}]},
-            4: {t:"Pilates", s:"Recov", j:false, pre:["Kalça Flexor"], i:[{n:"Pilates (19:00)",v:"pilates",d:"Esneklik."}]},
-            5: {t:"Back & Biceps", s:"Çekme", j:true, pre:["Omuz Mob."], i:[...muscleDB.back.i, {n:"Curl",v:"arm",d:"Negatif."}]},
-            6: {t:"Legs & Shoulders", s:"Kuvvet", j:false, pre:["Kalça Akt."], i:[...muscleDB.legs.i, ...muscleDB.shoulders.i]},
-            panic: {t:"Ev Modu", s:"Home", j:false, pre:["Jacks"], i:[{n:"50 Şınav",v:"push",d:"Nizami."},{n:"50 Squat",v:"legs",d:"Derin."}]}
+        const seasonSchedule = { 
+            0: {t:"Dinlenme", s:"Recovery", j:false, pre:["Yürüyüş"], i:[{n:"Meal Prep",v:"rest",d:"Planla."}]}, 
+            1: {t:"Chest & Triceps", s:"İtme", j:false, pre:["Rotator Cuff"], i:[...muscleDB.chest.i, {n:"Pushdown",v:"arm",d:"İzole et."}]}, 
+            2: {t:"Pilates & Basket", s:"Yoğun", j:false, pre:["Tibialis"], i:[{n:"Pilates (19:00)",v:"pilates",d:"Core."},{n:"Basketbol (20:45)",v:"cardio",d:"Şut."}]}, 
+            3: {t:"Maç Günü", s:"Game Night", j:true, pre:["Patellar Tendon"], i:[{n:"Maç (21:45)",v:"cardio", isGame:true, d:"Odaklan."}]}, 
+            4: {t:"Pilates", s:"Recov", j:false, pre:["Kalça Flexor"], i:[{n:"Pilates (19:00)",v:"pilates",d:"Esneklik."}]}, 
+            5: {t:"Back & Biceps", s:"Çekme", j:true, pre:["Omuz Mob."], i:[...muscleDB.back.i, {n:"Curl",v:"arm",d:"Negatif."}]}, 
+            6: {t:"Legs & Shoulders", s:"Kuvvet", j:false, pre:["Kalça Akt."], i:[...muscleDB.legs.i, ...muscleDB.shoulders.i]}, 
+            panic: {t:"Ev Modu", s:"Home", j:false, pre:["Jacks"], i:[{n:"50 Şınav",v:"push",d:"Nizami."},{n:"50 Squat",v:"legs",d:"Derin."}]} 
         };
 
-        const offSeasonSchedule = JSON.parse(JSON.stringify(seasonSchedule));
-        offSeasonSchedule[3] = {t:"CANAVAR MODU", s:"Off-Season", j:true, pre:["Dinamik Isınma"], i:[{n:"Deadlift",v:"legs",d:"Ağır gir."},{n:"Heavy Rows",v:"pull",d:"Sırtını parçala."},{n:"HIIT",v:"cardio",d:"Nabzı patlat."}]};
-
-        const panicPrograms = {
-            classic: seasonSchedule.panic,
-            micro: {
-                t:"Ev Modu Mini", s:"5 Dakika", j:false, pre:["Jacks"],
-                i:[
-                    {n:"Squat (2x20)", v:"legs", d:"Derin ve kontrollü."},
-                    {n:"Şınav (2x10)", v:"push", d:"Plank pozisyonunu koru."}
-                ]
-            },
-            recovery: {
-                t:"Recovery Ev Modu", s:"Esneme", j:false, pre:["Dinamik Isınma"],
-                i:[
-                    {n:"Nefes & Esneme (10dk)", v:"pilates", d:"Yumuşak hareket et, nefese odaklan."}
-                ]
-            }
+        const offSeasonSchedule = JSON.parse(JSON.stringify(seasonSchedule)); 
+        offSeasonSchedule[3] = {
+            t:"CANAVAR MODU",
+            s:"Off-Season",
+            j:true,
+            pre:["Dinamik Isınma"],
+            i:[
+                {n:"Deadlift",v:"legs",d:"Ağır gir."},
+                {n:"Heavy Rows",v:"pull",d:"Sırtını parçala."},
+                {n:"HIIT",v:"cardio",d:"Nabzı patlat."}
+            ]
         };
 
-        const heatMapVisualMap = {
-            push:'chest',
-            press:'shoulders',
-            pull:'back',
-            legs:'legs',
-            arm:'arms',
-            core:'core',
-            cardio:'core',
-            pilates:'core'
+        // --- DEFAULT STATE ---
+        const defaultStats = {
+            xp: 0,
+            height: 0,
+            challenge: { target: 1000, current: 0, title: "1000 Şınav" },
+            streak: 0,
+            lastLogin: "",
+            max: {},
+            games: [],
+            heat: { chest:0, back:0, legs:0, shoulders:0, arms:0, core:0 },
+            history: {},
+            pain: []
         };
 
+        const defaultSettings = {
+            sound: false,
+            inSeason: true
+        };
+
+        // --- GLOBAL STATE ---
         let today = new Date();
         let data, stats, settings;
         let timerInt = null, timerSec = 0;
-        let breatheInt = null;
+        let breathInterval = null;
 
-        const getK = d => d.toISOString().split('T')[0];
+        // DATE KEY
+        const getK = d => d.toLocaleDateString('fr-CA'); // YYYY-MM-DD Local
 
-        function defaultDay(){
-            return {c:[],s:{},w:{},rpe:{},n:"",wt:0,nutri:{cal:0, pro:0, log:[], supps:[], timing:[]}, panic:false, panicMode:null, readiness:0, bw:0, vol:0};
-        }
-
-        function save(){ localStorage.setItem('primeDataV21', JSON.stringify(data)); }
-        function saveStats(){
-            localStorage.setItem('primeStatsV21', JSON.stringify(stats));
-            const h = document.getElementById('userHeight');
-            if(h) h.value = stats.height || "";
-        }
-
-        function handleStreak(){
-            const k = getK(today);
-            if(!stats.lastLogin){
-                stats.lastLogin = k;
-                stats.streak = stats.streak || 1;
-                saveStats();
-                return;
+        // --- STORAGE HELPERS ---
+        function save() {
+            try {
+                localStorage.setItem('primeDataV21', JSON.stringify(data));
+            } catch (e) {
+                // iOS özel mod vs. hata verir: sessizce geç
             }
-            if(stats.lastLogin === k) return;
-            const last = new Date(stats.lastLogin);
-            const diffDays = Math.round((today - last)/(1000*60*60*24));
-            if(diffDays === 1){
-                stats.streak = (stats.streak || 0) + 1;
-            } else if(diffDays > 1){
-                stats.streak = 1;
-            }
-            stats.lastLogin = k;
-            saveStats();
         }
 
-        function computeTargets(){
-            let weight = stats.lastWeight;
-            const k = getK(today);
-            if(!weight && data[k] && data[k].bw) weight = data[k].bw;
-            weight = parseFloat(weight);
-            if(!weight || weight <= 0){
-                stats.targetCal = stats.targetCal || 2500;
-                stats.targetPro = stats.targetPro || 160;
-            } else {
-                const goal = (stats.profile && stats.profile.goal) || 'maintain';
-                const activity = (stats.profile && stats.profile.activity) || 'medium';
-                const actFactor = activity === 'low' ? 1.3 : (activity === 'high' ? 1.7 : 1.5);
-                let cal = weight * 24 * actFactor;
-                if(goal === 'cut') cal *= 0.85;
-                else if(goal === 'gain') cal *= 1.1;
-                stats.targetCal = Math.round(cal);
-                let proPerKg = 1.6;
-                if(goal === 'cut') proPerKg = 2.0;
-                else if(goal === 'strength' || goal === 'jump') proPerKg = 1.8;
-                stats.targetPro = Math.round(weight * proPerKg);
-            }
-            saveStats();
-            const tCal = stats.targetCal || 2500;
-            const tPro = stats.targetPro || 160;
-            const calEl = document.getElementById('targetCalDisplay');
-            const proEl = document.getElementById('targetProDisplay');
-            if(calEl) calEl.innerText = tCal;
-            if(proEl) proEl.innerText = tPro + "g";
+        function saveStats() { 
+            const hEl = document.getElementById('userHeight');
+            if (hEl) stats.height = hEl.value;
+            try {
+                localStorage.setItem('primeStatsV21', JSON.stringify(stats)); 
+            } catch (e) {}
         }
 
-        function ensureDailyQuests(){
-            const k = getK(today);
-            if(!stats.daily || stats.daily.date !== k){
-                stats.daily = {
-                    date: k,
-                    quests: [
-                        {id:'water2', text:'Bugün en az 2L su iç', reward:20, done:false},
-                        {id:'journal', text:'Günün sonunda günlük not yaz', reward:20, done:false},
-                        {id:'session', text:'Bugün en az 1 antrenman hareketini tamamla', reward:30, done:false}
-                    ]
-                };
-                saveStats();
-            }
-            renderDailyQuests();
-        }
-
-        function renderDailyQuests(){
-            const box = document.getElementById('dailyQuestBox');
-            if(!box || !stats.daily) return;
-            const qs = stats.daily.quests || [];
-            box.innerHTML = '<div style="font-size:0.8rem; color:#aaa; margin-bottom:6px;">🎯 Günlük Görevler</div>' +
-                qs.map(q=>{
-                    const mark = q.done ? '✔' : '○';
-                    const color = q.done ? 'var(--accent)' : '#777';
-                    return `<div style="display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; margin-bottom:4px;">
-                        <span>${mark} ${q.text}</span>
-                        <span style="color:${color}; font-weight:bold;">+${q.reward} XP</span>
-                    </div>`;
-                }).join('');
-        }
-
-        function completeQuest(id){
-            if(!stats.daily || !stats.daily.quests) return;
-            const q = stats.daily.quests.find(q=>q.id===id);
-            if(!q || q.done) return;
-            q.done = true;
-            addXP(q.reward);
-            saveStats();
-            renderDailyQuests();
-        }
-
-        function getTotalVolumeAll(){
-            let sum = 0;
-            Object.keys(data || {}).forEach(k=>{
-                if(data[k] && typeof data[k].vol === 'number') sum += data[k].vol;
-            });
-            return sum;
-        }
-
-        function calcDayVolumeKey(k){
-            const dt = data[k];
-            if(!dt) return 0;
-            let vol = 0;
-            const completed = dt.c || [];
-            (completed || []).forEach(idx=>{
-                const kg = parseInt(dt.w && dt.w[idx] || 0) || 0;
-                const sets = parseInt(dt.s && dt.s[idx] || 3) || 0;
-                if(kg > 0 && sets > 0) vol += kg * sets;
-            });
-            dt.vol = vol;
-            return vol;
-        }
-
+        // --- INIT ---
         function init() {
             try {
-                data = JSON.parse(localStorage.getItem('primeDataV21')) || {};
-                stats = JSON.parse(localStorage.getItem('primeStatsV21')) || {
-                    xp:0,
-                    height:0,
-                    challenge:{target:1000, current:0, title:"1000 Şınav"},
-                    streak:0,
-                    lastLogin:"",
-                    max:{},
-                    games:[],
-                    heat:{},
-                    history:{},
-                    pain:[],
-                    profile:null,
-                    profileCompleted:false,
-                    lastWeight:null,
-                    targetCal:2500,
-                    targetPro:160,
-                    achievements:{},
-                    daily:null
-                };
-                settings = JSON.parse(localStorage.getItem('primeSettingsV21')) || {sound:false, inSeason:true};
+                const rawData = localStorage.getItem('primeDataV21');
+                const rawStats = localStorage.getItem('primeStatsV21');
+                const rawSettings = localStorage.getItem('primeSettingsV21');
 
-                if(!stats.heat) stats.heat = {chest:0,back:0,legs:0,shoulders:0,arms:0,core:0};
-                if(!stats.achievements) stats.achievements = {};
-                const k = getK(today);
-                if(!data[k]) data[k] = defaultDay();
-
-                handleStreak();
-                computeTargets();
-
-                document.getElementById('dailyQuote').innerHTML = `"${quotes[today.getDate() % quotes.length]}"`;
-                document.getElementById('seasonToggle').checked = settings.inSeason;
-                document.getElementById('soundToggle').checked = settings.sound;
-                document.getElementById('userHeight').value = stats.height || "";
-
-                ensureDailyQuests();
-
-                if(!stats.profile || !stats.profileCompleted){
-                    openModal('onboardingModal');
-                } else if(data[k].readiness === 0){
-                    openModal('readinessModal');
-                }
-
-                updateChallengeUI();
-                renderFoodList();
-                render();
-                renderXP();
-                renderHeatmap();
-                renderGameHistory();
-                renderPainMap();
-                renderAchievements();
+                data = rawData ? JSON.parse(rawData) : {};
+                stats = rawStats ? JSON.parse(rawStats) : { ...defaultStats };
+                settings = rawSettings ? JSON.parse(rawSettings) : { ...defaultSettings };
             } catch (e) {
-                alert("Veri hatası. Sıfırlanıyor...");
-                if(confirm("Kayıtlı verileri temizleyip tekrar başlatmak ister misin?")){
-                    localStorage.removeItem('primeDataV21');
-                    localStorage.removeItem('primeStatsV21');
-                    localStorage.removeItem('primeSettingsV21');
-                    location.reload();
-                }
+                alert("Veri okunamadı, bu oturumda sıfırdan başlıyorum.");
+                data = {};
+                stats = { ...defaultStats };
+                settings = { ...defaultSettings };
             }
+
+            const k = getK(today);
+            if (!data[k]) {
+                data[k] = {
+                    c: [],
+                    s: {},
+                    w: {},
+                    rpe: {},
+                    n: "",
+                    wt: 0,
+                    nutri: { cal: 0, pro: 0, log: [], supps: [], timing: [] },
+                    panic: false,
+                    readiness: 0
+                };
+            }
+
+            if (!stats.heat) {
+                stats.heat = { chest:0, back:0, legs:0, shoulders:0, arms:0, core:0 };
+            }
+            if (!stats.challenge) {
+                stats.challenge = { target: 1000, current: 0, title: "1000 Şınav" };
+            }
+
+            const quoteEl = document.getElementById('dailyQuote');
+            if (quoteEl) {
+                quoteEl.innerHTML = `"${quotes[today.getDate() % quotes.length]}"`;
+            }
+
+            if (data[k].readiness === 0) {
+                openModal('readinessModal');
+            }
+
+            const seasonToggle = document.getElementById('seasonToggle');
+            const soundToggle = document.getElementById('soundToggle');
+            const heightEl = document.getElementById('userHeight');
+
+            if (seasonToggle) seasonToggle.checked = !!settings.inSeason;
+            if (soundToggle) soundToggle.checked = !!settings.sound;
+            if (heightEl) heightEl.value = stats.height || "";
+
+            updateChallengeUI();
+            renderFoodList(); 
+            render(); 
+            renderXP(); 
+            renderHeatmap(); 
+            renderGameHistory(); 
+            renderPainMap();
         }
 
+        // --- RENDER MAIN ---
         function render() {
-            const k = getK(today);
-            const dd = data[k];
-            document.getElementById('dateDisplay').innerText = today.toLocaleDateString('tr-TR', {weekday:'long', day:'numeric'});
-            const baseProg = settings.inSeason ? seasonSchedule[today.getDay()] : offSeasonSchedule[today.getDay()];
-            let p = dd.custom || baseProg;
-            if(dd.panic){
-                const pmode = dd.panicMode || 'classic';
-                p = panicPrograms[pmode] || panicPrograms.classic;
+            const k = getK(today); 
+            const dd = data[k]; 
+
+            const dateEl = document.getElementById('dateDisplay');
+            if (dateEl) {
+                dateEl.innerText = today.toLocaleDateString('tr-TR', {weekday:'long', day:'numeric'});
             }
 
-            document.getElementById('progTitle').innerText = p.t;
-            document.getElementById('progSub').innerText = p.s;
-            document.getElementById('seasonBadge').innerText = settings.inSeason ? "SEZON İÇİ" : "OFF-SEASON";
-            document.getElementById('readinessBadge').innerText = ["Enerji: ?", "Enerji: 😫", "Enerji: 🥱", "Enerji: 😐", "Enerji: 🙂", "Enerji: 🔥"][dd.readiness];
+            const baseProg = dd.panic ? seasonSchedule.panic :
+                (dd.custom || (settings.inSeason ? seasonSchedule[today.getDay()] : offSeasonSchedule[today.getDay()]));
+            const p = baseProg;
 
-            // Prehab + pain entegrasyonu
-            const phList = document.getElementById('prehabList');
-            phList.innerHTML = "";
-            let preList = (p.pre ? [...p.pre] : []);
-            if(stats.pain && Array.isArray(stats.pain)){
-                if(stats.pain.includes('diz')){
-                    if(!preList.includes('Patellar Tendon')) preList.push('Patellar Tendon');
-                    if(!preList.includes('Tibialis')) preList.push('Tibialis');
-                }
-                if(stats.pain.includes('bel') || stats.pain.includes('kalca')){
-                    if(!preList.includes('Kalça Flexor')) preList.push('Kalça Flexor');
-                    if(!preList.includes('Kalça Akt.')) preList.push('Kalça Akt.');
-                }
-                if(stats.pain.includes('omuz')){
-                    if(!preList.includes('Rotator Cuff')) preList.push('Rotator Cuff');
-                    if(!preList.includes('Omuz Mob.')) preList.push('Omuz Mob.');
-                }
+            const progTitle = document.getElementById('progTitle');
+            const progSub = document.getElementById('progSub');
+            const seasonBadge = document.getElementById('seasonBadge');
+            const readinessBadge = document.getElementById('readinessBadge');
+
+            if (progTitle) progTitle.innerText = p.t; 
+            if (progSub) progSub.innerText = p.s;
+            if (seasonBadge) seasonBadge.innerText = settings.inSeason ? "SEZON İÇİ" : "OFF-SEASON";
+            if (readinessBadge) readinessBadge.innerText = ["Enerji: ?", "😫", "🥱", "😐", "🙂", "🔥"][dd.readiness];
+
+            // Prehab
+            const phList = document.getElementById('prehabList'); 
+            if (phList) {
+                phList.innerHTML = "";
+                if (p.pre) p.pre.forEach(item => { 
+                    const meta = warmupDB[item] || {d: "Hazırlık."}; 
+                    phList.innerHTML += `
+                    <div class="prehab-item">
+                        <div>
+                            <div style="font-weight:600">${item}</div>
+                            <span class="prehab-desc">${meta.d}</span>
+                        </div>
+                        <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(item + " exercise")}" target="_blank" class="yt-btn">▶</a>
+                    </div>`; 
+                });
             }
-            if(preList) preList.forEach(item => {
-                const meta = warmupDB[item] || {d: "Hazırlık."};
-                phList.innerHTML += `<div class="prehab-item">
-                    <div>
-                        <div style="font-weight:600">${item}</div>
-                        <span class="prehab-desc">${meta.d}</span>
-                    </div>
-                    <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(item + " exercise")}" target="_blank" class="yt-btn">▶</a>
-                </div>`;
-            });
 
-            const list = document.getElementById('workoutList');
-            list.innerHTML='';
-            const ddC = dd.c || [];
-            const ddW = dd.w || {};
-            const ddS = dd.s || {};
+            // Workout list
+            const list = document.getElementById('workoutList'); 
+            if (!list) return;
+            list.innerHTML=''; 
+            let vol=0;
+
             p.i.forEach((it,i) => {
-                const chk = ddC.includes(i);
-                const kg = parseInt(ddW[i] || 0) || 0;
-                const sets = ddS[i] || '';
-                const name = it.n.split('(')[0].trim();
-                const isPR = kg > (stats.max[name]||0) && kg>0;
-                list.innerHTML += `<div class="task-item ${chk?'checked':''}" id="task-${i}">
+                const chk = dd.c.includes(i); 
+                const kg = parseInt(dd.w[i]||0); 
+                if(chk) vol += kg * (parseInt(dd.s[i])||3);
+                
+                const name = it.n.split('(')[0].trim(); 
+                const isPR = kg > (stats.max[name]||0) && kg > 0;
+                
+                list.innerHTML += `
+                <div class="task-item ${chk?'checked':''}" id="task-${i}">
                     <div class="task-top">
                         <div class="task-visual" onclick="toggleGuide(${i})">${visuals[it.v]||visuals.push}</div>
                         <div class="check-group" onclick="toggle(${i},'${it.isGame?'game':''}',${p.i.length})">
@@ -746,577 +778,530 @@
                     </div>
                     <div class="guide-text">💡 ${it.d||"Kontrollü."}</div>
                     ${it.v!=='rest' && it.v!=='pilates' && it.v!=='cardio' ? `
-                        <div class="input-row">
-                            <input class="mini-input" placeholder="Set" value="${sets}" onchange="saveS(${i},this.value)">
-                            <input class="mini-input ${isPR?'pr-active':''}" placeholder="Kg" type="number" value="${ddW[i]||''}" onchange="saveW('${name}',${i},this.value,${ddS[i]||3})">
-                            <button class="tool-btn" onclick="openCalc(${kg||0})">🧮</button>
-                            <button class="tool-btn" onclick="openHist('${name}')">📜</button>
-                        </div>` : ''
-                    }
+                    <div class="input-row">
+                        <input class="mini-input" type="number" min="0" placeholder="Set" value="${dd.s[i]||''}" onchange="saveS(${i},this.value)">
+                        <input class="mini-input ${isPR?'pr-active':''}" type="number" min="0" placeholder="Kg" value="${dd.w[i]||''}" onchange="saveW('${name}',${i},this.value,${dd.s[i]||3})">
+                        <button class="tool-btn" onclick="openCalc(${kg||0})">🧮</button>
+                        <button class="tool-btn" onclick="openHist('${name}')">📜</button>
+                    </div>` : ''}
                 </div>`;
             });
-
-            const vol = calcDayVolumeKey(k);
-            document.getElementById('totalVolume').innerText = vol + " kg";
-
-            const percent = (p.i && p.i.length) ? Math.round((ddC.length / p.i.length) * 100) : 0;
-            document.getElementById('progPercent').innerText = "%" + percent;
-
+            
+            const totalVolume = document.getElementById('totalVolume');
+            const progPercent = document.getElementById('progPercent');
+            if (totalVolume) totalVolume.innerText = vol + " kg"; 
+            if (progPercent) progPercent.innerText = "%" + (p.i.length ? Math.round((dd.c.length/p.i.length)*100) : 0); 
             updateTrackers(dd);
-            updateTrainingAlerts();
         }
 
-        function updateTrainingAlerts(){
-            const k = getK(today);
-            const dd = data[k];
-            const lowEl = document.getElementById('lowEnergyAlert');
-            const highEl = document.getElementById('highEnergyAlert');
-            lowEl.style.display = 'none';
-            highEl.style.display = 'none';
-            if(dd.readiness <= 2 && dd.readiness > 0) lowEl.style.display = 'flex';
-            if(dd.readiness >= 4) highEl.style.display = 'flex';
-
-            const deloadEl = document.getElementById('deloadAlert');
-            const todayDate = new Date(today);
-            let last7 = 0, prev7 = 0;
-            for(let i=0;i<14;i++){
-                const d = new Date(todayDate);
-                d.setDate(d.getDate() - i);
-                const key = getK(d);
-                const v = (data[key] && typeof data[key].vol === 'number') ? data[key].vol : 0;
-                if(i < 7) last7 += v; else prev7 += v;
-            }
-            const avgPrev7 = prev7 / 7;
-            if(last7 > 0 && avgPrev7 > 0 && last7 > avgPrev7 * 1.3){
-                deloadEl.style.display = 'flex';
-            } else {
-                deloadEl.style.display = 'none';
-            }
-        }
-
-        function toggle(i,s,t){
-            const k=getK(today);
-            const a=data[k].c || (data[k].c = []);
+        function toggle(i,s,t){ 
+            const k=getK(today); 
+            const a=data[k].c; 
             if(a.includes(i)) {
-                a.splice(a.indexOf(i),1);
+                a.splice(a.indexOf(i),1); 
+            } else { 
+                a.push(i); 
+                startTimer(); 
+                addXP(10); 
+                updateHeatmap(i); 
+                if(s==='game') openModal('gameLogModal'); 
+                if(a.length===t) checkClutch(); 
+            } 
+            save(); 
+            render(); 
+        }
+
+        function checkClutch(){ 
+            if(Math.random()<0.3) { 
+                document.getElementById('clutchTaskDisplay').innerText = clutchTasks[Math.floor(Math.random()*clutchTasks.length)]; 
+                openModal('clutchModal'); 
             } else {
-                a.push(i);
-                startTimer();
-                addXP(10);
-                updateHeatmap(i);
-                if(s==='game') openModal('gameLogModal');
-                if(a.length===t) checkClutch();
-                completeQuest('session');
+                showWrapUp(); 
             }
-            data[k].c = a;
-            data[k].vol = calcDayVolumeKey(k);
-            save();
-            render();
         }
 
-        function checkClutch(){ if(Math.random()<0.3) { document.getElementById('clutchTaskDisplay').innerText = clutchTasks[Math.floor(Math.random()*clutchTasks.length)]; openModal('clutchModal'); } else showWrapUp(); }
-        function completeClutch(){ addXP(100); closeModal('clutchModal'); showWrapUp(); }
-
-        function showWrapUp(){
-            const k=getK(today);
-            const dt=data[k];
-            const vol = dt.vol || calcDayVolumeKey(k);
-            document.getElementById('wrapVol').innerText = vol;
-            document.getElementById('wrapXP').innerText = "+" + (dt.c.length * 10);
-
-            // Haftalık özet
-            let sessions = 0;
-            const baseDate = new Date(today);
-            for(let i=0;i<7;i++){
-                const d = new Date(baseDate);
-                d.setDate(d.getDate()-i);
-                const key = getK(d);
-                if(data[key] && data[key].c && data[key].c.length>0) sessions++;
-            }
-            document.getElementById('wrapExtras').innerText = `Son 7 günde ${sessions} antrenman günü tamamladın.`;
-
-            const totalVolAll = getTotalVolumeAll();
-            if(totalVolAll >= 10000 && !stats.achievements.tenKVolume){
-                stats.achievements.tenKVolume = true;
-                addXP(100);
-                alert("Başarım açıldı: 10.000 kg toplam yük!");
-            }
-            saveStats();
-            renderAchievements();
-            openModal('wrapUpModal');
-            fireConfetti();
+        function completeClutch(){ 
+            addXP(100); 
+            closeModal('clutchModal'); 
+            showWrapUp(); 
         }
 
-        function addJumpToToday(){
-            const k=getK(today);
-            const idx=today.getDay();
-            const base = settings.inSeason ? seasonSchedule[idx] : offSeasonSchedule[idx];
-            let cur=data[k].custom?data[k].custom:base;
-            data[k].custom={t:cur.t+" + Jump",s:cur.s,j:true,pre:cur.pre,i:[...cur.i,...jumpR]};
-            save();
-            render();
-            alert("Zıplama Eklendi!");
+        function showWrapUp(){ 
+            const k=getK(today); 
+            const dt=data[k]; 
+            let vol=0; 
+            Object.values(dt.w).forEach(v=>vol+=parseInt(v||0)); 
+            document.getElementById('wrapVol').innerText=vol; 
+            document.getElementById('wrapXP').innerText="+"+(dt.c.length*10); 
+            openModal('wrapUpModal'); 
+            fireConfetti(); 
         }
 
-        function saveW(n,i,v,s){
-            const k=getK(today);
-            data[k].w[i]=v;
+        function addJumpToToday(){ 
+            const k=getK(today); 
+            const idx=today.getDay(); 
+            let cur=data[k].custom ? data[k].custom : (settings.inSeason ? seasonSchedule[idx] : offSeasonSchedule[idx]); 
+            
+            if(cur.i.find(x => x.n === jumpR[0].n)) { alert("Zaten eklendi!"); return; }
+
+            data[k].custom = {
+                t: cur.t+" + Jump",
+                s: cur.s,
+                j: true,
+                pre: cur.pre,
+                i: [...cur.i, ...jumpR]
+            }; 
+            save(); 
+            render(); 
+            alert("Zıplama eklendi!"); 
+        }
+
+        function saveW(n,i,v,s){ 
+            const k=getK(today); 
+            if (!data[k].w) data[k].w = {};
+            data[k].w[i]=v; 
             if(v>(stats.max[n]||0)){
-                stats.max[n]=v;
+                stats.max[n]=v; 
                 alert("REKOR! 🏆");
-                if(!stats.achievements.firstPR){
-                    stats.achievements.firstPR = true;
-                    addXP(50);
-                    alert("Başarım açıldı: İlk PR!");
-                }
-            }
-            stats.history[n]={w:v,s:s,d:k};
-            save();
+            } 
+            if (!stats.history) stats.history = {};
+            stats.history[n]={w:v,s:s,d:k}; 
+            save(); 
             saveStats();
-            render();
+            render(); 
         }
 
-        function saveS(i,v){ data[getK(today)].s[i]=v; save(); }
-
-        function addXP(x){
-            stats.xp+=x;
-            saveStats();
-            renderXP();
-        }
-
-        function renderXP(){
-            const lvl = Math.floor(stats.xp/1000+1);
-            document.getElementById('xpBar').style.width=(stats.xp%1000)/10+"%";
-            document.getElementById('xpText').innerText=stats.xp+" XP";
-            document.getElementById('currentLvl').innerText="Lvl "+lvl;
-            document.getElementById('userRank').innerText = "Seri: " + (stats.streak || 0) + " gün";
-        }
-
-        function updateTrackers(dd){
+        function saveS(i,v){ 
             const k = getK(today);
-            document.getElementById('waterCount').innerText=dd.wt+" lt";
-            document.getElementById('journal').value=dd.n||"";
-            document.getElementById('dailyWeight').value=dd.bw||"";
-            const cal=dd.nutri?.cal||0;
-            const pro=dd.nutri?.pro||0;
-            document.getElementById('calStatus').innerText=cal+" kcal";
-            document.getElementById('proStatus').innerText=pro+"g";
+            if (!data[k].s) data[k].s = {};
+            data[k].s[i]=v; 
+            save(); 
+        }
 
-            const tCal = stats.targetCal || 2500;
-            const tPro = stats.targetPro || 160;
-            document.getElementById('targetCalDisplay').innerText = tCal;
-            document.getElementById('targetProDisplay').innerText = tPro + "g";
+        function addXP(x){ 
+            stats.xp+=x; 
+            saveStats(); 
+            renderXP(); 
+        }
 
-            document.getElementById('calText').innerText=`${cal} / ${tCal}`;
-            document.getElementById('proText').innerText=`${pro} / ${tPro}g`;
-            document.getElementById('calBar').style.width=Math.min((cal/tCal)*100,100)+"%";
-            document.getElementById('proBar').style.width=Math.min((pro/tPro)*100,100)+"%";
+        function renderXP(){ 
+            const bar = document.getElementById('xpBar');
+            const txt = document.getElementById('xpText');
+            const lvl = document.getElementById('currentLvl');
+            if (!bar || !txt || !lvl) return;
 
-            const l=document.getElementById('foodLog');
-            l.innerHTML="";
-            if(dd.nutri?.log) dd.nutri.log.forEach(f=>l.innerHTML+=`<div>• ${f.n} (${f.c}kcal, ${f.p}g)</div>`);
+            bar.style.width = (stats.xp%1000)/10+"%"; 
+            txt.innerText = stats.xp+" XP"; 
+            lvl.innerText = "Lvl "+Math.floor(stats.xp/1000+1); 
+        }
 
-            const idx = today.getDay();
-            const baseProg = settings.inSeason ? seasonSchedule[idx] : offSeasonSchedule[idx];
-            let p = dd.custom || baseProg;
-            if(dd.panic){
-                const pmode = dd.panicMode || 'classic';
-                p = panicPrograms[pmode] || panicPrograms.classic;
+        function updateTrackers(dd){ 
+            const waterCount = document.getElementById('waterCount');
+            const journal = document.getElementById('journal');
+            const dailyWeight = document.getElementById('dailyWeight');
+
+            if (waterCount) waterCount.innerText = (dd.wt || 0) + " lt"; 
+            if (journal) journal.value = dd.n || ""; 
+            if (dailyWeight) dailyWeight.value = dd.bw || ""; 
+            
+            const cal = dd.nutri?.cal||0; 
+            const pro = dd.nutri?.pro||0; 
+            const calStatus = document.getElementById('calStatus');
+            const proStatus = document.getElementById('proStatus');
+
+            if (calStatus) calStatus.innerText = cal+" kcal"; 
+            if (proStatus) proStatus.innerText = pro+"g"; 
+            
+            const tCal=2500; 
+            const tPro=160; 
+            const targetCalDisplay = document.getElementById('targetCalDisplay');
+            const calText = document.getElementById('calText');
+            const proText = document.getElementById('proText');
+            const calBar = document.getElementById('calBar');
+            const proBar = document.getElementById('proBar');
+
+            if (targetCalDisplay) targetCalDisplay.innerText = tCal; 
+            if (calText) calText.innerText = `${cal} / ${tCal}`; 
+            if (proText) proText.innerText = `${pro} / ${tPro}g`; 
+            if (calBar) calBar.style.width = Math.min((cal/tCal)*100,100)+"%"; 
+            if (proBar) proBar.style.width = Math.min((pro/tPro)*100,100)+"%"; 
+            
+            const l=document.getElementById('foodLog'); 
+            if (l) {
+                l.innerHTML=""; 
+                if(dd.nutri?.log) dd.nutri.log.forEach(f=>l.innerHTML+=`<div>• ${f.n} (${f.c}kcal, ${f.p}g)</div>`); 
             }
-            if(p.j) document.getElementById('nutrientTimingBox').style.display='block';
-            else document.getElementById('nutrientTimingBox').style.display='none';
+
+            const isGameDay = seasonSchedule[today.getDay()]?.j;
+            const timingBox = document.getElementById('nutrientTimingBox');
+            if (timingBox) timingBox.style.display = isGameDay ? 'block' : 'none';
+            
+            document.querySelectorAll('.supp-icon').forEach(el=>el.classList.remove('active')); 
+            if(dd.nutri?.supps) dd.nutri.supps.forEach(s => {
+                const el = document.getElementById('supp-'+s);
+                if (el) el.classList.add('active');
+            });
+            
+            document.querySelectorAll('.timing-item').forEach(el=>el.classList.remove('timing-active')); 
+            if(dd.nutri?.timing) dd.nutri.timing.forEach(t => {
+                const el = document.getElementById('time-'+t);
+                if (el) el.classList.add('timing-active');
+            });
         }
 
-        function renderFoodList(){
-            const g=document.getElementById('foodGrid');
-            g.innerHTML="";
-            foodDB.forEach((f,i)=>{g.innerHTML+=`<div class="food-item" onclick="addFood(${i})"><b>${f.n}</b><small>${f.c}kcal / ${f.p}g</small></div>`;});
+        function renderFoodList(){ 
+            const g=document.getElementById('foodGrid'); 
+            if (!g) return;
+            g.innerHTML=""; 
+            foodDB.forEach((f,i)=>{
+                g.innerHTML+=`<div class="food-item" onclick="addFood(${i})"><b>${f.n}</b><small>${f.c}kcal / ${f.p}g</small></div>`;
+            }); 
         }
 
-        function ensureNutri(k){
-            if(!data[k].nutri) data[k].nutri = {cal:0, pro:0, log:[], supps:[], timing:[]};
-            if(!Array.isArray(data[k].nutri.supps)) data[k].nutri.supps = [];
-            if(!Array.isArray(data[k].nutri.timing)) data[k].nutri.timing = [];
-            if(!Array.isArray(data[k].nutri.log)) data[k].nutri.log = [];
+        function addFood(i){ 
+            const f=foodDB[i]; 
+            const k=getK(today); 
+            if(!data[k].nutri) data[k].nutri={cal:0,pro:0,log:[],supps:[],timing:[]}; 
+            data[k].nutri.cal+=f.c; 
+            data[k].nutri.pro+=f.p; 
+            if(!data[k].nutri.log) data[k].nutri.log=[]; 
+            data[k].nutri.log.push(f); 
+            save(); 
+            render(); 
         }
 
-        function addFood(i){
-            const f=foodDB[i];
-            const k=getK(today);
-            ensureNutri(k);
-            data[k].nutri.cal+=f.c;
-            data[k].nutri.pro+=f.p;
-            data[k].nutri.log.push(f);
-            save();
-            render();
+        function addQuickMacros(){ 
+            const c=parseInt(document.getElementById('quickCal').value)||0; 
+            const p=parseInt(document.getElementById('quickPro').value)||0; 
+            if(c>0||p>0){ 
+                const k=getK(today); 
+                if(!data[k].nutri) data[k].nutri={cal:0,pro:0,log:[],supps:[],timing:[]}; 
+                data[k].nutri.cal+=c; 
+                data[k].nutri.pro+=p; 
+                if(!data[k].nutri.log) data[k].nutri.log=[]; 
+                data[k].nutri.log.push({n:"Hızlı Ekleme",c:c,p:p}); 
+                document.getElementById('quickCal').value=""; 
+                document.getElementById('quickPro').value=""; 
+                save(); 
+                render(); 
+            } 
         }
 
-        function addQuickMacros(){
-            const c=parseInt(document.getElementById('quickCal').value)||0;
-            const p=parseInt(document.getElementById('quickPro').value)||0;
-            if(c>0||p>0){
-                const k=getK(today);
-                ensureNutri(k);
-                data[k].nutri.cal+=c;
-                data[k].nutri.pro+=p;
-                data[k].nutri.log.push({n:"Hızlı Ekleme",c:c,p:p});
-                document.getElementById('quickCal').value="";
-                document.getElementById('quickPro').value="";
-                save();
-                render();
-            }
+        function clearNutrition(){ 
+            if(confirm("Beslenme kaydı silinsin mi?")){ 
+                const k=getK(today); 
+                const supps = data[k].nutri?.supps || [];
+                const timing = data[k].nutri?.timing || [];
+                data[k].nutri={cal:0,pro:0,log:[],supps, timing}; 
+                save(); 
+                render(); 
+            } 
         }
 
-        function clearNutrition(){
-            if(confirm("Beslenme listesi silinsin mi?")){
-                const k=getK(today);
-                ensureNutri(k);
-                const supps = data[k].nutri.supps;
-                const timing = data[k].nutri.timing;
-                data[k].nutri={cal:0,pro:0,log:[],supps:supps,timing:timing};
-                save();
-                render();
-            }
-        }
-
-        function renderHeatmap(){
-            const c={low:'#333',med:'#ffd60a',high:'#ff453a'};
+        function renderHeatmap(){ 
+            const c={low:'#333',med:'#ffd60a',high:'#ff453a'}; 
             const setFill=(id,val)=>{
                 const el=document.getElementById(id);
                 if(!el)return;
                 if(val>20)el.style.fill=c.high;
                 else if(val>5)el.style.fill=c.med;
                 else el.style.fill=c.low;
-            };
-            setFill('svg-chest',stats.heat.chest);
-            setFill('svg-shoulders',stats.heat.shoulders);
-            setFill('svg-arms',stats.heat.arms);
-            setFill('svg-legs',stats.heat.legs);
-            setFill('svg-core',stats.heat.core);
-
-            const legAlert = document.getElementById('legAlert');
-            const totalUpper = (stats.heat.chest||0)+(stats.heat.shoulders||0)+(stats.heat.arms||0);
-            if(totalUpper>0 && (stats.heat.legs||0) < totalUpper*0.4){
-                legAlert.style.display = 'flex';
-            } else {
-                legAlert.style.display = 'none';
-            }
+            }; 
+            setFill('svg-chest',stats.heat.chest); 
+            setFill('svg-shoulders',stats.heat.shoulders); 
+            setFill('svg-arms',stats.heat.arms); 
+            setFill('svg-legs',stats.heat.legs); 
+            setFill('svg-core',stats.heat.core); 
         }
 
-        function updateHeatmap(i){
-            const k=getK(today);
-            const dd=data[k];
-            const baseProg = settings.inSeason ? seasonSchedule[today.getDay()] : offSeasonSchedule[today.getDay()];
-            let p = dd.custom || baseProg;
-            if(dd.panic){
-                const pmode = dd.panicMode || 'classic';
-                p = panicPrograms[pmode] || panicPrograms.classic;
-            }
-            const ex = p && p.i && p.i[i];
-            if(!ex) return;
-            const key = heatMapVisualMap[ex.v] || 'core';
-            stats.heat[key] = (stats.heat[key]||0)+1;
-            saveStats();
-            renderHeatmap();
+        function updateHeatmap(i){ 
+            const k=getK(today); 
+            const dd=data[k]; 
+            const p=dd.custom||(settings.inSeason?seasonSchedule[today.getDay()]:offSeasonSchedule[today.getDay()]); 
+            const block = muscleDB[p.i[i].mb];
+            const mKey = block ? block.mb : "core";
+            if (!stats.heat[mKey]) stats.heat[mKey] = 0;
+            stats.heat[mKey] += 1; 
+            saveStats(); 
+            renderHeatmap(); 
         }
 
-        function renderGameHistory(){
-            const d=document.getElementById('gameHistory');
-            d.innerHTML="";
-            if(!stats.games || stats.games.length===0){
-                d.innerHTML = '<div style="font-size:0.8rem; color:#777;">Henüz kayıtlı maç yok.</div>';
-                return;
-            }
-            let totalPts=0,totalAst=0,maxPts=0;
-            stats.games.forEach(g=>{
-                const pts = Number(g.pts)||0;
-                const ast = Number(g.ast)||0;
-                totalPts += pts;
-                totalAst += ast;
-                if(pts>maxPts) maxPts = pts;
-            });
-            const count = stats.games.length;
-            const avgPts = (totalPts/count).toFixed(1);
-            const avgAst = (totalAst/count).toFixed(1);
-            d.innerHTML += `<div style="background:#111; padding:10px; border-radius:8px; margin-bottom:8px; border:1px solid #444; font-size:0.8rem;">
-                Ortalama: ${avgPts} Sayı / ${avgAst} Asist<br>
-                En yüksek skor: ${maxPts} Sayı
-            </div>`;
-            stats.games.slice(-5).reverse().forEach(g=>{
+        function renderGameHistory(){ 
+            const d=document.getElementById('gameHistory'); 
+            if (!d) return;
+            d.innerHTML=""; 
+            (stats.games || []).slice(-5).reverse().forEach(g=>{
                 d.innerHTML+=`<div style="background:#111; padding:10px; border-radius:8px; margin-bottom:5px; border:1px solid #333; font-size:0.8rem;">${g.date} - ${g.pts} Sayı / ${g.ast} Asist</div>`;
-            });
+            }); 
         }
 
-        function renderAchievements(){
-            const box = document.getElementById('achievementsBox');
-            if(!box) return;
-            const a = stats.achievements || {};
-            const items = [];
-            if(a.firstPR) items.push("🏆 İlk PR");
-            if(a.tenKVolume) items.push("💪 10.000 kg Toplam Yük");
-            if(a.tenGames) items.push("🏀 10 Maç Kaydı");
-            if(items.length===0){
-                box.innerHTML = '<div style="font-size:0.8rem; color:#777;">Henüz kilitlenen başarı yok.</div>';
-            } else {
-                box.innerHTML = items.map(t=>`<div style="background:#111; padding:8px; border-radius:6px; margin-bottom:4px; border:1px solid #333; font-size:0.8rem;">${t}</div>`).join('');
-            }
+        // --- MODAL HELPERS ---
+        function openModal(id){
+            const el = document.getElementById(id);
+            if (el) el.classList.add('open');
+        } 
+
+        function closeModal(id){
+            const el = document.getElementById(id);
+            if (el) el.classList.remove('open');
         }
 
-        function openModal(id){document.getElementById(id).classList.add('open');}
-        function closeModal(id){document.getElementById(id).classList.remove('open');}
-
-        function switchToolTab(t, el){
-            document.querySelectorAll('.tool-content').forEach(e=>e.style.display='none');
-            document.getElementById('tool-'+t).style.display='block';
-            document.querySelectorAll('.n-tab').forEach(e=>e.classList.remove('active'));
-            if(el) el.classList.add('active');
+        // Zone kapatma
+        function closeZone(){
+            closeModal('zoneModal');
+            if (breathInterval) clearInterval(breathInterval);
+            breathInterval = null;
         }
 
-        function toggleGuide(i){ document.getElementById(`task-${i}`).classList.toggle('show-guide'); }
+        // TAB switch
+        function switchToolTab(t, el){ 
+            document.querySelectorAll('.tool-content').forEach(e=>e.style.display='none'); 
+            const target = document.getElementById('tool-'+t);
+            if (target) target.style.display='block'; 
+            document.querySelectorAll('.n-tab').forEach(e=>e.classList.remove('active')); 
+            if (el) el.classList.add('active'); 
+        }
 
-        function startTimer(){
-            const el=document.getElementById('timerFloat');
-            el.classList.add('active');
-            if(timerInt) clearInterval(timerInt);
-            timerSec=90;
-            updT();
-            timerInt=setInterval(()=>{
-                timerSec--;
+        function toggleGuide(i){ 
+            const row = document.getElementById(`task-${i}`);
+            if (row) row.classList.toggle('show-guide'); 
+        }
+
+        // --- TIMER ---
+        function startTimer(){ 
+            const el=document.getElementById('timerFloat'); 
+            if (el) el.classList.add('active'); 
+            if(timerInt) clearInterval(timerInt); 
+            timerSec=90; 
+            updT(); 
+            timerInt=setInterval(()=>{ 
+                timerSec--; 
+                updT(); 
+                if(timerSec<=0){ stopTimer(); notify(); } 
+            },1000); 
+        }
+
+        function addTimer(extra){
+            const el=document.getElementById('timerFloat'); 
+            if (!timerInt) {
+                timerSec = extra;
+                if (el) el.classList.add('active');
                 updT();
-                if(timerSec<=0){
-                    stopTimer();
-                    notify();
-                }
-            },1000);
+                timerInt=setInterval(()=>{ 
+                    timerSec--; 
+                    updT(); 
+                    if(timerSec<=0){ stopTimer(); notify(); } 
+                },1000); 
+            } else {
+                timerSec += extra;
+                if (timerSec < 0) timerSec = 0;
+                updT();
+            }
         }
 
-        function addTimer(sec){
-            timerSec += sec;
-            if(timerSec < 0) timerSec = 0;
-            updT();
-        }
-
-        function stopTimer(){
-            if(timerInt) clearInterval(timerInt);
+        function stopTimer(){ 
+            if (timerInt) clearInterval(timerInt); 
             timerInt = null;
-            document.getElementById('timerFloat').classList.remove('active');
+            const el = document.getElementById('timerFloat');
+            if (el) el.classList.remove('active'); 
         }
 
-        function updT(){
-            const m=Math.floor(timerSec/60), s=timerSec%60;
-            document.getElementById('timerDisplay').innerText=`0${m}:${s<10?'0'+s:s}`;
+        function updT(){ 
+            const m=Math.floor(timerSec/60);
+            const s=timerSec%60; 
+            const disp = document.getElementById('timerDisplay');
+            if (disp) disp.innerText=`0${m}:${s<10?'0'+s:s}`; 
         }
-
-        function notify(){
-            if(settings.sound && 'speechSynthesis' in window){
-                const u=new SpeechSynthesisUtterance("Süre doldu!");
-                u.lang='tr-TR';
-                window.speechSynthesis.speak(u);
-            } else if(navigator.vibrate){
-                navigator.vibrate([200,100,200]);
+        
+        function notify(){ 
+            if(settings.sound && 'speechSynthesis' in window){ 
+                const u=new SpeechSynthesisUtterance("Süre doldu!"); 
+                u.lang='tr-TR'; 
+                window.speechSynthesis.speak(u); 
+            } else if (navigator && typeof navigator.vibrate === 'function') {
+                navigator.vibrate([200,100,200]); 
             }
         }
 
-        function addWater(){
-            const k=getK(today);
-            data[k].wt+=0.5;
-            save();
-            if(data[k].wt >= 2) completeQuest('water2');
-            render();
-        }
-
-        function saveData(){
+        // --- MISC ---
+        function addWater(){ 
             const k = getK(today);
-            if(!data[k]) data[k] = defaultDay();
-            data[k].n = document.getElementById('journal').value;
-            const bw = document.getElementById('dailyWeight').value;
-            data[k].bw = bw;
-            if(bw){
-                stats.lastWeight = bw;
-                saveStats();
-                computeTargets();
-            }
-            if((data[k].n || '').trim().length > 0){
-                completeQuest('journal');
-            }
-            save();
+            if (!data[k]) data[k] = {};
+            data[k].wt = (data[k].wt || 0) + 0.5; 
+            save(); 
+            render(); 
         }
 
-        function setReadiness(v){
-            data[getK(today)].readiness=v;
-            save();
-            closeModal('readinessModal');
-            render();
-        }
-
-        function togglePanic(){
-            openModal('panicModal');
-        }
-
-        function setPanicMode(mode){
-            const k=getK(today);
-            data[k].panic = true;
-            data[k].panicMode = mode;
-            save();
-            closeModal('panicModal');
-            render();
-        }
-
-        function disablePanic(){
-            const k=getK(today);
-            data[k].panic = false;
-            data[k].panicMode = null;
-            save();
-            closeModal('panicModal');
-            render();
-        }
-
-        function changeDate(d){
-            today.setDate(today.getDate()+d);
+        function setReadiness(v){ 
             const k = getK(today);
-            if(!data[k]) data[k] = defaultDay();
-            init();
+            if (!data[k]) return;
+            data[k].readiness=v; 
+            save(); 
+            closeModal('readinessModal'); 
+            render(); 
         }
 
-        function toggleSupp(s){
-            const k=getK(today);
-            ensureNutri(k);
-            const arr = data[k].nutri.supps;
-            if(arr.includes(s)) data[k].nutri.supps = arr.filter(x=>x!==s);
-            else arr.push(s);
-            save();
-            render();
+        function togglePanic(){ 
+            const k = getK(today);
+            if (!data[k]) return;
+            data[k].panic=!data[k].panic; 
+            save(); 
+            render(); 
         }
 
-        function toggleTiming(t){
-            const k=getK(today);
-            ensureNutri(k);
-            const arr = data[k].nutri.timing;
-            if(arr.includes(t)) data[k].nutri.timing = arr.filter(x=>x!==t);
-            else arr.push(t);
-            save();
-            render();
+        function changeDate(d){ 
+            today.setDate(today.getDate()+d); 
+            init(); 
+        }
+        
+        function toggleSupp(s){ 
+            const k=getK(today); 
+            if(!data[k].nutri)data[k].nutri={cal:0,pro:0,log:[],supps:[],timing:[]}; 
+            if(!data[k].nutri.supps)data[k].nutri.supps=[]; 
+            if(data[k].nutri.supps.includes(s)) data[k].nutri.supps=data[k].nutri.supps.filter(x=>x!==s); 
+            else data[k].nutri.supps.push(s); 
+            save(); 
+            render(); 
+        }
+        
+        function toggleTiming(t){ 
+            const k=getK(today); 
+            if(!data[k].nutri)data[k].nutri={cal:0,pro:0,log:[],supps:[],timing:[]}; 
+            if(!data[k].nutri.timing)data[k].nutri.timing=[]; 
+            if(data[k].nutri.timing.includes(t)) data[k].nutri.timing=data[k].nutri.timing.filter(x=>x!==t); 
+            else data[k].nutri.timing.push(t); 
+            save(); 
+            render(); 
         }
 
-        function calc1RM(){
-            const w=parseFloat(document.getElementById('rmWeight').value);
-            const r=parseFloat(document.getElementById('rmReps').value);
-            if(w&&r)document.getElementById('rmResult').innerText=Math.round(w*(1+r/30))+" kg";
+        function calc1RM(){ 
+            const w=parseFloat(document.getElementById('rmWeight').value); 
+            const r=parseFloat(document.getElementById('rmReps').value); 
+            if(w&&r) document.getElementById('rmResult').innerText=Math.round(w*(1+r/30))+" kg"; 
         }
 
-        function openCalc(kg){
-            document.getElementById('plateTarget').value=kg;
-            calcPlates();
-            openModal('plateModal');
+        function openCalc(kg){ 
+            const el = document.getElementById('plateTarget');
+            if (el) el.value=kg; 
+            calcPlates(); 
+            openModal('plateModal'); 
         }
 
-        function calcPlates(){
-            const t=parseFloat(document.getElementById('plateTarget').value);
-            const vis=document.getElementById('plateVisual');
-            vis.innerHTML='';
-            if(!t||t<=20)return;
-            let w=(t-20)/2;
+        function calcPlates(){ 
+            const t=parseFloat(document.getElementById('plateTarget').value); 
+            const vis=document.getElementById('plateVisual'); 
+            if (!vis) return;
+            vis.innerHTML=''; 
+            if(!t||t<=20)return; 
+            let w=(t-20)/2; 
             [25,20,15,10,5,2.5,1.25].forEach(p=>{
                 while(w>=p){
-                    w-=p;
+                    w-=p; 
                     vis.innerHTML+=`<div class="plate" style="width:${28+p}px; background:${p>=25?'#ff3b30':(p>=20?'#0a84ff':(p>=10?'#32d74b':'#ffd60a'))}">${p}</div>`;
                 }
-            });
+            }); 
         }
 
-        function openHist(n){
-            const h=stats.history[n];
-            document.getElementById('histTitle').innerText=n+" Geçmişi";
-            document.getElementById('histList').innerText=h?`Son: ${h.w}kg x ${h.s} (${h.d})`:"Veri yok.";
-            openModal('historyModal');
+        function openHist(n){ 
+            const h = stats.history ? stats.history[n] : null;
+            const max = stats.max[n] || 0; 
+            document.getElementById('histTitle').innerText=n+" Geçmişi"; 
+            document.getElementById('histList').innerHTML = 
+                (max > 0 ? `<div style="color:var(--gold); font-weight:bold; margin-bottom:10px;">🏆 PR: ${max} kg</div>` : "") +
+                (h ? `<div>Son: ${h.w}kg x ${h.s} (${h.d})</div>` : "Henüz veri yok."); 
+            openModal('historyModal'); 
         }
 
-        function generateMenu(){
-            const r=a=>a[Math.floor(Math.random()*a.length)];
-            const m1=r(foodDB.filter(f=>f.n.includes('Yumurta')||f.n.includes('Yulaf')));
-            const m2=r(foodDB.filter(f=>f.n.includes('Tavuk')||f.n.includes('Ton')));
-            const m3=r(foodDB.filter(f=>f.n.includes('Pilav')||f.n.includes('Makarna')));
-            document.getElementById('menuResult').innerHTML=`<div style="background:#222; padding:15px; margin-top:15px;"><b>Kahvaltı:</b> ${m1.n}<br><b>Öğle:</b> ${m2.n}<br><b>Akşam:</b> ${m3.n}</div>`;
+        function generateMenu(){ 
+            const r=a=>a[Math.floor(Math.random()*a.length)]; 
+            const m1=r(foodDB.filter(f=>f.n.includes('Yumurta')||f.n.includes('Yulaf'))); 
+            const m2=r(foodDB.filter(f=>f.n.includes('Tavuk')||f.n.includes('Ton'))); 
+            const m3=r(foodDB.filter(f=>f.n.includes('Pilav')||f.n.includes('Makarna'))); 
+            document.getElementById('menuResult').innerHTML=
+                `<div style="background:#222; padding:15px; margin-top:15px;">
+                    <b>Kahvaltı:</b> ${m1.n}<br>
+                    <b>Öğle:</b> ${m2.n}<br>
+                    <b>Akşam:</b> ${m3.n}
+                </div>`; 
         }
 
-        function togglePain(p){
-            if(!stats.pain) stats.pain = [];
-            if(stats.pain.includes(p)) stats.pain = stats.pain.filter(x => x !== p);
-            else stats.pain.push(p);
-            saveStats();
-            renderPainMap();
-            render();
+        function togglePain(p){ 
+            if(!stats.pain) stats.pain = []; 
+            if(stats.pain.includes(p)) stats.pain = stats.pain.filter(x => x !== p); 
+            else stats.pain.push(p); 
+            saveStats(); 
+            renderPainMap(); 
         }
 
-        function renderPainMap(){
-            document.querySelectorAll('.pain-part').forEach(el => el.classList.remove('active'));
-            if(stats.pain) stats.pain.forEach(p => {
-                const el = document.querySelector(`.pain-part[onclick="togglePain('${p}')"]`);
-                if(el) el.classList.add('active');
-            });
+        function renderPainMap(){ 
+            document.querySelectorAll('.pain-part').forEach(el => el.classList.remove('active')); 
+            if(stats.pain) stats.pain.forEach(p => { 
+                document.querySelectorAll('.pain-part').forEach(el => {
+                    if (el.textContent === p.charAt(0).toUpperCase() + p.slice(1) || el.getAttribute('onclick') === `togglePain('${p}')`) {
+                        el.classList.add('active');
+                    }
+                });
+            }); 
         }
 
-        function toggleSeason(){
-            settings.inSeason = document.getElementById('seasonToggle').checked;
-            localStorage.setItem('primeSettingsV21', JSON.stringify(settings));
-            render();
+        function toggleSeason(){ 
+            const el = document.getElementById('seasonToggle');
+            settings.inSeason = el ? el.checked : settings.inSeason; 
+            try {
+                localStorage.setItem('primeSettingsV21', JSON.stringify(settings)); 
+            } catch (e) {}
+            render(); 
         }
 
-        function toggleSound(){
-            settings.sound = document.getElementById('soundToggle').checked;
-            localStorage.setItem('primeSettingsV21', JSON.stringify(settings));
+        function toggleSound(){ 
+            const el = document.getElementById('soundToggle');
+            settings.sound = el ? el.checked : settings.sound; 
+            try {
+                localStorage.setItem('primeSettingsV21', JSON.stringify(settings)); 
+            } catch (e) {}
         }
 
-        function resetApp(){
-            if(confirm("Tüm veriler silinsin mi?")){
-                localStorage.removeItem('primeDataV21');
-                localStorage.removeItem('primeStatsV21');
-                localStorage.removeItem('primeSettingsV21');
-                location.reload();
-            }
+        function resetApp(){ 
+            if(confirm("Sıfırla?")){ 
+                try { localStorage.clear(); } catch(e) {}
+                location.reload(); 
+            } 
         }
 
-        function startBreathing(){
-            const el = document.getElementById('breathCircle');
-            const txt = document.getElementById('breathText');
-            document.getElementById('zoneModal').classList.add('zone-active');
-            let phase = 0;
-            if(breatheInt) clearInterval(breatheInt);
-            const cycle = () => {
-                if(phase===0){ el.innerText="AL"; el.style.transform="scale(1.5)"; txt.innerText="Havayı doldur"; }
-                else if(phase===1){ el.innerText="TUT"; txt.innerText="Nefesi tut"; }
-                else if(phase===2){ el.innerText="VER"; el.style.transform="scale(1)"; txt.innerText="Yavaşça ver"; }
-                else if(phase===3){ el.innerText="TUT"; txt.innerText="Boşlukta bekle"; }
-                phase = (phase+1)%4;
-            };
-            cycle();
-            breatheInt = setInterval(cycle, 4000);
+        function startBreathing(){ 
+            const el = document.getElementById('breathCircle'); 
+            const txt = document.getElementById('breathText'); 
+            let phase = 0; 
+            if (breathInterval) clearInterval(breathInterval);
+
+            const cycle = () => { 
+                if(!el || !txt) return;
+                if(phase===0){ el.innerText="AL"; el.style.transform="scale(1.5)"; txt.innerText="Nefes al"; } 
+                else if(phase===1){ el.innerText="TUT"; txt.innerText="Tut"; } 
+                else if(phase===2){ el.innerText="VER"; el.style.transform="scale(1)"; txt.innerText="Nefes ver"; } 
+                else if(phase===3){ el.innerText="TUT"; txt.innerText="Tut"; } 
+                phase = (phase+1)%4; 
+            }; 
+            cycle(); 
+            breathInterval = setInterval(cycle, 4000); 
         }
 
-        function closeZone(){
-            if(breatheInt) clearInterval(breatheInt);
-            closeModal('zoneModal');
-        }
-
-        function saveGameLog(){
-            const p=document.getElementById('gamePoints').value;
-            const a=document.getElementById('gameAssists').value;
-            if(p||a){
-                stats.games.push({date:getK(today), pts:p||0, ast:a||0});
-                if(stats.games.length >= 10 && !stats.achievements.tenGames){
-                    stats.achievements.tenGames = true;
-                    addXP(50);
-                    alert("Başarım açıldı: 10 maç kaydı!");
-                }
-                saveStats();
-                closeModal('gameLogModal');
-                renderGameHistory();
-                renderAchievements();
-            }
+        function saveGameLog(){ 
+            const p=document.getElementById('gamePoints').value; 
+            const a=document.getElementById('gameAssists').value; 
+            const note=document.getElementById('gameNotes').value; 
+            if(p||a||note){ 
+                if (!stats.games) stats.games = [];
+                stats.games.push({date:getK(today), pts:p||0, ast:a||0, note}); 
+                saveStats(); 
+                closeModal('gameLogModal'); 
+                renderGameHistory(); 
+            } 
         }
 
         function fireConfetti(){
             const c=document.getElementById('confetti');
+            if (!c) return;
             const x=c.getContext('2d');
             c.width=window.innerWidth;
             c.height=window.innerHeight;
@@ -1338,42 +1323,164 @@
             l();
         }
 
-        function exportData() {
-            const d = {data: data, stats: stats, settings: settings};
-            const b = new Blob([JSON.stringify(d)], {type: 'application/json'});
-            const u = URL.createObjectURL(b);
-            const a = document.createElement('a');
-            a.href = u;
-            a.download = 'prime_backup.json';
-            a.click();
+        function exportData() { 
+            const d = {data: data, stats: stats, settings: settings}; 
+            const b = new Blob([JSON.stringify(d)], {type: 'application/json'}); 
+            const u = URL.createObjectURL(b); 
+            const a = document.createElement('a'); 
+            a.href = u; 
+            a.download = 'prime_backup.json'; 
+            a.click(); 
         }
 
-        function importData(input) {
-            const f = input.files[0];
-            const r = new FileReader();
-            r.onload = (e) => {
-                const d = JSON.parse(e.target.result);
-                localStorage.setItem('primeDataV21', JSON.stringify(d.data));
-                localStorage.setItem('primeStatsV21', JSON.stringify(d.stats));
-                localStorage.setItem('primeSettingsV21', JSON.stringify(d.settings));
-                location.reload();
-            };
-            r.readAsText(f);
+        function importData(input) { 
+            const f = input.files[0]; 
+            const r = new FileReader(); 
+            r.onload = (e) => { 
+                const d = JSON.parse(e.target.result); 
+                try {
+                    localStorage.setItem('primeDataV21', JSON.stringify(d.data)); 
+                    localStorage.setItem('primeStatsV21', JSON.stringify(d.stats)); 
+                    localStorage.setItem('primeSettingsV21', JSON.stringify(d.settings)); 
+                } catch(e2){}
+                location.reload(); 
+            }; 
+            r.readAsText(f); 
         }
 
-        function saveProfile(){
-            const goal = document.getElementById('obGoal').value;
-            const equip = document.getElementById('obEquip').value;
-            const activity = document.getElementById('obActivity').value;
-            stats.profile = {goal, equip, activity};
-            stats.profileCompleted = true;
-            saveStats();
-            computeTargets();
-            closeModal('onboardingModal');
-            const k = getK(today);
-            if(data[k].readiness === 0){
-                openModal('readinessModal');
+        // Challenge UI & logic
+        function updateChallengeUI(){
+            if (!stats.challenge) {
+                stats.challenge = { target: 1000, current: 0, title: "1000 Şınav" };
             }
+            const ch = stats.challenge;
+            const shortEl = document.getElementById('challengeShort');
+            const titleEl = document.getElementById('challengeTitle');
+            const displayEl = document.getElementById('challengeDisplay');
+            const barEl = document.getElementById('challengeBarFill');
+
+            if (shortEl) shortEl.textContent = (ch.current || 0) + "/" + (ch.target || 0);
+            if (titleEl) titleEl.textContent = ch.title || "Meydan Okuma";
+            if (displayEl) displayEl.textContent = (ch.current || 0) + " / " + (ch.target || 0);
+            if (barEl) {
+                const pct = ch.target ? Math.min((ch.current / ch.target) * 100, 100) : 0;
+                barEl.style.width = pct + "%";
+            }
+        }
+
+        function addChallenge(amount){
+            if (!stats.challenge) {
+                stats.challenge = { target: 1000, current: 0, title: "1000 Şınav" };
+            }
+            stats.challenge.current = (stats.challenge.current || 0) + amount;
+            saveStats();
+            updateChallengeUI();
+        }
+
+        function setChallenge(){
+            const currentTarget = (stats.challenge && stats.challenge.target) || 1000;
+            const currentTitle = (stats.challenge && stats.challenge.title) || "Meydan Okuma";
+            const newTarget = parseInt(prompt("Yeni hedef (toplam tekrar):", currentTarget), 10);
+            if (!newTarget || newTarget <= 0) return;
+            const newTitle = prompt("Meydan okuma başlığı:", currentTitle);
+            stats.challenge = {
+                target: newTarget,
+                current: 0,
+                title: newTitle || "Meydan Okuma"
+            };
+            saveStats();
+            updateChallengeUI();
+        }
+
+        // Journal + kilo kaydı
+        function saveData(){
+            const k = getK(today);
+            if (!data[k]) return;
+            const j = document.getElementById('journal');
+            const bw = document.getElementById('dailyWeight');
+            if (j) data[k].n = j.value;
+            if (bw) data[k].bw = bw.value;
+            save();
+        }
+
+        // Program builder
+        function updateSec(){
+            const mainSel = document.getElementById('mainMuscle');
+            const subSel = document.getElementById('subMuscle');
+            if (!mainSel || !subSel) return;
+
+            const main = mainSel.value;
+            subSel.innerHTML = "";
+            if (!main) {
+                subSel.disabled = true;
+                const op = document.createElement('option');
+                op.textContent = "2. Bölge";
+                op.value = "";
+                subSel.appendChild(op);
+                return;
+            }
+            subSel.disabled = false;
+            const placeholder = document.createElement('option');
+            placeholder.textContent = "2. Bölge";
+            placeholder.value = "";
+            subSel.appendChild(placeholder);
+
+            const list = compat[main] || [];
+            list.forEach(m => {
+                const o = document.createElement('option');
+                o.value = m;
+                o.textContent = muscleDB[m] ? muscleDB[m].t : m;
+                subSel.appendChild(o);
+            });
+        }
+
+        function buildProg(){
+            const mainSel = document.getElementById('mainMuscle');
+            const subSel = document.getElementById('subMuscle');
+            const addJumpCb = document.getElementById('addJump');
+            const main = mainSel ? mainSel.value : "";
+            const sub = subSel ? subSel.value : "";
+
+            if (!main) { 
+                alert("Önce 1. bölgeyi seç.");
+                return; 
+            }
+
+            const todayKey = getK(today);
+            if (!data[todayKey]) data[todayKey] = {};
+
+            const mainBlock = muscleDB[main];
+            let items = mainBlock ? [...mainBlock.i] : [];
+            let title = mainBlock ? mainBlock.t : "Program";
+            let subTitle = mainBlock ? mainBlock.mb : "";
+
+            if (sub) {
+                const subBlock = muscleDB[sub];
+                if (subBlock) {
+                    items = items.concat(subBlock.i);
+                    subTitle += " + " + subBlock.mb;
+                    title += " + " + subBlock.t;
+                }
+            }
+
+            const isJump = !!(addJumpCb && addJumpCb.checked);
+            if (isJump) {
+                items = items.concat(jumpR);
+            }
+
+            const basePre = (settings.inSeason ? seasonSchedule[today.getDay()] : offSeasonSchedule[today.getDay()])?.pre || [];
+
+            data[todayKey].custom = {
+                t: title,
+                s: subTitle || (mainBlock ? mainBlock.mb : ""),
+                j: isJump,
+                pre: basePre,
+                i: items
+            };
+
+            save();
+            closeModal('builderModal');
+            render();
         }
 
         window.onload = init;
