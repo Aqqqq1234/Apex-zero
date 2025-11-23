@@ -71,7 +71,10 @@
         .guide-text { font-size: 0.8rem; color: var(--blue); margin-top: 5px; display: none; background: rgba(10, 132, 255, 0.1); padding: 8px; border-radius: 6px;}
         .task-item.show-guide .guide-text { display: block; animation: fadeIn 0.3s; }
         .yt-btn { background: #222; color: var(--text); padding: 8px 12px; border-radius: 6px; text-decoration: none; font-size: 0.7rem; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; gap: 5px; flex-shrink: 0; cursor: pointer; position: relative; z-index: 20; }
-        
+
+        .alt-list { margin-top: 6px; }
+        .alt-item { margin-top: 4px; font-size:0.8rem; color:#ddd; }
+
         /* INPUTS */
         .input-row { display: flex; gap: 8px; margin-top: 12px; padding-left: 66px; align-items: center; flex-wrap: wrap; position: relative; z-index: 20; }
         .mini-input { background: #000; border: 1px solid #333; color: #fff; width: 65px; padding: 10px; border-radius: 8px; text-align: center; font-size: 0.9rem; font-weight: 600; -webkit-appearance: none; }
@@ -100,8 +103,7 @@
         .close-sticky { position: fixed; top: 20px; right: 20px; z-index: 999; background: rgba(0,0,0,0.5); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #fff; backdrop-filter: blur(10px); border: 1px solid #444; cursor: pointer; }
 
         /* UTILS & NUTRITION */
-        .tab-btn { font-size: 1.7rem; opacity: 0.5; transition: 0.2s; cursor: pointer; } 
-        .tab-btn.active { opacity: 1; transform: scale(1.1); color: var(--accent); }
+        .tab-btn { font-size: 1.7rem; opacity: 0.5; transition: 0.2s; cursor: pointer; } .tab-btn.active { opacity: 1; transform: scale(1.1); color: var(--accent); }
         .timer-float { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(150px); background: #1c1c1e; border: 1px solid var(--accent); padding: 12px 24px; border-radius: 40px; display: flex; align-items: center; gap: 15px; z-index: 250; box-shadow: 0 10px 40px rgba(0,0,0,0.8); transition: 0.4s; }
         .timer-float.active { transform: translateX(-50%) translateY(0); }
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px; }
@@ -208,18 +210,9 @@
         <div class="card tracker-section">
             <h3 style="margin:0 0 15px 0">🔋 Günlük Takip</h3>
             <div class="grid-3">
-                <div class="track-box" onclick="addWater()">
-                    <div class="track-val" id="waterCount">0 lt</div>
-                    <div style="font-size:0.7rem; color:#777; margin-top:5px">SU</div>
-                </div>
-                <div class="track-box" onclick="openModal('nutriModal')">
-                    <div class="track-val" id="calStatus">0</div>
-                    <div style="font-size:0.7rem; color:#777; margin-top:5px">KALORİ</div>
-                </div>
-                <div class="track-box" id="proBox" style="border-color:#333" onclick="openModal('nutriModal')">
-                    <div class="track-val" id="proStatus">0g</div>
-                    <div style="font-size:0.7rem; color:#777; margin-top:5px">PROTEİN</div>
-                </div>
+                <div class="track-box" onclick="addWater()"><div class="track-val" id="waterCount">0 lt</div><div style="font-size:0.7rem; color:#777; margin-top:5px">SU</div></div>
+                <div class="track-box" onclick="openModal('nutriModal')"><div class="track-val" id="calStatus">0</div><div style="font-size:0.7rem; color:#777; margin-top:5px">KALORİ</div></div>
+                <div class="track-box" id="proBox" style="border-color:#333" onclick="openModal('nutriModal')"><div class="track-val" id="proStatus">0g</div><div style="font-size:0.7rem; color:#777; margin-top:5px">PROTEİN</div></div>
             </div>
             <textarea id="journal" style="width:100%; background:#111; color:#fff; border:1px solid #333; border-radius:12px; padding:15px; min-height:80px;" placeholder="Notlar..." oninput="saveData()"></textarea>
         </div>
@@ -255,7 +248,7 @@
         <div class="sheet" style="text-align:center">
             <div style="display:flex; justify-content:space-between;">
                 <h2>Zone Modu</h2>
-                <span onclick="closeZone()">✕</span>
+                <span onclick="closeModal('zoneModal')" style="cursor:pointer;">✕</span>
             </div>
             <p style="color:#777; font-size:0.9rem">Kutu Nefes: 4 Al - 4 Tut - 4 Ver - 4 Tut</p>
             <div class="breathing-circle" id="breathCircle" style="width:150px; height:150px; border:4px solid #333; border-radius:50%; margin:30px auto; display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:bold; color:var(--blue); transition:all 4s ease-in-out;">BAŞLA</div>
@@ -288,9 +281,9 @@
             <h2 style="padding:0 20px">Beslenme Merkezi</h2>
             <div style="padding:0 20px">
                 <div class="nutri-tabs">
-                    <div class="n-tab active" onclick="switchToolTab('track')">Takip</div>
-                    <div class="n-tab" onclick="switchToolTab('wizard')">Sihirbaz</div>
-                    <div class="n-tab" onclick="switchToolTab('1rm')">1RM & Hesap</div>
+                    <div class="n-tab active" onclick="switchToolTab('track', event)">Takip</div>
+                    <div class="n-tab" onclick="switchToolTab('wizard', event)">Sihirbaz</div>
+                    <div class="n-tab" onclick="switchToolTab('1rm', event)">1RM & Hesap</div>
                 </div>
 
                 <div id="tool-track" class="tool-content active">
@@ -331,7 +324,19 @@
                 </div>
 
                 <div id="tool-wizard" class="tool-content" style="display:none;">
-                    <button class="spin-btn" style="width:100%; justify-content:center; margin-bottom:15px" onclick="generateMenu()">🎲 Rastgele Günlük Menü Oluştur</button>
+                    <div style="display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap;">
+                        <select id="menuGoal" style="flex:1; padding:10px; background:#000; color:#fff; border:1px solid #333; border-radius:8px;">
+                            <option value="maintain">Kilo Koru</option>
+                            <option value="cut">Kilo Ver</option>
+                            <option value="bulk">Kilo Al</option>
+                        </select>
+                        <select id="menuDayType" style="flex:1; padding:10px; background:#000; color:#fff; border:1px solid #333; border-radius:8px;">
+                            <option value="train">Antrenman Günü</option>
+                            <option value="match">Maç Günü</option>
+                            <option value="rest">Dinlenme Günü</option>
+                        </select>
+                    </div>
+                    <button class="spin-btn" style="width:100%; justify-content:center; margin-bottom:15px" onclick="generateMenu()">🎲 Günlük Menü Oluştur</button>
                     <div id="menuResult"></div>
                 </div>
                 
@@ -355,7 +360,10 @@
                 <input type="number" min="0" id="userHeight" class="mini-input" style="width:50%; padding:15px" placeholder="Boy (cm)" onchange="saveStats()">
                 <input type="number" min="0" id="dailyWeight" class="mini-input" style="width:50%; padding:15px" placeholder="Kilo (kg)" onchange="saveData()">
             </div>
-            <div class="alert-box alert-imbalance" id="legAlert"><span>🐔</span> <div><b>Chicken Leg Uyarısı!</b><br>Üst vücudun gelişti ama bacakları ihmal ediyorsun.</div></div>
+            <div class="alert-box alert-imbalance" id="legAlert">
+                <span>🐔</span>
+                <div><b>Chicken Leg Uyarısı!</b><br>Üst vücudun gelişti ama bacakları ihmal ediyorsun.</div>
+            </div>
             <h4 style="margin-top:20px; border-top:1px solid #333; padding-top:10px; text-align:center">Kas Yoğunluk Haritası</h4>
             <div class="anatomy-container">
                 <svg class="anatomy-svg" viewBox="0 0 100 200">
@@ -377,6 +385,9 @@
             </div>
             <h4 style="margin-top:20px; border-top:1px solid #333; padding-top:10px">Son Maçlar</h4>
             <div id="gameHistory"></div>
+            <h4 style="margin-top:20px; border-top:1px solid #333; padding-top:10px">Haftalık Özet</h4>
+            <div id="weeklyReport" style="font-size:0.85rem; color:#ccc;"></div>
+            <button class="spin-btn" style="margin-top:10px;" onclick="showWeeklyReport()">Haftalığı Hesapla</button>
         </div>
     </div>
 
@@ -402,7 +413,7 @@
         <div class="sheet">
             <div style="display:flex; justify-content:space-between;">
                 <h2>Program Yap</h2>
-                <span onclick="closeModal('builderModal')">✕</span>
+                <span onclick="closeModal('builderModal')" style="cursor:pointer;">✕</span>
             </div>
             <select id="mainMuscle" style="width:100%;padding:12px;background:#000;color:#fff;border:1px solid #333;border-radius:8px;margin-bottom:10px" onchange="updateSec()">
                 <option value="">1. Bölge</option>
@@ -430,7 +441,7 @@
         <div class="sheet">
             <div style="display:flex; justify-content:space-between;">
                 <h2>Günlük Hazırlık</h2>
-                <span onclick="closeModal('readinessModal')">✕</span>
+                <span onclick="closeModal('readinessModal')" style="cursor:pointer;">✕</span>
             </div>
             <p style="color:#aaa; margin-bottom:20px">Bugün kendini nasıl hissediyorsun?</p>
             <div class="readiness-scale" style="display:flex; justify-content:space-between; font-size:2rem;">
@@ -447,7 +458,7 @@
         <div class="sheet">
             <div style="display:flex; justify-content:space-between;">
                 <h2>🏀 Maç Karnesi</h2>
-                <span onclick="closeModal('gameLogModal')">✕</span>
+                <span onclick="closeModal('gameLogModal')" style="cursor:pointer;">✕</span>
             </div>
             <div style="display:flex; gap:10px; margin:20px 0;">
                 <input type="number" min="0" id="gamePoints" class="mini-input" style="width:50%; padding:15px" placeholder="Sayı">
@@ -470,9 +481,9 @@
 
     <div class="modal" id="settingsModal">
         <div class="sheet">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
                 <h2>Ayarlar</h2>
-                <span style="font-size:1.5rem; cursor:pointer;" onclick="closeModal('settingsModal')">✕</span>
+                <span onclick="closeModal('settingsModal')" style="cursor:pointer; font-size:1.5rem;">✕</span>
             </div>
             <div class="toggle-row">
                 <span>🏀 Sezon İçi</span>
@@ -501,14 +512,12 @@
         <div class="sheet">
             <div style="display:flex; justify-content:space-between;">
                 <h2>Meydan Okuma</h2>
-                <span onclick="closeModal('challengeModal')">✕</span>
+                <span onclick="closeModal('challengeModal')" style="cursor:pointer;">✕</span>
             </div>
             <div style="background:#111; padding:20px; border-radius:12px; text-align:center; margin-top:20px">
                 <h3 style="margin:0; color:var(--warn)" id="challengeTitle">1000 Şınav</h3>
                 <div style="font-size:2rem; font-weight:bold; margin:10px 0" id="challengeDisplay">0 / 1000</div>
-                <div class="progress-track">
-                    <div class="progress-fill" id="challengeBarFill" style="width:0%; background:var(--warn)"></div>
-                </div>
+                <div class="progress-track"><div class="progress-fill" id="challengeBarFill" style="width:0%; background:var(--warn)"></div></div>
                 <div style="margin-top:20px; display:flex; gap:10px; justify-content:center">
                     <button class="mini-input" onclick="addChallenge(10)">+10</button>
                     <button class="mini-input" onclick="addChallenge(25)">+25</button>
@@ -539,13 +548,138 @@
             "Yorgunluk sadece zihnindedir."
         ];
 
+        // ANA HAREKET DB + ALTERNATİFLER
         const muscleDB = { 
-            chest:{t:"Göğüs", mb:"chest", i:[{n:"Bench Press (4x8)",v:"push",d:"Barı göğüs ucuna indir."},{n:"Incline Press (3x10)",v:"push",d:"Üst göğsü hedefle."}]}, 
-            back:{t:"Sırt", mb:"back", i:[{n:"Pull Up",v:"pull",d:"Çeneni barın üzerine çıkar."},{n:"Row",v:"pull",d:"Kürek kemiklerini sıkıştır."}]}, 
-            legs:{t:"Bacak", mb:"legs", i:[{n:"Squat",v:"legs",d:"Topuklara bas."},{n:"RDL",v:"legs",d:"Kalçayı geriye it."}]}, 
-            shoulders:{t:"Omuz", mb:"shoulders", i:[{n:"Overhead Press",v:"press",d:"Karnını sık, barı dik it."}]}, 
-            arms:{t:"Kol", mb:"arms", i:[{n:"Curl",v:"arm",d:"Sallanmadan kaldır."},{n:"Pushdown",v:"arm",d:"Dirsekleri kilitle."}]}, 
-            core:{t:"Karın", mb:"core", i:[{n:"Plank",v:"core",d:"Kalçayı düşürme."}]} 
+            chest:{
+                t:"Göğüs", mb:"chest",
+                i:[
+                    {
+                        n:"Bench Press (4x8)",
+                        v:"push",
+                        d:"Barı göğüs ucuna kontrolle indir, topuklardan güç al.",
+                        alts:[
+                            {n:"Dumbbell Bench Press", d:"Daha fazla denge, omuz başına daha nazik."},
+                            {n:"Machine Chest Press", d:"Sabitleyici kas yükü düşük, saf kuvvet odaklı."},
+                            {n:"Şınav", d:"Makine doluysa en klasik fallback."}
+                        ]
+                    },
+                    {
+                        n:"Incline Press (3x10)",
+                        v:"push",
+                        d:"Üst göğüs için açıyı çok dik yapma (30–45°).",
+                        alts:[
+                            {n:"Incline DB Press", d:"Tek tek kollar, dengesizlikleri düzeltir."},
+                            {n:"Smith Incline Press", d:"Bar yolu sabit, volüm için güvenli."},
+                            {n:"Decline Push-up (Ayak Yüksekte)", d:"Ev/saha modunda üst göğüs alternatifi."}
+                        ]
+                    }
+                ]
+            }, 
+            back:{
+                t:"Sırt", mb:"back",
+                i:[
+                    {
+                        n:"Pull Up",
+                        v:"pull",
+                        d:"Çeneyi barın üzerine getir, salınma minimum olsun.",
+                        alts:[
+                            {n:"Lat Pulldown", d:"Barfiks doluysa aynı paterni makinede koru."},
+                            {n:"Band Destekli Pull Up", d:"Hareketi öğrenirken yükü azaltır."},
+                            {n:"Inverted Row", d:"Bar veya smith ile yatay çekiş."}
+                        ]
+                    },
+                    {
+                        n:"Row",
+                        v:"pull",
+                        d:"Kürek kemiklerini arkada sık, belini yuvarlama.",
+                        alts:[
+                            {n:"Seated Cable Row", d:"Sabitlemesi kolay, orta sırt odaklı."},
+                            {n:"Chest-Supported Row", d:"Bel problemi varsa en güvenlisi."},
+                            {n:"Tek Kol DB Row", d:"Dengesizlikleri tek taraflı düzeltir."}
+                        ]
+                    }
+                ]
+            }, 
+            legs:{
+                t:"Bacak", mb:"legs",
+                i:[
+                    {
+                        n:"Squat",
+                        v:"legs",
+                        d:"Topuklara bas, dizler parmak yönünde gitsin.",
+                        alts:[
+                            {n:"Goblet Squat", d:"Dumbbell/kettlebell ile daha dik gövde."},
+                            {n:"Leg Press", d:"Squat rack doluyken hacim çalışması için."},
+                            {n:"Split Squat", d:"Tek bacak denge ve kuvvet."}
+                        ]
+                    },
+                    {
+                        n:"RDL",
+                        v:"legs",
+                        d:"Kalçayı geriye it, barı bacak boyunca kaydır.",
+                        alts:[
+                            {n:"DB RDL", d:"Hareketi öğrenmek ve mobilite için hafif versiyon."},
+                            {n:"Hip Thrust", d:"Kalça odaklı kuvvet, glute için ana hareket."},
+                            {n:"Back Extension", d:"Alt sırt ve hamstring için destekleyici."}
+                        ]
+                    }
+                ]
+            }, 
+            shoulders:{
+                t:"Omuz", mb:"shoulders",
+                i:[
+                    {
+                        n:"Overhead Press",
+                        v:"press",
+                        d:"Kaburgayı öne fırlatma, core sıkı kalsın.",
+                        alts:[
+                            {n:"DB Shoulder Press", d:"Omuz başı ve stabilite için güzel alternatif."},
+                            {n:"Machine Shoulder Press", d:"Daha güvenli, ağır volüm için ideal."},
+                            {n:"Landmine Press", d:"Omuz problemi olanlar için daha nazik açı."}
+                        ]
+                    }
+                ]
+            }, 
+            arms:{
+                t:"Kol", mb:"arms",
+                i:[
+                    {
+                        n:"Curl",
+                        v:"arm",
+                        d:"Dirsekleri sabit tut, sallanmadan kaldır.",
+                        alts:[
+                            {n:"Hammer Curl", d:"Brachialis ve ön kolu daha çok çalıştırır."},
+                            {n:"Cable Curl", d:"Sürekli gerilim, pompaj için iyi."},
+                            {n:"Band Curl", d:"Ev/saha modu için lastik alternatifi."}
+                        ]
+                    },
+                    {
+                        n:"Pushdown",
+                        v:"arm",
+                        d:"Dirsekleri gövdeye kilitle, tam uzat.",
+                        alts:[
+                            {n:"Overhead Rope Extension", d:"Uzun baş triceps için harika."},
+                            {n:"Skullcrusher (EZ Bar)", d:"Triceps’in tüm başlarını vurur."},
+                            {n:"Bench Dip", d:"Vücut ağırlığıyla triceps bitirici."}
+                        ]
+                    }
+                ]
+            }, 
+            core:{
+                t:"Karın", mb:"core",
+                i:[
+                    {
+                        n:"Plank",
+                        v:"core",
+                        d:"Kalçayı ne çok indir ne çok kaldır, nefesi tutma.",
+                        alts:[
+                            {n:"Side Plank", d:"Oblik ve yan core için."},
+                            {n:"Dead Bug", d:"Bel dostu core aktivasyonu."},
+                            {n:"Hollow Body Hold", d:"Gymnastics core seviyesi."}
+                        ]
+                    }
+                ]
+            } 
         };
 
         const compat = { chest:['arms','shoulders'], back:['arms','shoulders'], legs:['core'], shoulders:['arms'], arms:['core'] };
@@ -556,21 +690,22 @@
             {n:"Depth Jump (3x5)", v:"legs", d:"Yüksekten in, yere değer değmez zıpla (Sistem şoku)."}
         ];
 
+        // Cila / Finisher objeleri açıklamalı
         const finishers = { 
             gym: [
-                "🔥 1 Dakika Plank", 
-                "🔥 50 Mekik", 
-                "🔥 Tabata Burpee (4dk)", 
-                "🔥 100 Şınav (Toplam)", 
-                "🔥 Farmer's Walk (Ağırlıkla Yürü)",
-                "🔥 Dead Hang (Barfixte Asılı Kal - Max Süre)"
+                {n:"🔥 1 Dakika Plank", d:"Core stabilitesini test et, nefesini kontrol et."}, 
+                {n:"🔥 50 Mekik", d:"Hafif yanma değil, ciddi core pompası."}, 
+                {n:"🔥 Tabata Burpee (4dk)", d:"20 sn burpee / 10 sn dinlen, 8 tur."}, 
+                {n:"🔥 100 Şınav (Toplam)", d:"Setlere böl, form bozulmadan tamamla."}, 
+                {n:"🔥 Farmer's Walk", d:"Ağır dambıllarla sahayı / salonu yürü."},
+                {n:"🔥 Dead Hang (Barfixte Asılı Kal)", d:"Tutuş, omuz ve core dayanıklılığı."}
             ], 
             basket: [
-                "🏀 5 Noktadan 10'ar Şut", 
-                "🏀 50 Serbest Atış (Sokmadan Çıkma)", 
-                "🏀 Mikan Drill (2 Dakika)",
-                "🏀 3 Sayı Yarışması (10'da kaç?)",
-                "🏀 Sahayı 5 Kere Tam Tur Koş"
+                {n:"🏀 5 Noktadan 10'ar Şut", d:"Her noktadan 10 şut, ritmi koru."}, 
+                {n:"🏀 50 Serbest Atış (Sokmadan Çıkma)", d:"Odaklan, ritüel oluştur."}, 
+                {n:"🏀 Mikan Drill (2 Dakika)", d:"Sağ-sol el bitirişlerini hızlandır."},
+                {n:"🏀 3 Sayı Yarışması (10'da Kaç?)", d:"Kendine hedef koy, istatistik tut."},
+                {n:"🏀 Sahayı 5 Kere Tam Tur Koş", d:"Kondisyon ve mental dayanıklılık."}
             ] 
         };
         
@@ -580,88 +715,209 @@
             "50 Şınav çek, hemen!"
         ];
         
+        // BESLENME DB - zenginleştirilmiş
         const foodDB = [
-            {n:"Yumurta (1 Adet)", c:70, p:6}, 
-            {n:"Tavuk Göğsü (150g)", c:165, p:31}, 
-            {n:"Pilav (1 Kase)", c:200, p:4}, 
-            {n:"Yulaf (50g)", c:190, p:6}, 
-            {n:"Muz (Orta)", c:105, p:1}, 
-            {n:"Protein Shake", c:120, p:24}, 
-            {n:"Ton Balığı (100g)", c:130, p:25}, 
-            {n:"Makarna (1 Tabak)", c:250, p:8}, 
-            {n:"Fıstık Ezmesi (1 tk)", c:90, p:3}, 
-            {n:"Yoğurt (1 Kase)", c:100, p:10}, 
-            {n:"Elma", c:52, p:0}, 
-            {n:"Badem/Ceviz (1 Avuç)", c:160, p:6}, 
-            {n:"Lor Peyniri (100g)", c:90, p:15}, 
-            {n:"Izgara Köfte (150g)", c:350, p:25}, 
-            {n:"Mercimek (1 Tabak)", c:230, p:18}, 
-            {n:"Pirinç Patlağı (1 ad)", c:30, p:1},
-            {n:"Protein Bar", c:200, p:20},
-            {n:"Hindi Füme (2 Dilim)", c:60, p:10},
-            {n:"Patates Haşlama (Orta)", c:160, p:4}
+            {n:"Yumurta (2 Adet)", c:140, p:12, type:"kahvaltı"}, 
+            {n:"Yumurta + Peynir + Ekmek", c:350, p:22, type:"kahvaltı"},
+            {n:"Tavuk Göğsü (150g)", c:165, p:31, type:"ana"}, 
+            {n:"Biftek (150g)", c:250, p:30, type:"ana"},
+            {n:"Hindi Göğüs (150g)", c:170, p:32, type:"ana"},
+            {n:"Pilav (1 Kase)", c:200, p:4, type:"karb"}, 
+            {n:"Bulgur (1 Kase)", c:180, p:5, type:"karb"},
+            {n:"Tam Buğday Makarna (1 Tabak)", c:230, p:8, type:"karb"},
+            {n:"Yulaf (50g)", c:190, p:6, type:"kahvaltı"}, 
+            {n:"Muz (Orta)", c:105, p:1, type:"pre"}, 
+            {n:"Elma", c:52, p:0, type:"ara"}, 
+            {n:"Protein Shake", c:120, p:24, type:"post"}, 
+            {n:"Ton Balığı (100g)", c:130, p:25, type:"ana"}, 
+            {n:"Makarna (1 Tabak)", c:250, p:8, type:"karb"}, 
+            {n:"Fıstık Ezmesi (1 tk)", c:90, p:3, type:"ara"}, 
+            {n:"Yoğurt (1 Kase)", c:100, p:10, type:"ara"}, 
+            {n:"Kefir (1 Bardak)", c:110, p:6, type:"ara"},
+            {n:"Badem/Ceviz (1 Avuç)", c:160, p:6, type:"ara"}, 
+            {n:"Lor Peyniri (100g)", c:90, p:15, type:"ara"}, 
+            {n:"Izgara Köfte (150g)", c:350, p:25, type:"ana"}, 
+            {n:"Mercimek (1 Tabak)", c:230, p:18, type:"ana"}, 
+            {n:"Pirinç Patlağı (1 ad)", c:30, p:1, type:"pre"},
+            {n:"Protein Bar", c:200, p:20, type:"ara"},
+            {n:"Hindi Füme (2 Dilim)", c:60, p:10, type:"ara"},
+            {n:"Patates Haşlama (Orta)", c:160, p:4, type:"karb"},
+            {n:"Sebzeli Salata + Zeytinyağı", c:120, p:3, type:"yan"},
+            {n:"Yoğurtlu Meyve Kasesi", c:180, p:10, type:"ara"},
+            {n:"Smoothie (Muz + Yoğurt + Whey)", c:250, p:25, type:"pre"}
         ];
 
+        // ISINMA / PREHAB DB - detaylı açıklamalar
         const warmupDB = { 
             "Yürüyüş": {d:"Kan akışını başlat, zihni antrenmana hazırla."}, 
             "Rotator Cuff": {d:"Lastikle dışa/içe rotasyon. Omuz sağlığı için şart."}, 
-            "Tibialis": {d:"Duvara yaslanıp parmak ucu kaldırma. Diz ağrısını önler."}, 
-            "Patellar Tendon": {d:"Diz kapağı altı izometrik bekleme (Spanish Squat)."}, 
+            "Tibialis": {d:"Duvara yaslanıp parmak ucu kaldırma. Diz ağrısını önlemeye yardım eder."}, 
+            "Patellar Tendon": {d:"Diz kapağı altı izometrik bekleme (Spanish Squat hazırlığı gibi)."}, 
             "Kalça Flexor": {d:"Lunge pozisyonunda arka bacağı sıkıp esnet."}, 
-            "Omuz Mob.": {d:"Sopayla omuz çevirme (Dislocates)."}, 
+            "Omuz Mob.": {d:"Sopayla omuz çevirme (Dislocates)."},
             "Kalça Akt.": {d:"Monster Walk veya Glute Bridge ile kalçayı uyandır."}, 
-            "Dinamik Isınma": {d:"High Knees, Butt Kicks, kol savurma."}, 
-            "Jacks": {d:"Nabzı 120 üzerine çıkarmak için seri zıplama."} 
+            "Dinamik Isınma": {d:"High Knees, Butt Kicks, kol-bacak savurma."}, 
+            "Jacks": {d:"Jumping Jacks ile nabzı 120 üstüne çıkar."},
+            // Bölgeye özel prehab hareketleri
+            "Spanish Squat": {d:"Diz önü için izometrik, patellar tendonu rahatlatır."},
+            "Poliquin Step-up": {d:"Diz açısını öne taşıyarak quadriceps'e yük bindirir."},
+            "Yavaş Tempo Squat": {d:"3–4 sn iniş ile diz çevresini kontrollü güçlendir."},
+            "Eccentric Calf Raise": {d:"Aşil ve baldır için eksantrik kuvvet, topukta yavaş iniş."},
+            "Soleus Raise": {d:"Diz bükük baldır kaldırma, soleus kasına odaklanır."},
+            "McGill Curl-up": {d:"Bel dostu crunch, core stabilitesine odaklanır."},
+            "Side Plank": {d:"Yan core ve bel çevresi için statik güç."},
+            "Bird Dog": {d:"Karın-bel koordinasyonunu artırır."},
+            "Band External Rotation": {d:"Omuz dış rotatörlerini güçlendirir."},
+            "Band Internal Rotation": {d:"Omuz iç rotatörleri ve denge için."},
+            "Y-T-W Drill": {d:"Kürek kemiği kontrolü ve sırt stabilitesi."},
+            "Wrist Flexor Stretch": {d:"Ön kol iç yüzü (flexor) esnetme."},
+            "Wrist Extensor Stretch": {d:"Ön kol dış yüzü (extensor) esnetme."},
+            "Farmer's Walk": {d:"Tutuş, core ve omuz stabilitesi için yürüyüş."},
+            "90/90 Hip Rotation": {d:"Kalça iç/dış rotasyon mobilitesi."},
+            "Monster Walk": {d:"Glute medius için band ile yana yürüyüş."},
+            "Single-leg RDL": {d:"Tek bacak denge ve hamstring güçlendirme."}
         };
 
+        // Ağrı haritasına göre ekstra prehab paketleri
+        const painPrehabMap = {
+            diz: ["Spanish Squat", "Poliquin Step-up", "Yavaş Tempo Squat"],
+            bel: ["McGill Curl-up", "Side Plank", "Bird Dog"],
+            omuz: ["Band External Rotation", "Band Internal Rotation", "Y-T-W Drill"],
+            bilek: ["Wrist Flexor Stretch", "Wrist Extensor Stretch", "Farmer's Walk"],
+            kalca: ["90/90 Hip Rotation", "Monster Walk", "Single-leg RDL"]
+        };
+
+        // HAFTA PROGRAMLARI
         const seasonSchedule = { 
-            0: {t:"Dinlenme", s:"Recovery", j:false, pre:["Yürüyüş"], i:[{n:"Meal Prep",v:"rest",d:"Haftayı planla."}]}, 
-            1: {t:"Chest & Triceps", s:"İtme", j:false, pre:["Rotator Cuff"], i:[...muscleDB.chest.i, {n:"Pushdown",v:"arm",d:"Triceps'i izole et."}]}, 
-            2: {t:"Pilates & Basket", s:"Yoğun", j:false, pre:["Tibialis"], i:[{n:"Pilates (19:00)",v:"pilates",d:"Core ve nefes odaklı çalış."},{n:"Basketbol (20:45)",v:"cardio",d:"Şut, tempo ve oyun okuma."}]}, 
-            3: {t:"Maç Günü", s:"Game Night", j:true, pre:["Patellar Tendon"], i:[{n:"Maç (21:45)",v:"cardio", isGame:true, d:"Odaklan, savunmayı bırakma."}]}, 
-            4: {t:"Pilates", s:"Recov", j:false, pre:["Kalça Flexor"], i:[{n:"Pilates (19:00)",v:"pilates",d:"Esneklik ve core stabilite."}]}, 
-            5: {t:"Back & Biceps", s:"Çekme", j:true, pre:["Omuz Mob."], i:[...muscleDB.back.i, {n:"Curl",v:"arm",d:"Negatiflere odaklan."}]}, 
+            0: {t:"Dinlenme", s:"Recovery", j:false, pre:["Yürüyüş"], i:[{n:"Meal Prep",v:"rest",d:"Haftanın yemeğini planla."}]}, 
+            1: {t:"Chest & Triceps", s:"İtme", j:false, pre:["Rotator Cuff"], i:[...muscleDB.chest.i, {...muscleDB.arms.i[1]}]}, 
+            2: {t:"Pilates & Basket", s:"Yoğun", j:false, pre:["Tibialis"], i:[{n:"Pilates (19:00)",v:"pilates",d:"Core & mobilite."},{n:"Basketbol (20:45)",v:"cardio",d:"Şut ve oyun okuma."}]}, 
+            3: {t:"Maç Günü", s:"Game Night", j:true, pre:["Patellar Tendon"], i:[{n:"Maç (21:45)",v:"cardio", isGame:true, d:"Odaklan, tempo ve savunma."}]}, 
+            4: {t:"Pilates", s:"Recov", j:false, pre:["Kalça Flexor"], i:[{n:"Pilates (19:00)",v:"pilates",d:"Esneklik ve core kontrolü."}]}, 
+            5: {t:"Back & Biceps", s:"Çekme", j:true, pre:["Omuz Mob."], i:[...muscleDB.back.i, {...muscleDB.arms.i[0]}]}, 
             6: {t:"Legs & Shoulders", s:"Kuvvet", j:false, pre:["Kalça Akt."], i:[...muscleDB.legs.i, ...muscleDB.shoulders.i]}, 
-            panic: {t:"Ev Modu", s:"Home", j:false, pre:["Jacks"], i:[{n:"50 Şınav",v:"push",d:"Nizami form."},{n:"50 Squat",v:"legs",d:"Derin ve kontrollü."}]} 
+            panic: {t:"Ev Modu", s:"Home", j:false, pre:["Jacks"], i:[{n:"50 Şınav",v:"push",d:"Nizami."},{n:"50 Squat",v:"legs",d:"Derin."}]} 
         };
 
         const offSeasonSchedule = JSON.parse(JSON.stringify(seasonSchedule)); 
         offSeasonSchedule[3] = {
-            t:"CANAVAR MODU", s:"Off-Season", j:true, pre:["Dinamik Isınma"], 
+            t:"CANAVAR MODU",
+            s:"Off-Season",
+            j:true,
+            pre:["Dinamik Isınma"],
             i:[
-                {n:"Deadlift",v:"legs",d:"Ağır gir. Sırtı nötr tut."},
-                {n:"Heavy Rows",v:"pull",d:"Sırtını parçala, formu bozma."},
-                {n:"HIIT",v:"cardio",d:"Nabzı patlat, kısa tut."}
+                {n:"Deadlift",v:"legs",d:"Ağır gir, formu bozma."},
+                {n:"Heavy Rows",v:"pull",d:"Sırtını kalınlaştır."},
+                {n:"HIIT",v:"cardio",d:"Nabzı patlat, 20/40 aralıklı koşu."}
             ]
         };
-        
+
+        // Menü sihirbazı için şablonlar
+        const menuGoalLabel = {
+            maintain: "Kilo Koru",
+            cut: "Kilo Ver",
+            bulk: "Kilo Al"
+        };
+        const menuDayLabel = {
+            train: "Antrenman Günü",
+            match: "Maç Günü",
+            rest: "Dinlenme Günü"
+        };
+
+        const menuTemplates = {
+            maintain: {
+                train: [
+                    {label:"Kahvaltı", text:"Yulaf + süt + 1 muz + 1 avuç fındık/badem."},
+                    {label:"Ara Öğün", text:"Yoğurt + 1-2 hurma veya küçük meyve."},
+                    {label:"Öğle", text:"150g tavuk / hindi + 1 kase bulgur veya pirinç + salata."},
+                    {label:"Antrenman Öncesi", text:"1-2 pirinç patlağı + fıstık ezmesi + filtre kahve."},
+                    {label:"Antrenman Sonrası", text:"Protein shake + 1 muz."},
+                    {label:"Akşam", text:"Mercimek / nohut / barbunya + sebze + az ekmek."}
+                ],
+                match: [
+                    {label:"Kahvaltı", text:"2 tam yumurta + 2 yumurta akı + peynir + zeytin + sebze + 1-2 dilim ekmek."},
+                    {label:"Öğle", text:"150–200g tavuk veya köfte + pilav/makarna + salata."},
+                    {label:"Maçtan 3-4 Saat Önce", text:"Karbonhidratı biraz artır: pilav + patates haşlama + hafif yağlı protein."},
+                    {label:"Maçtan 60 dk Önce", text:"Muz + pirinç patlağı veya küçük peynirli tost."},
+                    {label:"Maç Sonrası (30 dk)", text:"Whey + muz veya yoğurtlu meyve."},
+                    {label:"Gece", text:"Lor peyniri + yoğurt + 1 avuç ceviz (isteğe bağlı)."}
+                ],
+                rest: [
+                    {label:"Kahvaltı", text:"2 tam yumurta + 2 yumurta akı + sebze + 1 dilim tam buğday ekmek."},
+                    {label:"Ara Öğün", text:"Lor peyniri + yoğurt + 1 avuç ceviz/badem."},
+                    {label:"Öğle", text:"Mercimek / nohut + büyük salata (zeytinyağı kontrollü)."},
+                    {label:"Ara Öğün 2", text:"Elma + 1-2 hurma veya küçük kefir."},
+                    {label:"Akşam", text:"Balık veya tavuk + sebze ağırlıklı tabak, az karbonhidrat."}
+                ]
+            },
+            cut: {
+                train: [
+                    {label:"Kahvaltı", text:"Yulaf miktarını biraz azalt (30–40g), yumurta sayısı sabit."},
+                    {label:"Ara Öğün", text:"Sade yoğurt + 1 meyve (kuruyemiş yok veya çok az)."},
+                    {label:"Öğle", text:"150g tavuk / hindi + bol salata, karbonhidrat 1/2 porsiyon."},
+                    {label:"Antrenman Öncesi", text:"Muz veya pirinç patlağı, yağ çok az."},
+                    {label:"Antrenman Sonrası", text:"Protein shake, ekstra karbonhidratı düşük tut."},
+                    {label:"Akşam", text:"Sebze + protein (balık/tavuk), ekmek/pilav minimum."}
+                ],
+                match: [
+                    {label:"Kahvaltı", text:"Protein ve orta düzey karbonhidrat, yağ kontrollü."},
+                    {label:"Öğle", text:"Karbonhidratı çok abartmadan pilav/makarna + protein."},
+                    {label:"Maç Öncesi", text:"1 muz + pirinç patlağı, yağ yok denecek kadar az."},
+                    {label:"Maç Sonrası", text:"Protein shake + meyve, sonra hafif bir ana öğün."}
+                ],
+                rest: [
+                    {label:"Kahvaltı", text:"Yumurta + sebze, ekmek minimum."},
+                    {label:"Ara Öğün", text:"Lor peyniri veya yoğurt, kuruyemiş 5-6 adet."},
+                    {label:"Öğle", text:"Bakliyat + salata, ekmek/pilav çok az."},
+                    {label:"Akşam", text:"Balık/tavuk + bol sebze."}
+                ]
+            },
+            bulk: {
+                train: [
+                    {label:"Kahvaltı", text:"Yulaf + süt + muz + fıstık ezmesi + 2 tam yumurta."},
+                    {label:"Ara Öğün", text:"Yoğurtlu meyve kasesi + 1 avuç kuruyemiş."},
+                    {label:"Öğle", text:"200g tavuk/köfte + pilav veya makarna + salata."},
+                    {label:"Antrenman Öncesi", text:"Pirinç patlağı + fıstık ezmesi + smoothie (whey + muz)."},
+                    {label:"Antrenman Sonrası", text:"Protein shake + hızlı karbonhidrat (muz/su + bal)."},
+                    {label:"Akşam", text:"Kırmızı et veya somon + patates/karbonhidrat + sebze."}
+                ],
+                match: [
+                    {label:"Kahvaltı", text:"Yüksek karbonhidratlı, yeterli proteinli klasik Türk kahvaltısı."},
+                    {label:"Öğle", text:"Pilav/makarna bol, protein 150–200g, yağ çok aşırı olmasın."},
+                    {label:"Maç Öncesi", text:"Makarna/pilav + ekmek, sindirimi kolay bir kombinasyon."},
+                    {label:"Maç Sonrası", text:"Whey + meyve, sonra karbonhidrat ve proteini bol bir ana öğün."}
+                ],
+                rest: [
+                    {label:"Kahvaltı", text:"Yulaf + yumurta + peynir, karbonhidratı koru."},
+                    {label:"Ara Öğün", text:"Smoothie (whey + muz + süt)."},
+                    {label:"Öğle", text:"Bakliyat + pilav/bulgur + salata."},
+                    {label:"Akşam", text:"Et/tavuk/balık + patates/bulgur + sebze."}
+                ]
+            }
+        };
+
         // --- GLOBAL STATE ---
         let today = new Date();
         let data, stats, settings;
         let timerInt = null, timerSec = 0;
+
+        const getK = d => d.toLocaleDateString('fr-CA'); // YYYY-MM-DD Local Time
 
         // --- INITIALIZATION ---
         function init() {
             try {
                 data = JSON.parse(localStorage.getItem('primeDataV21')) || {};
                 stats = JSON.parse(localStorage.getItem('primeStatsV21')) || {
-                    xp:0,
-                    height:0,
+                    xp:0, height:0,
                     challenge:{target:1000, current:0, title:"1000 Şınav"},
-                    streak:0,
-                    lastLogin:"",
-                    max:{},
-                    games:[],
-                    heat:{},
-                    history:{},
-                    pain:[]
+                    streak:0, lastLogin:"",
+                    max:{}, games:[], heat:{}, history:{}, pain:[]
                 };
                 settings = JSON.parse(localStorage.getItem('primeSettingsV21')) || {sound:false, inSeason:true};
                 
                 const k = getK(today);
                 if(!data[k]) data[k] = {c:[],s:{},w:{},rpe:{},n:"",wt:0,nutri:{cal:0, pro:0, log:[], supps:[], timing:[]}, panic:false, readiness:0};
                 if(!stats.heat) stats.heat = {chest:0,back:0,legs:0,shoulders:0,arms:0,core:0};
-                if(!stats.challenge) stats.challenge = {target:1000, current:0, title:"1000 Şınav"};
                 
                 document.getElementById('dailyQuote').innerHTML = `"${quotes[today.getDate() % quotes.length]}"`;
                 if(data[k].readiness === 0) openModal('readinessModal');
@@ -676,6 +932,7 @@
                 renderHeatmap(); 
                 renderGameHistory(); 
                 renderPainMap();
+                showWeeklyReport(); // başlangıçta basit özet
 
             } catch (e) { 
                 alert("Veri hatası algılandı. Uygulama sıfırlanıyor..."); 
@@ -683,9 +940,6 @@
                 location.reload(); 
             }
         }
-
-        //FIXED: DATE LOGIC
-        const getK = d => d.toLocaleDateString('fr-CA'); // YYYY-MM-DD Local Time
 
         function save() { localStorage.setItem('primeDataV21', JSON.stringify(data)); }
         function saveStats() { 
@@ -697,28 +951,55 @@
             const k = getK(today); 
             document.getElementById('dateDisplay').innerText = today.toLocaleDateString('tr-TR', {weekday:'long', day:'numeric'});
             const dd = data[k]; 
-            const baseProg = settings.inSeason ? seasonSchedule[today.getDay()] : offSeasonSchedule[today.getDay()];
-            const p = dd.panic ? seasonSchedule.panic : (dd.custom || baseProg);
+            const p = dd.panic ? seasonSchedule.panic : (dd.custom || (settings.inSeason ? seasonSchedule[today.getDay()] : offSeasonSchedule[today.getDay()]));
             
             document.getElementById('progTitle').innerText = p.t; 
             document.getElementById('progSub').innerText = p.s;
             document.getElementById('seasonBadge').innerText = settings.inSeason ? "SEZON İÇİ" : "OFF-SEASON";
             document.getElementById('readinessBadge').innerText = "Enerji: " + (["?", "😫", "🥱", "😐", "🙂", "🔥"][dd.readiness] || "?");
             
+            // Prehab listesi
             const phList = document.getElementById('prehabList'); 
             phList.innerHTML = "";
             if(p.pre) p.pre.forEach(item => { 
                 const meta = warmupDB[item] || {d: "Hazırlık."}; 
+                const q = encodeURIComponent(item + " exercise");
                 phList.innerHTML += `
                 <div class="prehab-item">
                     <div>
                         <div style="font-weight:600">${item}</div>
                         <span class="prehab-desc">${meta.d}</span>
                     </div>
-                    <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(item + " exercise")}" target="_blank" class="yt-btn">▶</a>
+                    <a href="https://www.youtube.com/results?search_query=${q}" target="_blank" class="yt-btn">▶</a>
                 </div>`; 
             });
 
+            // Ağrıya özel prehab ekle
+            const painExtras = [];
+            if(stats.pain && stats.pain.length){
+                stats.pain.forEach(painKey => {
+                    (painPrehabMap[painKey] || []).forEach(ex => {
+                        if(!painExtras.includes(ex)) painExtras.push(ex);
+                    });
+                });
+            }
+            if(painExtras.length){
+                phList.innerHTML += `<div class="box-header" style="color:var(--danger); margin-top:6px;">🎯 Bölgeye Özel Prehab</div>`;
+                painExtras.forEach(item => {
+                    const meta = warmupDB[item] || {d:"Kontrollü prehab."};
+                    const q = encodeURIComponent(item + " exercise");
+                    phList.innerHTML += `
+                    <div class="prehab-item">
+                        <div>
+                            <div style="font-weight:600">${item}</div>
+                            <span class="prehab-desc">${meta.d}</span>
+                        </div>
+                        <a href="https://www.youtube.com/results?search_query=${q}" target="_blank" class="yt-btn">▶</a>
+                    </div>`;
+                });
+            }
+
+            // Workout list
             const list = document.getElementById('workoutList'); 
             list.innerHTML=''; 
             let vol=0;
@@ -729,7 +1010,19 @@
                 
                 const name = it.n.split('(')[0].trim(); 
                 const isPR = kg > (stats.max[name]||0) && kg > 0;
+
+                let altHtml = "";
+                if(it.alts && it.alts.length){
+                    altHtml = '<div class="alt-list"><div style="margin-top:6px; font-weight:600; font-size:0.75rem;">Alternatifler:</div>';
+                    it.alts.forEach(a=>{
+                        const qAlt = encodeURIComponent((a.n + " exercise"));
+                        altHtml += `<div class="alt-item">• ${a.n}<span style="display:block; font-size:0.75rem; color:#aaa;">${a.d||""}</span><a href="https://www.youtube.com/results?search_query=${qAlt}" target="_blank" class="yt-btn" style="margin-top:4px; font-size:0.65rem; display:inline-flex;">▶ YouTube</a></div>`;
+                    });
+                    altHtml += '</div>';
+                }
                 
+                const mainYT = encodeURIComponent(name + " nasıl yapılır");
+
                 list.innerHTML += `
                 <div class="task-item ${chk?'checked':''}" id="task-${i}">
                     <div class="task-top">
@@ -738,38 +1031,41 @@
                             <div style="flex:1"><span class="task-name">${name}</span></div>
                             <div class="circle-check"></div>
                         </div>
-                        <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(name + " nasıl yapılır")}" target="_blank" class="yt-btn">▶</a>
+                        <a href="https://www.youtube.com/results?search_query=${mainYT}" target="_blank" class="yt-btn">▶</a>
                     </div>
-                    <div class="guide-text">💡 ${it.d||"Kontrollü çalış."}</div>
-                    ${it.v!=='rest' && it.v!=='pilates' && it.v!=='cardio' ? `
-                    <div class="input-row">
-                        <input class="mini-input" type="number" min="0" placeholder="Set" value="${dd.s[i]||''}" onchange="saveS(${i},this.value)">
-                        <input class="mini-input ${isPR?'pr-active':''}" type="number" min="0" placeholder="Kg" value="${dd.w[i]||''}" onchange="saveW('${name}',${i},this.value,${dd.s[i]||3})">
-                        <button class="tool-btn" onclick="openCalc(${kg||0})">🧮</button>
-                        <button class="tool-btn" onclick="openHist('${name}')">📜</button>
-                    </div>` : ''}
+                    <div class="guide-text">💡 ${it.d||"Kontrollü."}${altHtml}</div>
+                    ${
+                        it.v!=='rest' && it.v!=='pilates' && it.v!=='cardio' 
+                        ? `
+                        <div class="input-row">
+                            <input class="mini-input" type="number" min="0" placeholder="Set" value="${dd.s[i]||''}" onchange="saveS(${i},this.value)">
+                            <input class="mini-input ${isPR?'pr-active':''}" type="number" min="0" placeholder="Kg" value="${dd.w[i]||''}" onchange="saveW('${name}',${i},this.value,${dd.s[i]||3})">
+                            <button class="tool-btn" onclick="openCalc(${kg||0})">🧮</button>
+                            <button class="tool-btn" onclick="openHist('${name}')">📜</button>
+                        </div>` 
+                        : ''
+                    }
                 </div>`;
             });
             
             document.getElementById('totalVolume').innerText = vol + " kg"; 
-            const percent = p.i.length ? Math.round((dd.c.length/p.i.length)*100) : 0;
-            document.getElementById('progPercent').innerText = "%" + (percent || 0); 
+            document.getElementById('progPercent').innerText = "%" + (p.i.length ? Math.round((dd.c.length/p.i.length)*100) : 0); 
             updateTrackers(dd);
         }
 
         function toggle(i,s,t){ 
-            const k = getK(today); 
-            const a = data[k].c; 
+            const k=getK(today); 
+            const a=data[k].c; 
             if(a.includes(i)) {
                 a.splice(a.indexOf(i),1); 
-                addXP(-10); // XP farm engeli
+                addXP(-10); // XP farm önlemi
             } else { 
                 a.push(i); 
                 startTimer(); 
                 addXP(10); 
                 updateHeatmap(i); 
-                if(s === 'game') openModal('gameLogModal'); 
-                if(a.length === t) checkClutch(); 
+                if(s==='game') openModal('gameLogModal'); 
+                if(a.length===t) checkClutch(); 
             } 
             save(); 
             render(); 
@@ -779,7 +1075,7 @@
             if(Math.random()<0.3) { 
                 document.getElementById('clutchTaskDisplay').innerText = clutchTasks[Math.floor(Math.random()*clutchTasks.length)]; 
                 openModal('clutchModal'); 
-            } else {
+            } else{
                 showWrapUp(); 
             }
         }
@@ -794,7 +1090,7 @@
             const k=getK(today); 
             const dt=data[k]; 
             let vol=0; 
-            Object.values(dt.w).forEach(v=>vol+=parseInt(v)||0); 
+            Object.values(dt.w).forEach(v=>vol+=parseInt(v||0)); 
             document.getElementById('wrapVol').innerText=vol; 
             document.getElementById('wrapXP').innerText="+"+(dt.c.length*10); 
             openModal('wrapUpModal'); 
@@ -806,11 +1102,7 @@
             const idx=today.getDay(); 
             let cur=data[k].custom ? data[k].custom : (settings.inSeason ? seasonSchedule[idx] : offSeasonSchedule[idx]); 
             
-            // Duplicate jump prevention
-            if(cur.i.find(x => x.n === jumpR[0].n)) { 
-                alert("Zaten zıplama ekli!"); 
-                return; 
-            }
+            if(cur.i.find(x => x.n === jumpR[0].n)) { alert("Zaten zıplama ekledin!"); return; }
 
             data[k].custom = {
                 t: cur.t+" + Jump",
@@ -842,19 +1134,16 @@
         }
 
         function addXP(x){ 
-            stats.xp = (stats.xp || 0) + x; 
-            if(stats.xp < 0) stats.xp = 0;
+            stats.xp+=x; 
+            if(stats.xp<0) stats.xp=0;
             saveStats(); 
             renderXP(); 
         }
 
         function renderXP(){ 
-            const lvl = Math.floor(stats.xp/1000+1);
-            const xpInto = stats.xp % 1000;
-            document.getElementById('xpBar').style.width = (xpInto/10)+"%"; 
+            document.getElementById('xpBar').style.width = (stats.xp%1000)/10+"%"; 
             document.getElementById('xpText').innerText = stats.xp+" XP"; 
-            document.getElementById('currentLvl').innerText = "Lvl "+lvl; 
-            document.getElementById('userRank').innerText = lvl < 3 ? "Rookie" : (lvl < 6 ? "Starter" : "All-Star");
+            document.getElementById('currentLvl').innerText = "Lvl "+Math.floor(stats.xp/1000+1); 
         }
 
         function updateTrackers(dd){ 
@@ -879,8 +1168,7 @@
             l.innerHTML=""; 
             if(dd.nutri?.log) dd.nutri.log.forEach(f=>l.innerHTML+=`<div>• ${f.n} (${f.c}kcal, ${f.p}g)</div>`); 
             
-            if(seasonSchedule[today.getDay()].j) document.getElementById('nutrientTimingBox').style.display='block'; 
-            else document.getElementById('nutrientTimingBox').style.display='none'; 
+            if(seasonSchedule[today.getDay()].j) document.getElementById('nutrientTimingBox').style.display='block'; else document.getElementById('nutrientTimingBox').style.display='none'; 
             
             document.querySelectorAll('.supp-icon').forEach(el=>el.classList.remove('active')); 
             if(dd.nutri?.supps) dd.nutri.supps.forEach(s => document.getElementById('supp-'+s)?.classList.add('active'));
@@ -900,7 +1188,7 @@
         function addFood(i){ 
             const f=foodDB[i]; 
             const k=getK(today); 
-            if(!data[k].nutri) data[k].nutri={cal:0,pro:0,log:[], supps:[], timing:[]}; 
+            if(!data[k].nutri) data[k].nutri={cal:0,pro:0,log:[],supps:[],timing:[]}; 
             data[k].nutri.cal+=f.c; 
             data[k].nutri.pro+=f.p; 
             if(!data[k].nutri.log) data[k].nutri.log=[]; 
@@ -914,7 +1202,7 @@
             const p=parseInt(document.getElementById('quickPro').value)||0; 
             if(c>0||p>0){ 
                 const k=getK(today); 
-                if(!data[k].nutri) data[k].nutri={cal:0,pro:0,log:[], supps:[], timing:[]}; 
+                if(!data[k].nutri) data[k].nutri={cal:0,pro:0,log:[],supps:[],timing:[]}; 
                 data[k].nutri.cal+=c; 
                 data[k].nutri.pro+=p; 
                 if(!data[k].nutri.log) data[k].nutri.log=[]; 
@@ -929,9 +1217,9 @@
         function clearNutrition(){ 
             if(confirm("Beslenme kaydı silinsin mi?")){ 
                 const k=getK(today); 
-                const prevSupps = data[k].nutri?.supps || [];
-                const prevTiming = data[k].nutri?.timing || [];
-                data[k].nutri={cal:0,pro:0,log:[],supps:prevSupps,timing:prevTiming}; 
+                const oldSupps = (data[k].nutri && data[k].nutri.supps) || [];
+                const oldTiming = (data[k].nutri && data[k].nutri.timing) || [];
+                data[k].nutri={cal:0,pro:0,log:[],supps:oldSupps,timing:oldTiming}; 
                 save(); 
                 render(); 
             } 
@@ -957,8 +1245,10 @@
             const k=getK(today); 
             const dd=data[k]; 
             const p=dd.custom||(settings.inSeason?seasonSchedule[today.getDay()]:offSeasonSchedule[today.getDay()]); 
-            const mb = p.i[i].mb || p.i[i].v || "core";
-            stats.heat[mb]=(stats.heat[mb]||0)+1; 
+            const ex=p.i[i];
+            let mbKey = ex.mb || "core";
+            if(!stats.heat[mbKey]) stats.heat[mbKey]=0;
+            stats.heat[mbKey]+=1;
             saveStats(); 
             renderHeatmap(); 
         }
@@ -966,33 +1256,21 @@
         function renderGameHistory(){ 
             const d=document.getElementById('gameHistory'); 
             d.innerHTML=""; 
-            if(!stats.games || stats.games.length===0){ 
-                d.innerHTML = '<div style="font-size:0.8rem; color:#777;">Henüz maç kaydı yok.</div>'; 
-                return;
-            }
-            stats.games.slice(-5).reverse().forEach(g=>{
-                const tag = g.res === 'W' ? 'W' : (g.res === 'L' ? 'L' : '');
-                const color = g.res === 'W' ? '#32d74b' : (g.res === 'L' ? '#ff453a' : '#999');
-                d.innerHTML += `
-                    <div style="background:#111; padding:10px; border-radius:8px; margin-bottom:5px; border:1px solid #333; font-size:0.8rem;">
-                        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                            <span>${g.date}</span>
-                            <span style="color:${color}; font-weight:bold;">${tag}</span>
-                        </div>
-                        <div>${g.pts||0} sayı / ${g.ast||0} asist / ${g.reb||0} rib / ${g.stl||0} TÇ</div>
-                        ${g.notes ? `<div style="margin-top:4px; color:#aaa;">${g.notes}</div>` : ''}
-                    </div>`;
+            (stats.games || []).slice(-5).reverse().forEach(g=>{
+                d.innerHTML+=`<div style="background:#111; padding:10px; border-radius:8px; margin-bottom:5px; border:1px solid #333; font-size:0.8rem;">
+                    ${g.date} - ${g.pts} Sayı / ${g.ast} Asist / ${g.reb||0} Rib / ${g.stl||0} TÇ (${g.res||'-'})
+                </div>`;
             }); 
         }
 
         function openModal(id){document.getElementById(id).classList.add('open');} 
         function closeModal(id){document.getElementById(id).classList.remove('open');}
         
-        function switchToolTab(t){ 
+        function switchToolTab(t, ev){ 
             document.querySelectorAll('.tool-content').forEach(e=>e.style.display='none'); 
             document.getElementById('tool-'+t).style.display='block'; 
             document.querySelectorAll('.n-tab').forEach(e=>e.classList.remove('active')); 
-            event.target.classList.add('active'); 
+            if(ev && ev.target) ev.target.classList.add('active'); 
         }
 
         function toggleGuide(i){ document.getElementById(`task-${i}`).classList.toggle('show-guide'); }
@@ -1010,15 +1288,8 @@
             },1000); 
         }
 
-        function stopTimer(){ 
-            clearInterval(timerInt); 
-            timerInt = null;
-            document.getElementById('timerFloat').classList.remove('active'); 
-        }
-        function updT(){ 
-            const m=Math.floor(timerSec/60), s=timerSec%60; 
-            document.getElementById('timerDisplay').innerText=`0${m}:${s<10?'0'+s:s}`; 
-        }
+        function stopTimer(){ clearInterval(timerInt); timerInt=null; document.getElementById('timerFloat').classList.remove('active'); }
+        function updT(){ const m=Math.floor(timerSec/60), s=timerSec%60; document.getElementById('timerDisplay').innerText=`0${m}:${s<10?'0'+s:s}`; }
         
         function notify(){ 
             if(settings.sound && 'speechSynthesis' in window){ 
@@ -1032,13 +1303,16 @@
 
         function addWater(){ 
             const k=getK(today);
-            data[k].wt = (data[k].wt || 0) + 0.5; 
+            if(!data[k]) data[k]={c:[],s:{},w:{},rpe:{},n:"",wt:0,nutri:{cal:0,pro:0,log:[],supps:[],timing:[]},panic:false,readiness:0};
+            data[k].wt=(data[k].wt||0)+0.5; 
             save(); 
             render(); 
         }
 
         function setReadiness(v){ 
-            data[getK(today)].readiness=v; 
+            const k=getK(today);
+            if(!data[k]) data[k]={c:[],s:{},w:{},rpe:{},n:"",wt:0,nutri:{cal:0,pro:0,log:[],supps:[],timing:[]},panic:false,readiness:0};
+            data[k].readiness=v; 
             save(); 
             closeModal('readinessModal'); 
             render(); 
@@ -1046,6 +1320,7 @@
 
         function togglePanic(){ 
             const k=getK(today);
+            if(!data[k]) data[k]={c:[],s:{},w:{},rpe:{},n:"",wt:0,nutri:{cal:0,pro:0,log:[],supps:[],timing:[]},panic:false,readiness:0};
             data[k].panic=!data[k].panic; 
             save(); 
             render(); 
@@ -1083,7 +1358,7 @@
         }
 
         function openCalc(kg){ 
-            document.getElementById('plateTarget').value=kg; 
+            document.getElementById('plateTarget').value=kg || ""; 
             calcPlates(); 
             openModal('plateModal'); 
         }
@@ -1091,14 +1366,15 @@
         function calcPlates(){ 
             const t=parseFloat(document.getElementById('plateTarget').value); 
             const vis=document.getElementById('plateVisual'); 
+            const res=document.getElementById('plateResult');
             vis.innerHTML=''; 
-            if(!t||t<=20)return; 
+            if(!t||t<=20){res.innerText="En az 20kg (bar) olmalı."; return;} 
             let w=(t-20)/2; 
-            const colors = (p)=> p>=25?'#ff3b30':(p>=20?'#0a84ff':(p>=10?'#32d74b':'#ffd60a'));
+            res.innerText="Her tarafa " + w.toFixed(1) + "kg plaka yerleşecek (kombinasyon aşağıda).";
             [25,20,15,10,5,2.5,1.25].forEach(p=>{
-                while(w>=p-0.0001){
+                while(w>=p-0.01){
                     w-=p; 
-                    vis.innerHTML+=`<div class="plate" style="width:${28+p}px; background:${colors(p)}">${p}</div>`;
+                    vis.innerHTML+=`<div class="plate" style="width:${28+p}px; background:${p>=25?'#ff3b30':(p>=20?'#0a84ff':(p>=10?'#32d74b':'#ffd60a'))}">${p}</div>`;
                 }
             }); 
         }
@@ -1114,15 +1390,18 @@
         }
 
         function generateMenu(){ 
-            const r=a=>a[Math.floor(Math.random()*a.length)]; 
-            const m1=r(foodDB.filter(f=>f.n.includes('Yumurta')||f.n.includes('Yulaf'))); 
-            const m2=r(foodDB.filter(f=>f.n.includes('Tavuk')||f.n.includes('Ton')||f.n.includes('Köfte')||f.n.includes('Hindi'))); 
-            const m3=r(foodDB.filter(f=>f.n.includes('Pilav')||f.n.includes('Makarna')||f.n.includes('Patates'))); 
-            document.getElementById('menuResult').innerHTML=`<div style="background:#222; padding:15px; margin-top:15px;">
-                <b>Kahvaltı:</b> ${m1.n}<br>
-                <b>Öğle:</b> ${m2.n}<br>
-                <b>Akşam:</b> ${m3.n}
-            </div>`; 
+            const goal = document.getElementById('menuGoal').value || "maintain";
+            const day = document.getElementById('menuDayType').value || "train";
+            const box = document.getElementById('menuResult');
+            const g = menuTemplates[goal] || menuTemplates.maintain;
+            const m = g[day] || g.train;
+            let html = `<div style="background:#222; padding:15px; border-radius:12px; border:1px solid #333;">`;
+            html += `<div style="font-size:0.8rem; color:#aaa; margin-bottom:8px;">Hedef: ${menuGoalLabel[goal]} · Gün: ${menuDayLabel[day]}</div>`;
+            m.forEach(meal=>{
+                html += `<div style="margin-bottom:8px;"><b>${meal.label}:</b> ${meal.text}</div>`;
+            });
+            html += `</div>`;
+            box.innerHTML = html;
         }
 
         function togglePain(p){ 
@@ -1131,6 +1410,7 @@
             else stats.pain.push(p); 
             saveStats(); 
             renderPainMap(); 
+            render(); // prehab bölümünü de güncelle
         }
 
         function renderPainMap(){ 
@@ -1146,14 +1426,12 @@
             localStorage.setItem('primeSettingsV21', JSON.stringify(settings)); 
             render(); 
         }
-
         function toggleSound(){ 
             settings.sound = document.getElementById('soundToggle').checked; 
             localStorage.setItem('primeSettingsV21', JSON.stringify(settings)); 
         }
-
         function resetApp(){ 
-            if(confirm("Tüm veriler silinecek. Emin misin?")){ 
+            if(confirm("Tüm verileri sıfırlamak istediğine emin misin?")){ 
                 localStorage.clear(); 
                 location.reload(); 
             } 
@@ -1163,21 +1441,15 @@
             const el = document.getElementById('breathCircle'); 
             const txt = document.getElementById('breathText'); 
             let phase = 0; 
-            const phases = ["AL","TUT","VER","TUT"];
-            const texts = ["Nefes al","Bekle","Ver","Bekle"];
             const cycle = () => { 
-                el.innerText = phases[phase];
-                txt.innerText = texts[phase];
-                if(phase===0){ el.style.transform="scale(1.5)"; } 
-                if(phase===2){ el.style.transform="scale(1)"; } 
+                if(phase===0){ el.innerText="AL"; el.style.transform="scale(1.5)"; txt.innerText="4 sn boyunca nefes al"; } 
+                else if(phase===1){ el.innerText="TUT"; txt.innerText="Nefesi tut"; } 
+                else if(phase===2){ el.innerText="VER"; el.style.transform="scale(1)"; txt.innerText="4 sn boyunca nefes ver"; } 
+                else if(phase===3){ el.innerText="TUT"; txt.innerText="Boşken tut"; } 
                 phase = (phase+1)%4; 
             }; 
             cycle(); 
             setInterval(cycle, 4000); 
-        }
-
-        function closeZone(){ 
-            closeModal('zoneModal'); 
         }
 
         function saveGameLog(){ 
@@ -1185,24 +1457,17 @@
             const a=document.getElementById('gameAssists').value; 
             const r=document.getElementById('gameRebounds').value; 
             const s=document.getElementById('gameSteals').value; 
-            const res=document.getElementById('gameResult').value; 
-            const notes=document.getElementById('gameNotes').value; 
+            const res=document.getElementById('gameResult').value;
             if(p||a||r||s){ 
                 stats.games.push({
                     date:getK(today),
-                    pts:parseInt(p)||0,
-                    ast:parseInt(a)||0,
-                    reb:parseInt(r)||0,
-                    stl:parseInt(s)||0,
-                    res:res||"",
-                    notes:notes||""
+                    pts:parseInt(p||0),
+                    ast:parseInt(a||0),
+                    reb:parseInt(r||0),
+                    stl:parseInt(s||0),
+                    res:res
                 }); 
                 saveStats(); 
-                document.getElementById('gamePoints').value="";
-                document.getElementById('gameAssists').value="";
-                document.getElementById('gameRebounds').value="";
-                document.getElementById('gameSteals').value="";
-                document.getElementById('gameNotes').value="";
                 closeModal('gameLogModal'); 
                 renderGameHistory(); 
             } 
@@ -1235,10 +1500,7 @@
             const d = {data: data, stats: stats, settings: settings}; 
             const b = new Blob([JSON.stringify(d)], {type: 'application/json'}); 
             const u = URL.createObjectURL(b); 
-            const a = document.createElement('a'); 
-            a.href = u; 
-            a.download = 'prime_backup.json'; 
-            a.click(); 
+            const a = document.createElement('a'); a.href = u; a.download = 'prime_backup.json'; a.click(); 
         }
 
         function importData(input) { 
@@ -1254,51 +1516,126 @@
             r.readAsText(f); 
         }
 
-        function updateChallengeUI(){
-            if(!stats.challenge) stats.challenge = {target:1000, current:0, title:"1000 Şınav"};
-            const t = stats.challenge.target || 0;
-            const c = stats.challenge.current || 0;
-            const titleEl = document.getElementById('challengeTitle');
-            const dispEl = document.getElementById('challengeDisplay');
-            const barEl = document.getElementById('challengeBarFill');
-            const shortEl = document.getElementById('challengeShort');
-            if(titleEl) titleEl.innerText = stats.challenge.title || "Meydan Okuma";
-            if(dispEl) dispEl.innerText = `${c} / ${t}`;
-            if(barEl) barEl.style.width = t > 0 ? Math.min(c/t*100,100) + '%' : '0%';
-            if(shortEl) shortEl.innerText = `${c}/${t}`;
+        // Cila (Finisher) fonksiyonu açıklama + YouTube linkli
+        function spinFinisher(){
+            const typeEl = document.querySelector('input[name="fType"]:checked');
+            const type = typeEl ? typeEl.value : 'gym';
+            const pool = finishers[type] || finishers.gym;
+            const f = pool[Math.floor(Math.random()*pool.length)];
+            const box = document.getElementById('finisherResult');
+            const q = encodeURIComponent(f.n + " exercise");
+            box.style.display='block';
+            box.innerHTML = `
+                <div>${f.n}</div>
+                <div style="font-size:0.8rem; color:#aaa; margin-top:4px;">${f.d}</div>
+                <a href="https://www.youtube.com/results?search_query=${q}" target="_blank" class="yt-btn" style="margin-top:8px; justify-content:center;">▶ YouTube'da Gör</a>
+            `;
         }
 
-        function addChallenge(amount){
-            if(!stats.challenge) stats.challenge = {target:1000, current:0, title:"1000 Şınav"};
-            stats.challenge.current = (stats.challenge.current || 0) + amount;
+        // Builder için 2. bölge listesi
+        function updateSec(){
+            const main = document.getElementById('mainMuscle').value;
+            const sub = document.getElementById('subMuscle');
+            sub.innerHTML = "";
+            if(!main || !compat[main]){ 
+                sub.disabled=true;
+                sub.innerHTML = "<option>2. Bölge</option>";
+                return;
+            }
+            sub.disabled=false;
+            compat[main].forEach(m=>{
+                sub.innerHTML += `<option value="${m}">${muscleDB[m].t}</option>`;
+            });
+        }
+
+        function buildProg(){
+            const main = document.getElementById('mainMuscle').value;
+            const sub = document.getElementById('subMuscle').value;
+            const addJump = document.getElementById('addJump').checked;
+            if(!main){
+                alert("Önce 1. bölgeyi seç.");
+                return;
+            }
+            const k=getK(today);
+            const mainBlock = muscleDB[main];
+            const subBlock = muscleDB[sub] || null;
+            let iArr = [...mainBlock.i];
+            if(subBlock) iArr = [...iArr, ...subBlock.i];
+            if(addJump) iArr = [...iArr, ...jumpR];
+            data[k].custom = {
+                t: mainBlock.t + (subBlock ? " + " + subBlock.t : "") + (addJump ? " + Jump" : ""),
+                s: mainBlock.t,
+                j: !!addJump,
+                pre: seasonSchedule[today.getDay()].pre,
+                i: iArr
+            };
+            save();
+            render();
+            closeModal('builderModal');
+        }
+
+        // Weekly report (basit)
+        function showWeeklyReport(){
+            const box = document.getElementById('weeklyReport');
+            let d = new Date(today);
+            let daysTrain=0, totalSessions=0, totalCal=0, daysWithNutri=0;
+            let prCount = Object.keys(stats.max||{}).length;
+            for(let i=0;i<7;i++){
+                const k = getK(d);
+                const dd = data[k];
+                if(dd && dd.c && dd.c.length){
+                    daysTrain++;
+                    totalSessions += dd.c.length;
+                }
+                if(dd && dd.nutri && dd.nutri.cal){
+                    totalCal += dd.nutri.cal;
+                    daysWithNutri++;
+                }
+                d.setDate(d.getDate()-1);
+            }
+            const avgCal = daysWithNutri ? Math.round(totalCal/daysWithNutri) : 0;
+            box.innerHTML = `
+                <div>Son 7 günde <b>${daysTrain}</b> gün antrenman/maç kaydı var.</div>
+                <div>Toplam tamamlanan set/hareket: <b>${totalSessions}</b>.</div>
+                <div>Toplam PR sayısı: <b>${prCount}</b>.</div>
+                <div>Beslenme kaydı olan günlerde ortalama kalori: <b>${avgCal}</b> kcal.</div>
+            `;
+        }
+
+        // Challenge UI
+        function updateChallengeUI(){
+            const c = stats.challenge || {target:1000,current:0,title:"1000 Şınav"};
+            document.getElementById('challengeTitle').innerText = c.title;
+            document.getElementById('challengeDisplay').innerText = `${c.current} / ${c.target}`;
+            document.getElementById('challengeShort').innerText = `${c.current}/${c.target}`;
+            const perc = c.target ? Math.min(100, (c.current/c.target)*100) : 0;
+            document.getElementById('challengeBarFill').style.width = perc + "%";
+        }
+
+        function addChallenge(x){
+            if(!stats.challenge) stats.challenge = {target:1000,current:0,title:"1000 Şınav"};
+            stats.challenge.current += x;
             saveStats();
             updateChallengeUI();
         }
 
         function setChallenge(){
-            const currentTarget = stats.challenge?.target || 1000;
-            const currentTitle = stats.challenge?.title || "Yeni Hedef";
-            const target = parseInt(prompt("Yeni hedef (tekrar):", currentTarget)) || currentTarget;
-            const title = prompt("Başlık:", currentTitle) || currentTitle;
-            stats.challenge = {target:target, current:0, title:title};
+            const t = prompt("Yeni hedef adı (ör: 500 Squat):", stats.challenge?.title || "Yeni Hedef");
+            if(!t) return;
+            const num = parseInt(prompt("Toplam tekrar hedefi:", stats.challenge?.target || 1000));
+            if(!num) return;
+            stats.challenge = {title:t, target:num, current:0};
             saveStats();
             updateChallengeUI();
         }
 
-        function spinFinisher() {
-            const typeInput = document.querySelector('input[name="fType"]:checked');
-            const type = typeInput ? typeInput.value : 'gym';
-            const list = finishers[type] || finishers.gym;
-            if (!list || list.length === 0) return;
-
-            const pick = list[Math.floor(Math.random() * list.length)];
-
-            const el = document.getElementById('finisherResult');
-            el.innerText = pick;
-            el.style.display = 'block';
-            el.style.animation = 'fadeIn 0.3s';
-
-            addXP(15);
+        // Basit not/saveData (şimdilik yalnızca günlük not + kilo için)
+        function saveData(){
+            const k=getK(today);
+            if(!data[k]) data[k]={c:[],s:{},w:{},rpe:{},n:"",wt:0,nutri:{cal:0,pro:0,log:[],supps:[],timing:[]},panic:false,readiness:0};
+            data[k].n = document.getElementById('journal').value;
+            data[k].bw = document.getElementById('dailyWeight').value;
+            save();
         }
 
         window.onload = init;
